@@ -1,0 +1,42 @@
+\ProvidesPackage{Preamble}
+
+%Packages:
+    %Test package:
+    \usepackage{blindtext}
+
+    
+    %Graphics packages:
+    \usepackage{graphicx} % Required for inserting images
+    % Font:
+    \usepackage{fontspec}
+    \setmainfont{Arial} %Use arial according to university requirements
+    %PDF packages:
+    \usepackage{pdfpages}
+    %Packages for multifile project management:
+    \usepackage{subfiles}
+    %Packages for page layout:
+    \usepackage{geometry} %Not used yet
+    %Sections and chapters customization:
+    \usepackage{titlesec} %Not used yet
+    %Text aligment customization:
+    \usepackage{ragged2e}
+    \justifying
+    %References management:
+    \usepackage{hyperref} %Is needed for biblatex package.
+    %Bibliography management:
+    \usepackage[backend=biber,
+                hyperref=true, 
+                isbn=true
+                ]{biblatex}
+    \addbibresource{Bibliography.bib}
+    %Glossary management:
+    \usepackage[acronym]{glossaries}
+    \makeglossaries
+    \usepackage{Sections/ListOfSymbolsAndAbbreviations}
+
+%Other definitions:
+    %Change the title of the Table of content:
+    \renewcommand*\contentsname{Spis treści}
+    %Page numbering style:
+    \pagenumbering{arabic}
+    
