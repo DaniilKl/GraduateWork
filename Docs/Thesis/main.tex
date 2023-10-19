@@ -1,0 +1,63 @@
+\documentclass[a4paper, 10pt, twoside]{article}
+
+%Preamble:
+\usepackage{Preamble}
+
+%Main part of the document:
+\begin{document}
+%Title page from PDF:
+\includepdf[pages=-]{PDFs/StronaTytulowa_PracaDyplomowa}%The tittle is downloaded from university page
+
+%Page counter start:
+\setcounter{page}{1}
+
+%Abstract:
+    %Abstract using the Polish language:
+    \addcontentsline{toc}{section}{Streszczenie}
+    \section*{Streszczenie}
+
+    \subfile{Sections/AbstractPL}
+
+    %Abstract using the English language:
+    \addcontentsline{toc}{section}{Abstract}
+    \section*{Abstract}
+
+    \subfile{Sections/AbstractEN}
+
+%End of the abstract.
+
+%Table of content:
+\addcontentsline{toc}{section}{Spis treści}
+\tableofcontents
+%End of the Table of content.
+
+%List of symbols and abbreviations:
+\addcontentsline{toc}{section}{Oznaczenia i skróty}
+\section*{Oznaczenia i skróty}
+\printglossary[type=\acronymtype]
+%End of the list of symbols and abbreviations.
+
+%Main sections (numerated):
+
+%End of main sections.
+
+%The summary:
+\addcontentsline{toc}{section}{Podsumowanie}
+\section*{Podsumowanie}
+
+\subfile{Sections/Summary}
+\acrshort{rtos}
+%End of the Summary.
+
+%The bibliography section:
+\addcontentsline{toc}{section}{Wykaz literatury}
+\printbibliography[title={Wykaz literatury}]
+%End of the bibliography section.
+
+%Appendices:
+\addcontentsline{toc}{section}{Załączniki}
+\section*{Załączniki}
+
+\subfile{Sections/Appendices}
+%The End.
+\end{document}
