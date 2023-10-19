@@ -8,4 +8,5 @@ This repository consists of several folders, exactly:
 - Resources - contains documentation, links to sites, books and etc.. That is,
 all source of knowledge I am using to complete this work.
 
-This repository is under MIT license, that is free to use, share and etc.. But be careful, I do not guarantee anything.
+This repository is under MIT license, that is free to use, share and etc.. But
+be careful, I do not guarantee anything.
