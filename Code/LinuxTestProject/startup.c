@@ -200,3 +200,8 @@ void reset_handler(void){
 
   main();
 }
+
+void default_handler(void){
+    while (1) {
+    }
+  }
