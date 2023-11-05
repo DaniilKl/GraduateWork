@@ -10,7 +10,7 @@ void reset_handler(void);
 void default_handler(void);
 void nmi_handler(void) __attribute__((weak, alias("default_handler")));
 void hard_fault_handler(void) __attribute__((weak, alias("default_handler")));
-void mem_manage_handler(void) __attribute__(weak, alias("default_handler")); 
+void mem_manage_handler(void) __attribute__((weak, alias("default_handler"))); 
 void bus_fault_handler(void) __attribute__((weak, alias("default_handler")));
 void usage_fault_handler(void) __attribute__((weak, alias("default_handler")));
 void svcall_handler(void) __attribute__((weak, alias("default_handler")));
@@ -80,7 +80,7 @@ uint32_t isr_vector1[] __attribute__((section(".isr_vector"))) = {
 	(uint32_t)&hard_fault_handler, //0xc
 	(uint32_t)&mem_manage_handler, //0x10
 	(uint32_t)&bus_fault_handler, //0x14
-	(uint32_t)&usage_fault_handler //0x18
+	(uint32_t)&usage_fault_handler, //0x18
   0, //0x1c RESERVED
   0, //0x20 RESERVED
   0, //0x24 RESERVED
@@ -182,7 +182,7 @@ extern uint32_t _etext, _sdata, _edata, _sbss, _ebss;
 void reset_handler(void){
 
   // Copy data from FLSH to SRAM
-  uint32_t DataSize = (uint32t)&_edata - (uint32_t)&_sdata;
+  uint32_t DataSize = (uint32_t)&_edata - (uint32_t)&_sdata;
   uint8_t *FlashData = (uint8_t*) &_etext;
   uint8_t *SramData = (uint8_t*) &_sdata;
 
