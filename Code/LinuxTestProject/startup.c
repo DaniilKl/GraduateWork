@@ -179,6 +179,8 @@ uint32_t isr_vector1[] __attribute__((section(".isr_vector"))) = {
 
 extern uint32_t _etext, _sdata, _edata, _sbss, _ebss;
 
+int main(void);
+
 void reset_handler(void){
 
   // Copy data from FLSH to SRAM
