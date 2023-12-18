@@ -73,7 +73,7 @@ void i2c3_er_handler(void) __attribute__((weak, alias("default_handler")));
 void fpu_handler(void) __attribute__((weak, alias("default_handler")));
 void spi4_handler(void) __attribute__((weak, alias("default_handler")));
 
-uint32_t isr_vector1[] __attribute__((section(".isr_vector"))) = {
+uint32_t isr_vector[] __attribute__((section(".isr_vector"))) = {
 	STACK_POINTER_INIT_ADDRESS, //0x0
 	(uint32_t)&reset_handler, //0x4
 	(uint32_t)&nmi_handler, //0x8
