@@ -14,17 +14,34 @@ BUILDDIR = build
 #HAL_SRC += $(absapth ../stm32f4xx-hal-driver/Src/*.c)
 #HAL_INC += $(abspath ../stm32f4xx-hal-driver/Inc/)
 
-#FreeRTOS paths:
-FREERTOS_SRC += $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/) \
-		$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F/) \
-		$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/portable/MemMang/)
-FREERTOS_INC += $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include/) \
-		$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F/) \
+#FreeRTOS dirs paths:
+FREERTOS_SRC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source)
+FREERTOS_PORTABLE_SRC_DIR := $(abspath \
+			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
+FREERTOS_MEM_SRC_DIR := $(abspath \
+			../FreeRTOSv202212.01/FreeRTOS/Source/portable/MemMang)
+FREERTOS_INC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include)
+FREERTOS_PORTABLE_INC_DIR := $(abspath \
+			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
+
+#FreeRTOS files paths:
+FREERTOS_SRC := $(wildcard $(FREERTOS_SRC_DIR)/*.c) \
+		$(wildcard $(FREERTOS_PORTABLE_SRC_DIR)/*.c) \
+		$(wildcard $(FREERTOS_MEM_SRC_DIR)/*.c)
+FREERTOS_INC := $(wildcard $(FREERTOS_INC_DIR)/*.h) \
+		$(wildcard $(FREERTOS_PORTABLE_INC_DIR)/*.h)
 
 #SRC += init/startup.c  syscall.c
-SRC += $(FREERTOS_SRC) $(abspath ./src/) 
+SRC_DIR := $(FREERTOS_SRC_DIR) \
+	   $(FREERTOS_PORTABLE_SRC_DIR) \
+	   $(FREERTOS_MEM_SRC_DIR) \
+	   $(abspath ./src)
+INC_DIR := $(FREERTOS_INC_DIR) \
+	   $(FREERTOS_PORTABLE_INC_DIR) \
+	   $(abspath ./Include)
 
-INC += $(FREERTOS_INC) $(abspath ./Include/)
+SRC += $(FREERTOS_SRC) $(wildcard $(abspath ./src/)/*.c)
+INC += $(FREERTOS_INC) $(wildcard $(abspath ./Include/)/*.h)
 
 
 # Flags:
