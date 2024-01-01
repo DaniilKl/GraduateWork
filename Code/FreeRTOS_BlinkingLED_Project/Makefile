@@ -64,14 +64,23 @@ OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
 
 
 # Rules:
+$(BUILDDIR)/$(BIN): $(OBJ_FILES)
+	$(CC) -ffunction-sections -fdata-sections $(CFLAGS) $(LINKERFLAGS) $+ -o $(@)
+
+%.d: %.c
+	@set -e; rm -f $@; \
+	$(CC) -M $(CPPFLAGS) $< > $@.$$$$;
+
+INCLUDES := $(SOURCE_FILES:%.c=$(BUILDDIR)/%.d)
+-include $(INCLUDES)
+
+${BUILDDIR}/%.o : %.c Makefile build_dir
+	$(CC) $(CFLAGS) $(CPPFLAGS) -MMD -c $< -o $@
+
 build_dir:
 	$(shell [ -d ./build ] || mkdir build)
 
 
-build:
-	$(CC) -ffunction-sections -fdata-sections main.c $(SRC) $(FLAGS)
-	[ -d temps ] || mkdir temps
-	mv *.i *.s *.o *.map ./temps
 
 .PHONY clean
 clean:
