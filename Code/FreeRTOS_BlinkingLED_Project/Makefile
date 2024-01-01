@@ -56,6 +56,9 @@ FLAGS = $(LINKERFLAGS) $(TARGETFLAGS) $(OUTPUTFLAGS) -ggdb \
 	-fstrict-aliasing -Wstrict-aliasing -Wno-error=address-of-packed-member
 
 # Rules:
+build_dir:
+	$(shell [ -d ./build ] || mkdir build)
+
 
 build:
 	$(CC) -ffunction-sections -fdata-sections main.c $(SRC) $(FLAGS)
@@ -64,4 +67,4 @@ build:
 
 .PHONY clean
 clean:
-	rm -rf temps/
+	rm -rf ./build
