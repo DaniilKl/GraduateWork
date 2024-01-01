@@ -46,14 +46,22 @@ INC += $(FREERTOS_INC) $(wildcard $(abspath ./Include/)/*.h)
 
 # Flags:
 DEFINES := -DHEAP1
-LINKERFLAGS := -T ./linker_script.ld -W1, -Map=$(BUILDDIR)/project.map,--cref -save-temp
-TARGETFLAGS := -mcpu=cortex-m4 -mthumb
-OUTPUTFLAGS := -o blink.elf
+LINKERFLAGS := -Xlinker \
+	       -T $(abspath ./linker_script.ld) \
+	       -Wl,-Map=$(BUILDDIR)/project.map,--cref -save-temps -lc
 
-FLAGS = $(LINKERFLAGS) $(TARGETFLAGS) $(OUTPUTFLAGS) -ggdb \
-	-Wno-error=implicit-function-declaration \
-	-Wno-builtin-declaration-mismatch -Werror -Wall -Wextra -nostartfiles \
-	-fstrict-aliasing -Wstrict-aliasing -Wno-error=address-of-packed-member
+TARGETFLAGS := -mcpu=cortex-m4 -mthumb
+OUTPUTFLAGS := -o $(BIN)
+DEBUGFLAGS := -ggdb -Og
+
+CPPFLAGS := $(DEFINES)
+CFLAGS := $(TARGETFLAGS) -nostartfiles -Wno-error=implicit-function-declaration \
+	  -Wno-builtin-declaration-mismatch -Werror \
+	  -Wall -Wextra $(DEBUGFLAGS)
+
+
+OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
+
 
 # Rules:
 build_dir:
