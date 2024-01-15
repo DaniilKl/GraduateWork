@@ -68,7 +68,9 @@ $(BUILD_DIR)/$(BIN): $(OBJ_FILES)
 
 %.d: %.c
 	@set -e; rm -f $@; \
-	$(CC) -M $(CPPFLAGS) $< > $@.$$$$;
+	$(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
 
 INCLUDES := $(SRC:%.c=$(BUILD_DIR)/%.d)
 -include $(INCLUDES)
