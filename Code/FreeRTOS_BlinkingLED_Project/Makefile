@@ -2,7 +2,7 @@ CC = ~/Repos/arm-gnu-toolchain-12.3.rel1/bin/arm-none-linux-gnueabihf-gcc
 
 #Common variables:
 BIN = FreeRTOSblinki.elf
-BUILDDIR = build
+BUILD_DIR = $(abspath ./build)
 
 # Includes:
 #CMSIS paths:
@@ -48,7 +48,7 @@ INC += $(FREERTOS_INC) $(wildcard $(abspath ./Include/)/*.h)
 DEFINES := -DHEAP1
 LINKERFLAGS := -Xlinker \
 	       -T $(abspath ./linker_script.ld) \
-	       -Wl,-Map=$(BUILDDIR)/project.map,--cref -save-temps -lc
+	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc
 
 TARGETFLAGS := -mcpu=cortex-m4 -mthumb
 OUTPUTFLAGS := -o $(BIN)
@@ -64,20 +64,20 @@ OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
 
 
 # Rules:
-$(BUILDDIR)/$(BIN): $(OBJ_FILES)
+$(BUILD_DIR)/$(BIN): $(OBJ_FILES)
 	$(CC) -ffunction-sections -fdata-sections $(CFLAGS) $(LINKERFLAGS) $+ -o $(@)
 
 %.d: %.c
 	@set -e; rm -f $@; \
 	$(CC) -M $(CPPFLAGS) $< > $@.$$$$;
 
-INCLUDES := $(SOURCE_FILES:%.c=$(BUILDDIR)/%.d)
+INCLUDES := $(SRC:%.c=$(BUILD_DIR)/%.d)
 -include $(INCLUDES)
 
-${BUILDDIR}/%.o : %.c Makefile build_dir
+$(BUILD_DIR)/%.o: %.c $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -MMD -c $< -o $@
 
-build_dir:
+$(BUILD_DIR):
 	$(shell [ -d ./build ] || mkdir build)
 
 
