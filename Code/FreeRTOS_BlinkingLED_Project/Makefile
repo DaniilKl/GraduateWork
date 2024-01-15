@@ -20,28 +20,27 @@ FREERTOS_PORTABLE_SRC_DIR := $(abspath \
 			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
 FREERTOS_MEM_SRC_DIR := $(abspath \
 			../FreeRTOSv202212.01/FreeRTOS/Source/portable/MemMang)
-FREERTOS_INC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include)
-FREERTOS_PORTABLE_INC_DIR := $(abspath \
+FREERTOS_INC_DIR := -I$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include/)
+FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
 			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
 
 #FreeRTOS files paths:
 FREERTOS_SRC := $(wildcard $(FREERTOS_SRC_DIR)/*.c) \
 		$(wildcard $(FREERTOS_PORTABLE_SRC_DIR)/*.c) \
 		$(wildcard $(FREERTOS_MEM_SRC_DIR)/*.c)
-FREERTOS_INC := $(wildcard $(FREERTOS_INC_DIR)/*.h) \
-		$(wildcard $(FREERTOS_PORTABLE_INC_DIR)/*.h)
+FREERTOS_INC := $(FREERTOS_INC_DIR) \
+		$(FREERTOS_PORTABLE_INC_DIR)
 
 #SRC += init/startup.c  syscall.c
 SRC_DIR := $(FREERTOS_SRC_DIR) \
 	   $(FREERTOS_PORTABLE_SRC_DIR) \
 	   $(FREERTOS_MEM_SRC_DIR) \
 	   $(abspath ./src)
-INC_DIR := $(FREERTOS_INC_DIR) \
-	   $(FREERTOS_PORTABLE_INC_DIR) \
-	   $(abspath ./Include)
+# Local files paths
+LOCAL_INC := -I$(abspath ./Include)
 
 SRC += $(FREERTOS_SRC) $(wildcard $(abspath ./src/)/*.c)
-INC += $(FREERTOS_INC) $(wildcard $(abspath ./Include/)/*.h)
+INC := $(FREERTOS_INC) $(LOCAL_INC)
 
 
 # Flags:
@@ -57,7 +56,7 @@ DEBUGFLAGS := -ggdb -Og
 CPPFLAGS := $(DEFINES)
 CFLAGS := $(TARGETFLAGS) -nostartfiles -Wno-error=implicit-function-declaration \
 	  -Wno-builtin-declaration-mismatch -Werror \
-	  -Wall -Wextra $(DEBUGFLAGS)
+	  -Wall -Wextra $(DEBUGFLAGS) $(INC)
 
 
 OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
