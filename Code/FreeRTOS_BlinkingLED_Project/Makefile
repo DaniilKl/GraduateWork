@@ -1,6 +1,6 @@
 CC = ~/Repos/arm-gnu-toolchain-12.3.rel1/bin/arm-none-linux-gnueabihf-gcc
 
-#Common variables:
+# Common variables:
 BIN = FreeRTOSblinki.elf
 SRC_DIR = $(abspath ./src)
 BUILD_DIR = $(abspath ./build)
@@ -15,7 +15,7 @@ BUILD_DIR = $(abspath ./build)
 #HAL_SRC += $(absapth ../stm32f4xx-hal-driver/Src/*.c)
 #HAL_INC += $(abspath ../stm32f4xx-hal-driver/Inc/)
 
-#FreeRTOS dirs paths:
+# FreeRTOS dirs paths:
 FREERTOS_SRC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source)
 FREERTOS_PORTABLE_SRC_DIR := $(abspath \
 			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
@@ -25,7 +25,7 @@ FREERTOS_INC_DIR := -I$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include/)
 FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
 			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
 
-#FreeRTOS files paths:
+# FreeRTOS files paths:
 FREERTOS_SRC := $(wildcard $(FREERTOS_SRC_DIR)/*.c) \
 		$(wildcard $(FREERTOS_PORTABLE_SRC_DIR)/*.c) \
 		$(wildcard $(FREERTOS_MEM_SRC_DIR)/*.c)
@@ -55,6 +55,7 @@ OBJ_FILES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.o)
 
 # Flags:
 DEFINES := -DHEAP1
+
 LINKERFLAGS := -Xlinker \
 	       -T $(abspath ./linker_script.ld) \
 	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc
