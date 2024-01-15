@@ -79,8 +79,7 @@ $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)
 $(BUILD_DIR):
 	$(shell [ -d ./build ] || mkdir build)
 
+.PHONY: clean
 
-
-.PHONY clean
 clean:
 	rm -rf ./build
