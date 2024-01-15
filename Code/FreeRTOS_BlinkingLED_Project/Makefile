@@ -2,6 +2,7 @@ CC = ~/Repos/arm-gnu-toolchain-12.3.rel1/bin/arm-none-linux-gnueabihf-gcc
 
 #Common variables:
 BIN = FreeRTOSblinki.elf
+SRC_DIR = $(abspath ./src)
 BUILD_DIR = $(abspath ./build)
 
 # Includes:
@@ -30,17 +31,17 @@ FREERTOS_SRC := $(wildcard $(FREERTOS_SRC_DIR)/*.c) \
 		$(wildcard $(FREERTOS_MEM_SRC_DIR)/*.c)
 FREERTOS_INC := $(FREERTOS_INC_DIR) \
 		$(FREERTOS_PORTABLE_INC_DIR)
+FREERTOS_SRC_FILES := $(notdir $(FREERTOS_SRC))
 
-#SRC += init/startup.c  syscall.c
-SRC_DIR := $(FREERTOS_SRC_DIR) \
-	   $(FREERTOS_PORTABLE_SRC_DIR) \
-	   $(FREERTOS_MEM_SRC_DIR) \
-	   $(abspath ./src)
 # Local files paths
+LOCAL_SRC := $(wildcard $(abspath ./src)/*.c)
 LOCAL_INC := -I$(abspath ./Include)
+LOCAL_SRC_FILES := $(notdir $(LOCAL_SRC))
 
-SRC += $(FREERTOS_SRC) $(wildcard $(abspath ./src/)/*.c)
+# Global files paths
+SRC := $(FREERTOS_SRC) $(LOCAL_SRC)
 INC := $(FREERTOS_INC) $(LOCAL_INC)
+SRC_FILES := $(FREERTOS_SRC_FILES) $(LOCAL_SRC_FILES)
 
 
 # Flags:
@@ -71,7 +72,7 @@ $(BUILD_DIR)/$(BIN): $(OBJ_FILES)
 	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-INCLUDES := $(SRC:%.c=$(BUILD_DIR)/%.d)
+INCLUDES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.d)
 -include $(INCLUDES)
 
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)
