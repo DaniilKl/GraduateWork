@@ -43,6 +43,15 @@ SRC := $(FREERTOS_SRC) $(LOCAL_SRC)
 INC := $(FREERTOS_INC) $(LOCAL_INC)
 SRC_FILES := $(FREERTOS_SRC_FILES) $(LOCAL_SRC_FILES)
 
+# Search path
+VPATH = src:$(FREERTOS_SRC_DIR) \
+	$(FREERTOS_PORTABLE_SRC_DIR) \
+	$(FREERTOS_MEM_SRC_DIR) \
+	$(wildcard $(abspath ./src))
+
+# Object files
+OBJ_FILES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.o)
+
 
 # Flags:
 DEFINES := -DHEAP1
