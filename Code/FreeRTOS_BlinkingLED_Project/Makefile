@@ -50,7 +50,6 @@ LINKERFLAGS := -Xlinker \
 	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc
 
 TARGETFLAGS := -mcpu=cortex-m4 -mthumb
-OUTPUTFLAGS := -o $(BIN)
 DEBUGFLAGS := -ggdb -Og
 
 CPPFLAGS := $(DEFINES)
