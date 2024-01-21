@@ -26,20 +26,15 @@ FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
 			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM4F)
 
 # FreeRTOS files paths:
-FREERTOS_SRC := $(wildcard $(FREERTOS_SRC_DIR)/*.c) \
-		$(wildcard $(FREERTOS_PORTABLE_SRC_DIR)/*.c) \
-		$(wildcard $(FREERTOS_MEM_SRC_DIR)/*.c)
 FREERTOS_INC := $(FREERTOS_INC_DIR) \
 		$(FREERTOS_PORTABLE_INC_DIR)
-FREERTOS_SRC_FILES := $(notdir $(FREERTOS_SRC))
+FREERTOS_SRC_FILES := tasks.c list.c heap_1.c
 
 # Local files paths
-LOCAL_SRC := $(wildcard $(abspath ./src)/*.c)
 LOCAL_INC := -I$(abspath ./Include)
-LOCAL_SRC_FILES := $(notdir $(LOCAL_SRC))
+LOCAL_SRC_FILES := startup.c main.c port.c
 
 # Global files paths
-SRC := $(FREERTOS_SRC) $(LOCAL_SRC)
 INC := $(FREERTOS_INC) $(LOCAL_INC)
 SRC_FILES := $(FREERTOS_SRC_FILES) $(LOCAL_SRC_FILES)
 
