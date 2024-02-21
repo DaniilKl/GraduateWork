@@ -1,0 +1,19 @@
+# Do not push toolchain:
+arm-gnu-toolchain-12.3.rel1/
+CMSIS_5/
+stm32f4xx-hal-driver/
+stm32f4xx-nucleo-bsp/
+FreeRTOSv202212.01/
+zephyrproject/bootloader/
+zephyrproject/modules/
+zephyrproject/tools/
+zephyrproject/zephyr/
+zephyrproject/zephyr-sdk-0.16.4/
+
+# Ignore any files from particular compilation stages:
+temps/
+build/
+*.elf
+*.o
+*.s
+*.i
