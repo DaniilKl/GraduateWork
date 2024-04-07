@@ -1,0 +1,11 @@
+# Gdb aliases:
+alias GDBFrontend='~/Repos/gdb-frontend/gdbfrontend -g $(realpath ~/Repos/gdb-[0-9][0-9].[0-9]/build/gdb/gdb) -G --data-directory=$(realpath ~/Repos/gdb-[0-9][0-9].[0-9]/build/gdb/data-directory/)'
+alias arm-none-linux-gnueabihf-gcc="~/Repos/arm-gnu-toolchain*/bin/arm-none-linux-gnueabihf-gcc"
+alias GDB='~/Repos/gdb-11.2/build/gdb/gdb -tui'
+
+#openocd aliases:
+alias OpenOCDWrite='[ -z $FILE_TO_WRITE ] && echo "Variable FILE_TO_WRITE is empty!" || openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program $FILE_TO_WRITE verify reset exit"'
+alias OpenOCDServer='openocd -f interface/stlink.cfg -f target/stm32f4x.cfg &>> ./.opeocd-server-logs &'
+
+# Zephyr aliases:
+alias VenvZephyr='source ~/Documents/Projects/GraduateWork/Code/zephyrproject/.venv/bin/activate'
