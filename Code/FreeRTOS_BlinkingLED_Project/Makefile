@@ -28,11 +28,11 @@ FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
 # FreeRTOS files paths:
 FREERTOS_INC := $(FREERTOS_INC_DIR) \
 		$(FREERTOS_PORTABLE_INC_DIR)
-FREERTOS_SRC_FILES := tasks.c list.c heap_1.c
+FREERTOS_SRC_FILES := tasks.c list.c heap_1.c port.c
 
 # Local files paths
 LOCAL_INC := -I$(abspath ./Include)
-LOCAL_SRC_FILES := startup.c main.c port.c
+LOCAL_SRC_FILES := startup.c main.c
 
 # Global files paths
 INC := $(FREERTOS_INC) $(LOCAL_INC)
