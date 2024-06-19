@@ -1,4 +1,4 @@
-CC = ~/Repos/arm-gnu-toolchain-12.3.rel1/bin/arm-none-linux-gnueabihf-gcc
+CC = ~/Toolchains/arm-none-eabi-13.2.Rel1/bin/arm-none-eabi-gcc-13.2.1
 
 # Common variables:
 BIN = FreeRTOSblinki.elf
@@ -51,19 +51,17 @@ OBJ_FILES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.o)
 # Flags:
 DEFINES := -DHEAP1
 
-LINKERFLAGS := -Xlinker \
-	       -T $(abspath ./linker_script.ld) \
-	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc
+TARGETFLAGS := -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16
 
-TARGETFLAGS := -mcpu=cortex-m4 -mthumb
+LINKERFLAGS := $(TARGETFLAGS) -T $(abspath ./linker_script.ld) \
+	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc \
+	       -nostartfiles -static
+
 DEBUGFLAGS := -ggdb -Og
 
-CPPFLAGS := $(DEFINES)
-
 # For more warnings add -Wall and -Wextra
-CFLAGS := $(TARGETFLAGS) -nostartfiles -Wno-error=implicit-function-declaration \
-	  -Wno-builtin-declaration-mismatch -Werror \
-	  $(DEBUGFLAGS) $(INC)
+CFLAGS := $(TARGETFLAGS) -Wno-error=implicit-function-declaration \
+	  $(DEBUGFLAGS) $(INC) $(DEFINES)
 
 
 OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
@@ -71,13 +69,10 @@ OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
 
 # Rules:
 $(BUILD_DIR)/$(BIN): $(OBJ_FILES)
-	$(CC) -ffunction-sections -fdata-sections $(CFLAGS) $(LINKERFLAGS) $+ -o $(@)
-
-INCLUDES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.d)
--include $(INCLUDES)
+	$(CC) $(LINKERFLAGS) $+ -o $(@)
 
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -MMD -c $< -o $@
+	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 $(BUILD_DIR):
 	$(shell [ -d ./build ] || mkdir build)
