@@ -36,6 +36,8 @@ int main(void){
   
 	*GPIOA_MODER |= (1 << GPIO_MODER5);
 
+	*GPIOA_ODR |= (1 << LED_PIN);
+
 	xTaskCreate(LED_ON_Task, "LED_ON_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
 	xTaskCreate(LED_OFF_Task, "LED_OFF_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
 	vTaskStartScheduler();
