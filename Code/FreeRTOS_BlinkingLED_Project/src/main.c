@@ -1,6 +1,3 @@
-//#include <stm32f4xx.h>
-//#include "stm32f4xx_it.h"
-
 #include <stdint.h>
 
 // AHB1 definitions:
