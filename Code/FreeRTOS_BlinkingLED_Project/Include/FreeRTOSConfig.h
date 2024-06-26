@@ -42,7 +42,6 @@
  *----------------------------------------------------------*/
 
 #include <stdint.h>
-extern uint32_t SystemCoreClock;
 
 //config* definitions
 #define configAPPLICATION_ALLOCATED_HEAP 								0
@@ -57,7 +56,7 @@ extern uint32_t SystemCoreClock;
 //#define	configTIMER_QUEUE_LENGTH
 //#define	configTIMER_TASK_PRIORITY
 //#define configTIMER_TASK_STACK_DEPTH
-#define configCPU_CLOCK_HZ															( SystemCoreClock )
+#define configCPU_CLOCK_HZ															( 25000000 )
 #define configTICK_RATE_HZ															( ( TickType_t ) 1000 )
 #define configMAX_PRIORITIES														( 2 )
 #define configMINIMAL_STACK_SIZE												( ( unsigned short ) 130 )

@@ -1,4 +1,4 @@
-CC = ~/Repos/arm-gnu-toolchain-12.3.rel1/bin/arm-none-linux-gnueabihf-gcc
+CC = ~/Toolchains/arm-none-eabi-13.2.Rel1/bin/arm-none-eabi-gcc-13.2.1
 LINKERFLAGS= -T $(LINKFILES)
 TARGETFLAGS = -mcpu=cortex-m4 -mthumb
 OUTPUTFLAGS = -o blink.elf

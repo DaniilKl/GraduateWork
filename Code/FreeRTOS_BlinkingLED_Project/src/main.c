@@ -1,80 +1,63 @@
-/*File name: Mmain.c;
-* Author: Daniil;
-* Compiler: armclang;
-* Language: C11;
-* Hardware used in testing: STM32 NUCLEO-F401RE.
-* Warnings: -
-* Description: -
-* Last update: 01.05.2023.
-*/
+#include <stdint.h>
 
-#include "main.h"
+// AHB1 definitions:
+#define PERIPHERAL_BASE (0x40000000U)
+#define AHB1_BASE (PERIPHERAL_BASE + 0x20000U)
+#define AHB1_RCC_BASE (AHB1_BASE + 0x3800U)
+#define AHB1_GPIOA_BASE (AHB1_BASE + 0x0U)
 
-//main.c definitions:
-	//Tasks stacks lengths definitions:
-	#define TASK_STACK_LENGHT_WORDS 1000
+#define RCC_AHB1ENR ((volatile uint32_t*)(AHB1_RCC_BASE + 0x30U))
 
-//Hardware initializations function:
-static inline void SysInit(void){
-	HAL_Init();
-	
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	
-	GPIO_InitTypeDef GPIO_InitStructure = {0};
-	
-	GPIO_InitStructure.Pin = LED_APin;
-	GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStructure.Pull = GPIO_NOPULL;
-	GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
-}
-//Error handler impleemnted for debugging purposes:
-static void ErrorHandler(void){
-	while(1){}
-}
+#define GPIOA_MODER ((volatile uint32_t*)(AHB1_GPIOA_BASE + 0x0U))
+#define GPIO_MODER5 (0xaU)
+#define GPIOA_ODR ((volatile uint32_t*)(AHB1_GPIOA_BASE + 0x14U))
 
+#define LED_PIN (0x5U)
+
+/* FreeRTOS includes: */
+#include "FreeRTOS.h"
+#include "list.h"
+#include "task.h"
+
+#define TASK_STACK_LENGHT_WORDS 1000
 
 void LED_ON_Task(void *pvParameters);
 void LED_OFF_Task(void *pvParameters);
 
+int main(void){
+	*RCC_AHB1ENR |= (uint32_t)0x1;
+	
+	uint32_t dummy;
+	dummy = *(RCC_AHB1ENR);
+	dummy = *(RCC_AHB1ENR);
+  
+	*GPIOA_MODER |= (1 << GPIO_MODER5);
 
-int main(void){ //The main function will blink the LED with 5 Hz frequency.
-	SysInit();//System initialization.
-	
-	if (xTaskCreate(LED_ON_Task, "LED_ON_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL) == pdFAIL) //If memory allocation to this task fails go to ErrorHandler
-		ErrorHandler(); 
-	if (xTaskCreate(LED_OFF_Task, "LED_OFF_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL) ==pdFAIL) //If memory allocation to this task fails go to ErrorHandler
-		ErrorHandler();
-	
-	vTaskStartScheduler(); //Starting scheduler.
-	//Infinite loop:
+	*GPIOA_ODR |= (1 << LED_PIN);
+
+	xTaskCreate(LED_ON_Task, "LED_ON_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
+	xTaskCreate(LED_OFF_Task, "LED_OFF_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
+	vTaskStartScheduler();
+
 	while (1){
 		
-	
 	}
 }
 
 void LED_ON_Task (void *pvParameters){
-	
-	//Infinite loop:
+
 	while (1){
-		HAL_GPIO_WritePin(GPIOA, LED_APin, GPIO_PIN_SET);
+		*GPIOA_ODR |= (1 << LED_PIN);
 		vTaskDelay(pdMS_TO_TICKS( 500 ));
 	}
-	
-	vTaskDelete(NULL); 
+	vTaskDelete(NULL);
 }
 
 void LED_OFF_Task (void *pvParameters){
 	
-	//Infinite loop:
 	while (1){
-		HAL_GPIO_WritePin(GPIOA, LED_APin, GPIO_PIN_RESET);
+		*GPIOA_ODR &= ~(1 << LED_PIN);
 		vTaskDelay(pdMS_TO_TICKS( 600 ));
 	}
-	
 	vTaskDelete(NULL); 
 }
-
-
-
