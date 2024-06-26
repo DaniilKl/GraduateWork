@@ -5,16 +5,6 @@ BIN = FreeRTOSblinki.elf
 SRC_DIR = $(abspath ./src)
 BUILD_DIR = $(abspath ./build)
 
-# Includes:
-#CMSIS paths:
-#CMSIS_SRC += $(abspath ../CMSIS*/Device/ARM/ARMCM4/Source/*.c)
-#CMSIS_INC += $(abspath ../CMSIS*/Device/ARM/ARMCM4/Include/) \
-#		 $(abspath ../CMSIS/CMSIS/Core/Include/)
-
-#stm32f4xx-hal-driver paths:
-#HAL_SRC += $(absapth ../stm32f4xx-hal-driver/Src/*.c)
-#HAL_INC += $(abspath ../stm32f4xx-hal-driver/Inc/)
-
 # FreeRTOS dirs paths:
 FREERTOS_SRC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source)
 FREERTOS_PORTABLE_SRC_DIR := $(abspath \
