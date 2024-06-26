@@ -6,6 +6,10 @@
 #define SRAM_END (SRAM_START + SRAM_SIZE)
 #define STACK_POINTER_INIT_ADDRESS (SRAM_END)
 
+#define svcall_handler SVC_Handler
+#define pendsv_handler PendSV_Handler
+#define systick_handler SysTick_Handler
+
 void reset_handler(void);
 void default_handler(void);
 void nmi_handler(void) __attribute__((weak, alias("default_handler")));
@@ -13,10 +17,10 @@ void hard_fault_handler(void) __attribute__((weak, alias("default_handler")));
 void mem_manage_handler(void) __attribute__((weak, alias("default_handler"))); 
 void bus_fault_handler(void) __attribute__((weak, alias("default_handler")));
 void usage_fault_handler(void) __attribute__((weak, alias("default_handler")));
-void svcall_handler(void) __attribute__((weak, alias("default_handler")));
+extern void svcall_handler(void);
 void debug_monitor_handler(void) __attribute__((weak, alias("default_handler")));
-void pendsv_handler(void) __attribute__((weak, alias("default_handler")));
-void systick_handler(void) __attribute__((weak, alias("default_handler")));
+extern void pendsv_handler(void);
+extern void systick_handler(void);
 void wwdg_handler(void) __attribute__((weak, alias("default_handler")));
 void pvd_handler(void) __attribute__((weak, alias("default_handler")));
 void tamp_stamp_handler(void) __attribute__((weak, alias("default_handler")));
