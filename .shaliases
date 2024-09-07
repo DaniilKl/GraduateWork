@@ -5,6 +5,7 @@ alias GDB='~/Repos/gdb-11.2/build/gdb/gdb -data-directory=~/Repos/gdb-11.2/build
 #openocd aliases:
 alias OpenOCDWrite='[ -z $FILE_TO_WRITE ] && echo "Variable FILE_TO_WRITE is empty!" || openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program $FILE_TO_WRITE verify reset exit"'
 alias OpenOCDServer='openocd -f interface/stlink.cfg -f target/stm32f4x.cfg &>> ./.opeocd-server-logs &'
+alias OpenOCDServerZephyr="openocd -s ~/Projects/GraduateWork/Code/zephyrproject/zephyr/boards/arm/nucleo_f401re/support -s ~/.local/zephyr-sdk/sysroots/x86_64-pokysdk-linux/usr/share/openocd/scripts -f ~/Projects/GraduateWork/Code/zephyrproject/zephyr/boards/arm/nucleo_f401re/support/openocd.cfg -c 'tcl_port 6333' -c 'telnet_port 4444' -c 'gdb_port 3333' '-c init' '-c targets' '-c halt'"
 
 # Zephyr aliases:
 alias VenvZephyr='source ~/Documents/Projects/GraduateWork/Code/zephyrproject/.venv/bin/activate'

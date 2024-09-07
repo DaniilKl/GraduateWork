@@ -4,11 +4,13 @@ CMSIS_5/
 stm32f4xx-hal-driver/
 stm32f4xx-nucleo-bsp/
 FreeRTOSv202212.01/
+# Sourcetrail is an utility to parse source code and draw some graphs, no need
+# to publish it:
+FreeRTOS_BlinkingLed_SourcceTrail/
 zephyrproject/bootloader/
 zephyrproject/modules/
 zephyrproject/tools/
-zephyrproject/zephyr/
-zephyrproject/zephyr-sdk-0.16.4/
+zephyrproject/
 .gdb_history
 
 # Ignore any files from particular compilation stages:
