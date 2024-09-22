@@ -20,7 +20,7 @@
     \usepackage{titlesec} %Not used yet
     %Text aligment customization:
     \usepackage{ragged2e}
-    \justifying
+    \justifying % Spread text on the entire page
     %References management:
     \usepackage{hyperref} %Is needed for biblatex package.
     %Bibliography management:
@@ -33,6 +33,11 @@
     \usepackage[acronym]{glossaries}
     \makeglossaries
     \usepackage{Sections/ListOfSymbolsAndAbbreviations}
+    % PDF comments:
+    \usepackage[colorinlistoftodos,prependcaption,textsize=small,color=black!10]{todonotes}
+    % Comments types:
+    % Margin comment: \todo{This is a margin comment}
+    % Inline comment: \todo[inline]{This is an inline comment}
 
 %Other definitions:
     %Change the title of the Table of content:
