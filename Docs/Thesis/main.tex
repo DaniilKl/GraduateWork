@@ -8,22 +8,17 @@
 %Title page from PDF:
 \includepdf[pages=-]{PDFs/StronaTytulowa_PracaDyplomowa}%The tittle is downloaded from university page
 
-\listoftodos
-
 %Page counter start:
 \setcounter{page}{1}
+\listoftodos
 
 %Abstract:
     %Abstract using the Polish language:
-    \addcontentsline{toc}{section}{Streszczenie}
-    \section*{Streszczenie}
-
+    \section*{Streszczenie}\addcontentsline{toc}{section}{Streszczenie}
     \subfile{Sections/AbstractPL}
 
     %Abstract using the English language:
-    \addcontentsline{toc}{section}{Abstract}
-    \section*{Abstract}
-
+    \section*{Abstract}\addcontentsline{toc}{section}{Abstract}
     \subfile{Sections/AbstractEN}
 
 %End of the abstract.
