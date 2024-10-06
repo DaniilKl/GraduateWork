@@ -10,18 +10,15 @@
 
 %Page counter start:
 \setcounter{page}{1}
+\listoftodos
 
 %Abstract:
     %Abstract using the Polish language:
-    \addcontentsline{toc}{section}{Streszczenie}
-    \section*{Streszczenie}
-
+    \section*{Streszczenie}\addcontentsline{toc}{section}{Streszczenie}
     \subfile{Sections/AbstractPL}
 
     %Abstract using the English language:
-    \addcontentsline{toc}{section}{Abstract}
-    \section*{Abstract}
-
+    \section*{Abstract}\addcontentsline{toc}{section}{Abstract}
     \subfile{Sections/AbstractEN}
 
 %End of the abstract.
@@ -32,12 +29,24 @@
 %End of the Table of content.
 
 %List of symbols and abbreviations:
-\addcontentsline{toc}{section}{Oznaczenia i skróty}
-\section*{Oznaczenia i skróty}
-\printglossary[type=\acronymtype]
-%End of the list of symbols and abbreviations.
+\todo[inline]{Sekcja "Skróty i oznaczenia" nie jest dodawana automatycznie do spisu treści, trzeba ją dodawać ręczenie. Ale przy ręcznym dodawaniu, spis treści nie wskazuje prawidłowo na początek sekcji, tylko na początek strony gzdie ta sekcja się znajduje.}
+\addcontentsline{toc}{section}{Skróty i oznaczenia}
+\printglossary[type=\acronymtype,nonumberlist]
 
 %Main sections (numerated):
+
+%Intro:
+\section{Wstęp}
+\subfile{Sections/MainSections/00-Intro}
+
+\section{Architektury i pojęcia podstawowe}
+\subfile{Sections/MainSections/01-basics}
+
+\section{Dekompozycja i wyodrębnienie}
+\subfile{Sections/MainSections/02-decomposition-and-separation}
+
+\section{Analiza}
+\subfile{Sections/MainSections/03-analysis}
 
 %End of main sections.
 
