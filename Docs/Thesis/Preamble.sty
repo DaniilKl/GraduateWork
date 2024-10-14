@@ -3,10 +3,9 @@
 %Packages:
     %Test package:
     \usepackage{blindtext}
-
-    
     %Graphics packages:
     \usepackage{graphicx} % Required for inserting images
+    \renewcommand{\figurename}{Rysunek} % Change Figure to Rysunek in \caption
     % Font:
     \usepackage{fontspec}
     \setmainfont{Arial} %Use arial according to university requirements
@@ -14,7 +13,6 @@
     \usepackage{pdfpages}
     %Packages for multifile project management:
     \usepackage{subfiles}
-    %Packages for page layout:
     \usepackage{geometry} %Not used yet
     %Sections and chapters customization:
     \usepackage{titlesec} %Not used yet
@@ -40,12 +38,20 @@
     % Inline comment: \todo[inline]{This is an inline comment}
     \usepackage[skip=1.5pt plus1pt, indent=15pt]{parskip}
     \usepackage{indentfirst} % indent first paragraph in section.
+    \usepackage{float} % For using \begin{figure}[H] to place images at the exact locations.
+    \usepackage{subcaption} % For Subfigures
+    \usepackage{cleveref} % For cref
+    % Redefine cleveref names for figures:
+    \crefname{figure}{rysunek}{rysunki}
+    \Crefname{figure}{Rysunek}{Rysunki}
 
 %Other definitions:
     %Change the title of the Table of content:
     \renewcommand*\contentsname{Spis treści}
     %Change the title of the Acronyms list:
     \renewcommand{\acronymname}{Skróty i oznaczenia}
+    % Change the title of the List of Figures:
+    \renewcommand{\listfigurename}{Spis rysunków}
     %Page numbering style:
     \pagenumbering{arabic}
     % Distance between lines:
