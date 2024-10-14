@@ -18,4 +18,54 @@
 %Design - struktura lub architektura stowrzona dla osiągniecia pewnego celu (IMHO najbliższe %tłumaczenie na język Polski - projekt, chociaż w języku angielskim project =/= design).
 %Zostawiam to tu, aby nie zgubić. W pracę będę korzystał z tych pojęć zgodnie z tymi definicjami.}
 
+Ten rozdział przedstawia i opisuje architektury oprogramowania w systemach wbudowanych (używana podczas
+napisania tej pracy definicja pojęcia "system wbudowany" jest zamieszczona w
+\hyperref[sec:zalacznik-1]{załączniku nr 1}) bazujących się na jednostkach obliczeniowych
+skonstruowanych na podstawie architektury \acrshort{arm}'owej. Będą też omówione cechy przedstawionych
+architektur oraz przyczyny je powodujące.
+
+Następnie są przedstawione realizacje tych architektur. Niektóre z realizacji będą dokładniej omówione
+w kolejnych rozdziałach.
+
+Należy też wspomnieć, że \acrshort{arm} przedstawia też technologię TrustZone, która dodaje kilka
+możliwych architektur. Skoro zakresem tej technologii jest bezpieczeństwo — architektury, które ona
+wprowadza, nie zostaną tu omówione, są one jednak wkrótce opisane w \hyperref[sec:zalacznik-2]
+{załączniku nr 2}.
+
+W dalszej części pracy niejednokrotnie będzie wspominany termin "wirtualizacja", którego wytłumaczenie można znaleźć w \hyperref[sec:zalacznik-3]{załączniku nr 3}.
+
+\subsection{Architektury}
+
+\subsubsection{Architektura "nagi metal"}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/bare-metal.png}
+    \caption{Architektura "nagi metal"}
+    \label{fig:bare-metal}
+\end{figure}
+
+\subsubsection{Architektura z systemem operacyjnym}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/no-virt.png}
+    \caption{Architektura z systemem operacyjnym}
+    \label{fig:no-virt}
+\end{figure}
+
+\subsubsection{Architektura z wirtualizacja}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/virt.png}
+    \caption{Architektura z wirtualizacją}
+    \label{fig:virt}
+\end{figure}
+
+\subsubsection{Architektura z wirtualizacją zagnieżdżoną}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Images/virt-nested.png}
+    \caption{Architektura z wirtualizacją zagnieżdżona}
+    \label{fig:virt-nestet}
+\end{figure}
+
 \end{document}
