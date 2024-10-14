@@ -51,4 +51,26 @@ niezaufanego (\cref{fig:trustzone-m}) za pomocą modułów \acrshort{sau} i \acr
 oraz instrukcji dla komunikacji pomiędzy środowiskami: \acrshort{isa} SG, BXNS i BLXNS.
 \cite{trustzonearmv8m}
 
+\section*{Załącznik nr 3: Wirtualizacja}\addcontentsline{toc}{section}{Załącznik nr 3: Wirtualzacja}\label{sec:zalacznik-3}
+
+Wirtualizacja jest technologią wprowadzającą separację środowisk z oprogramowaniem poprzez tworzenie tzw. \acrshort{vm} zarządzanych przez \acrshort{vmm}.
+
+VM posiada listę cech, które określają wytyczne do oprogramowania uruchomianego wewnątrz:
+\begin{itemize}
+    \item VM ma przepisany przedział pamięci RAM dostępny dla oprogramowania, ten przedział jest
+    mniejszy niż pamieć RAM całego urządzenia, skoro w pamięci urządzenia rezyduję też hiperwizor,
+    oraz, najprawdopodobniej, inne VM. Próba otrzymania dostępu do pamięci spoza zdefiniowanego
+    przedziału powoduje wygenerowanie wyjątku, przechwytywanego hiperwizorem.
+    \item VM ma przepisany zbiór lub podzbiór urządzeń peryferyjnych, dostęp do których jest
+    współdzielony z innymi VM'ami, i jest zarządzany przez hiperwizor.
+    \item VM ma przepisaną pewną ilość zasobów obliczeniowych.
+    \item Wszystkie VM'y są odseparowane od siebie, i jakakolwiek komunikacja pomiędzy nimi jest
+    możliwa tylko w ściśle zdefiniowany przez hiperwizora sposób.
+\end{itemize}
+
+Wyżej wymienione cechy pozwalają na użycie wirtualizacji w dużej ilości rozwiązaniach systemów
+wbudowanych (za co też trzeba podziękować progres, dodający rozszerzenia sprzętowe), w szczególności w
+przypadkach gdzie jest potrzebna separacja oprogramowania ze względów bezpieczeństwa lub ograniczenia
+dostępu do zasobów sprzętowych.
+
 \end{document}
