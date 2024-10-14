@@ -21,4 +21,34 @@ oprogramowanie) dla spełnienia pewnej, zdefiniowanej funkcji (więc może być 
 częścią większego systemu.
 % TODO: Nie cytuję tu rzadnej książki ani normy, bazuję sie na swojej wiedzę, ale agólnie ta definicja jest podobna od książki do książki.
 
+\section*{Załącznik nr 2: ARM TrustZone}\addcontentsline{toc}{section}{Załącznik nr 2: ARM TrustZone}\label{sec:zalacznik-2}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/trustzone-m.png}
+    \caption{TrustZone dla architektury \acrshort{arm} v8-M}
+    \label{fig:trustzone-m}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/trustzone-a.png}
+    \caption{TrustZone dla architektury \acrshort{arm} v8-A}
+    \label{fig:trustzone-a}
+\end{figure}
+
+Koncept technologi TrustZone bazuję się na podziale sprzętowym środowiska (pamięci i innych zasobów) na
+środowisko zaufane i niezaufane (\cref{fig:trustzone-m} i
+\cref{fig:trustzone-a}), co jest robione za pomocą rozszerzeń do architektur ARMv8-A i
+ARMv8-M dotyczących \acrshort{bsa} i \acrshort{isa}.
+
+Dla architektury ARMv8-A został dodany \acrshort{el}3, w którym jest zamieszczony monitor bezpieczeństwa
+(\cref{fig:trustzone-a}), realizowany przez oprogramowanie \acrshort{arm}'owe Trusted
+Firmware A. Faktycznie ten monitor bezpieczeństwa jest pewnym mostem przekazującym polecenia ze
+środowiska niezaufanego do środowiska zaufanego oraz przełączający procesor w bezpieczny tryb za pomocą
+\acrshort{smccc}. \cite{smccc}\cite{trustzoneaarch64} % TODO: automatic images indexing
+
+Dla architektury ARMv8-M zostały dodane rozszerzenia pozwalające na separację środowiska zaufanego od
+niezaufanego (\cref{fig:trustzone-m}) za pomocą modułów \acrshort{sau} i \acrshort{idau},
+oraz instrukcji dla komunikacji pomiędzy środowiskami: \acrshort{isa} SG, BXNS i BLXNS.
+\cite{trustzonearmv8m}
+
 \end{document}
