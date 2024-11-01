@@ -42,9 +42,10 @@ ARMv8-M dotyczących \acrshort{bsa} i \acrshort{isa}.
 
 Dla architektury ARMv8-A został dodany \acrshort{el}3, w którym jest zamieszczony monitor bezpieczeństwa
 (\cref{fig:trustzone-a}), realizowany przez oprogramowanie \acrshort{arm}'owe Trusted
-Firmware A. Faktycznie ten monitor bezpieczeństwa jest pewnym mostem przekazującym polecenia ze
-środowiska niezaufanego do środowiska zaufanego oraz przełączający procesor w bezpieczny tryb za pomocą
-\acrshort{smccc}. \cite{smccc}\cite{trustzoneaarch64} % TODO: automatic images indexing
+Firmware A (referencyjna implementacja monitoru bezpieczeństwa). Faktycznie ten monitor bezpieczeństwa
+jest pewnym mostem przekazującym polecenia ze środowiska niezaufanego do środowiska zaufanego oraz
+przełączający procesor w bezpieczny tryb za pomocą \acrshort{smccc}.
+\cite{smccc}\cite{trustzoneaarch64} % TODO: automatic images indexing
 
 Dla architektury ARMv8-M zostały dodane rozszerzenia pozwalające na separację środowiska zaufanego od
 niezaufanego (\cref{fig:trustzone-m}) za pomocą modułów \acrshort{sau} i \acrshort{idau},
