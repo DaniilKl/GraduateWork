@@ -75,8 +75,77 @@ kontroler przerwań (w przypadku \acrshort{arm}'u to jest \acrshort{gic}).
 Celą separacji stanów jest sprzętowy podział wykonywanych programów i przypisanie do nich pewnych
 poziomów uprawnień. Dokładniej to jest opisane w \hyperref[sec:zalacznik-4]{załączniku nr 4}.
 
+\section*{Załącznik nr 4: Przełączanie stanu i kontekstu}\addcontentsline{toc}{section}{Załącznik nr 4: Przęłączanie stanu i kontekstu}\label{sec:zalacznik-4}
+
+Stan wykonywanego oprogramowania jest określany poprzez następujące elementy:
+
 \begin{itemize}
+    \item Zawartości rejestrów ogólnego przeznaczenia: zawierają wyniki wykonywania ostatnich
+    instrukcji;
+    \item Rejestry wskazujące na adres następnej komendy (PC w architekturach \acrshort{arm}'owych),
+    adres powrotu (LR w architekturach \acrshort{arm}'owych) i adres aktualnie używanego stosu (MSP
+    lub PSP w architekturach \acrshort{arm}): określają "kierunek" (tzn. co będzie wykonane następne,
+    gdzie wrócić po wykonaniu i tak dalej) wykonywanych instrukcji oprogramowania;
+    \item Zawartość aktualnie używanego stosu: tak samo jak i poprzedni punkt, określa "kierunek"
+    wykonywania instrukcji oprogramowania, przechowuje historie wykonywanych instrukcji oprogramowania
+    (np. przy przerwaniu, do niego są zapisywane pewne rejestry, które po zakończeniu przerwania są
+    odczytywane z powrotem, pozwalając na wznowienie wykonywanego programu);
+    \item Rejestry systemowe (np. PSR i rejestry masek przerwań w architekturach \acrshort{arm}'owych):
+    określają między innymi tryb jednostki obliczeniowej, w którym program jest wykonywany, co z kolei
+    określa poziom dostępu do zasobów sprzętowych.
 \end{itemize}
 
+Z powyższego wynika, że stan wykonywanego oprogramowania — to jest zbiór pewnych wartości
+przechowywanych w rejestrach jednostki obliczeniowej, co oznacza, że przełączenie stanów jest robione
+sprzętowo, przez jednostkę obliczeniową (ponieważ oprogramowanie nie ma dostępu zapisu lub odczytu do
+wszystkich rejestrów jednostki obliczeniowej).
+
+Z kolei przełączenie stanów — to jest proces, kiedy stan aktualnie wykonywanego oprogramowania jest
+zapisywany (w stos przynależącego do tego oprogramowania) i podmieniany na stan przynależący do innego
+oprogramowania (który jest odczytywany ze stosu uruchamianego oprogramowania). Występuje to podczas
+zmiany trybu jednostki obliczeniowej, ponieważ każdy tryb jednostki obliczeniowej ma własny stos.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/armv8m-modes.png}
+    \caption{Tryby procesora zbudowanego na podstawie architektury \acrshort{arm}v8-\acrshort{m}
+    \cite{armv8mintro}}
+    \label{fig:armv8-m-modes}
+\end{figure}
+
+Na \cref{fig:armv8-m-modes} są pokazane tryby jednostki obliczeniowej zbudowanej na podstawie
+architektury \acrshort{arm}v8-\acrshort{m}. Taka jednostka posiada trzy tryby z dwoma poziomami
+dostępu: tryb główny (główny uprzywilejowany i główny nieuprzywilejowany) i tryb przerwania. Każdy z
+tych trybów ma swój stos, w którym jest przechowywany stan aktualnie wykonywanego oprogramowania.
+Adres na każdy ze stosów jest przechowywany w rejestrach MSP i PSP \cite{armv8mintro}.
+
+Natomiast kontekst programu jest pojęciem definiowanym przez poszczególną implementację oprogramowania
+systemowego (system operacyjny bądź hiperwizor) i zawiera w sobie opisany wyżej stan programu oraz
+dodatkowe dane, interpretowane przez oprogramowanie systemowe (np. czas jednostki obliczeniowej, który
+był użyty przez ten program, lub priorytet).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/context-switching-armv8-m.png}
+    \caption{Przełączenie kontekstu w systemie operacyjnym uruchomionym na sprzęcie z jednostką
+    obliczeniową zbudowanej na podstawie architektury \acrshort{arm}v8-\acrshort{m}: deskryptor —
+    struktura przechowująca meta-dane programu; meta-dane programu — dane opisujące program.}
+    \label{fig:armv8-m-context-switch}
+\end{figure}
+
+Stąd przełączenie kontekstu oznacza, że nie jednostka obliczenioa jest odpowiedzialna za wybór i
+uruchomienie pewnego programu, tylko oprogramowanie systemowe.
+
+Na \cref{fig:armv8-m-context-switch} jest pokazany przykładowy przebieg takiego przełączenia dla
+architektury \acrshort{arm}v8-\acrshort{m}. Przełączenie kontekstu następuje podczas wykonywania kodu
+systemu operacyjnego, tzn. kiedy jednostka obliczeniowa znajduje się w trybie głównym uprzywilejowanym
+(\cref{fig:armv8-m-modes}), co oznacza, że przed przełączeniem kontekstu następuje przełączenie
+stanów, podczas którego jednostka obliczeniowa przełącza się z wykonywania kodu aktualnego programu na
+wykonywanie kodu systemu operacyjnego (tzn. przechodzi z trybu głównego nieuprzywilejowanego do trybu
+głównego uprzywilejowanego, \cref{fig:armv8-m-modes}). Natomiast po przełączeniu kontekstu następuje
+przełączenie stanów, podczas którego jednostka obliczeniowa przełącza się z wykonywania kodu systemu
+operacyjnego na wykonywanie kodu programu zaproponowanego przez system operacyjny podczas przełączenia
+kontekstu programu (tzn. przechodzi z trybu głównego uprzywilejowanego do trybu głównego
+nieuprzywilejowanego).
 
 \end{document}
