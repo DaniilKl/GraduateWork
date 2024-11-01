@@ -54,24 +54,29 @@ oraz instrukcji dla komunikacji pomiędzy środowiskami: \acrshort{isa} SG, BXNS
 
 \section*{Załącznik nr 3: Wirtualizacja}\addcontentsline{toc}{section}{Załącznik nr 3: Wirtualzacja}\label{sec:zalacznik-3}
 
-Wirtualizacja jest technologią wprowadzającą separację środowisk z oprogramowaniem poprzez tworzenie tzw. \acrshort{vm} zarządzanych przez \acrshort{vmm}.
+Wirtualizacja jest technologią wprowadzającą separację środowisk z oprogramowaniem poprzez tworzenie
+tzw. \acrshort{vm} zarządzanych przez \acrshort{vmm} (\cref{fig:virt}). Typy separacji używane w
+wirtualizacji: separacja pamięciowa (poprzez translację pamięci), separacja sygnałowa (przekierowywanie
+przerwań) i separacja stanów (przełączanie kontekstu).
 
-VM posiada listę cech, które określają wytyczne do oprogramowania uruchomianego wewnątrz:
+Celą separacji pamięciowej jest przypisanie do każdej \acrshort{vm} przedziału adresu pamięci (kodu
+programu i urządzeń peryferyjnych, ponieważ rejestry tych urządzeń są zmapowane do pamięci; ang. memory
+mapped peripherals) i wychwytywanie wszystkich prób manipulacji pamięcią nieprzypisaną do tej
+\acrshort{vm}. W architekturach \acrshort{arm} tym się zajmuje \acrshort{mmu}, który, zaczynając od
+\acrshort{arm}v8, posiada dwa poziomy translacji: z poziomu aplikacji (\acrshort{va}), do poziomu
+systemu operacyjnego (\acrshort{ipa}) i do poziomu hiperwizora (\acrshort{pa}
+\cite{armv8amemtranslation}).
+
+Celą separacji sygnałowej jest podział i przekierowywanie przerwań sprzętowych pomiędzy \acrshort{vm}.
+Każda \acrshort{vm} ma przepisany podzbiór urządzeń peryferyjnych za pomocą separacji pamięci, te
+urządzenia mogą generować przerwania, za przekierowywanie których jest odpowiedzialny hiperwizor i
+kontroler przerwań (w przypadku \acrshort{arm}'u to jest \acrshort{gic}).
+
+Celą separacji stanów jest sprzętowy podział wykonywanych programów i przypisanie do nich pewnych
+poziomów uprawnień. Dokładniej to jest opisane w \hyperref[sec:zalacznik-4]{załączniku nr 4}.
+
 \begin{itemize}
-    \item VM ma przepisany przedział pamięci RAM dostępny dla oprogramowania, ten przedział jest
-    mniejszy niż pamieć RAM całego urządzenia, skoro w pamięci urządzenia rezyduję też hiperwizor,
-    oraz, najprawdopodobniej, inne VM. Próba otrzymania dostępu do pamięci spoza zdefiniowanego
-    przedziału powoduje wygenerowanie wyjątku, przechwytywanego hiperwizorem.
-    \item VM ma przepisany zbiór lub podzbiór urządzeń peryferyjnych, dostęp do których jest
-    współdzielony z innymi VM'ami, i jest zarządzany przez hiperwizor.
-    \item VM ma przepisaną pewną ilość zasobów obliczeniowych.
-    \item Wszystkie VM'y są odseparowane od siebie, i jakakolwiek komunikacja pomiędzy nimi jest
-    możliwa tylko w ściśle zdefiniowany przez hiperwizora sposób.
 \end{itemize}
 
-Wyżej wymienione cechy pozwalają na użycie wirtualizacji w dużej ilości rozwiązaniach systemów
-wbudowanych (za co też trzeba podziękować progres, dodający rozszerzenia sprzętowe), w szczególności w
-przypadkach gdzie jest potrzebna separacja oprogramowania ze względów bezpieczeństwa lub ograniczenia
-dostępu do zasobów sprzętowych.
 
 \end{document}
