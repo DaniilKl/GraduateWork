@@ -64,8 +64,8 @@ programu i urządzeń peryferyjnych, ponieważ rejestry tych urządzeń są zmap
 mapped peripherals) i wychwytywanie wszystkich prób manipulacji pamięcią nieprzypisaną do tej
 \acrshort{vm}. W architekturach \acrshort{arm} tym się zajmuje \acrshort{mmu}, który, zaczynając od
 \acrshort{arm}v8, posiada dwa poziomy translacji: z poziomu aplikacji (\acrshort{va}), do poziomu
-systemu operacyjnego (\acrshort{ipa}) i do poziomu hiperwizora (\acrshort{pa}
-\cite{armv8amemtranslation}).
+systemu operacyjnego (\acrshort{ipa}) i do poziomu hiperwizora (\acrshort{pa})
+\cite{armv8amemtranslation}.
 
 Celą separacji sygnałowej jest podział i przekierowywanie przerwań sprzętowych pomiędzy \acrshort{vm}.
 Każda \acrshort{vm} ma przepisany podzbiór urządzeń peryferyjnych za pomocą separacji pamięci, te
@@ -74,6 +74,10 @@ kontroler przerwań (w przypadku \acrshort{arm}'u to jest \acrshort{gic}).
 
 Celą separacji stanów jest sprzętowy podział wykonywanych programów i przypisanie do nich pewnych
 poziomów uprawnień. Dokładniej to jest opisane w \hyperref[sec:zalacznik-4]{załączniku nr 4}.
+
+Przy czym, typowo hiperwizor jest zaprojektowany w taki sposób, że przy użyciu wszystkich tych rodzai separacji, aplikacja (lub system operacyjny), uruchomiana na tym hiperwizorze, wcale nie musi wiedzieć że jest uruchomiana nie wprost na rzeczywistym sprzęcie. Taki rodzaj wirtualizacji jest nazywany wirtualizacja natywną (ang. native virtualization, także ang. full virtualization, lub ang. hardware-accelerated virtualization).
+
+W przypadku, kiedy sprzęt nie posiada dedykowanych narzędzi do zapewnienia jakiegoś z rodzajów separacji, można skorzystać z tzw. parawirtualizacji (ang. paravirtualization). W takim przypadku aplikacja, która jest uruchamiana na hiperwizorze jest modyfikowana w sposób taki, aby ona wiedziała, że jest uruchomiona nie na realnym sprzęcie a na wirtualnym i wiedziała o obecności hiperwizora. Przykładem może być separacja pamięciowa. Typowo próba otrzymania dostępu do zabronionej sekcji pamięci RAM jest wykrywana przez \acrshort{mmu}, w przypadku nieobecności tego modułu, uruchamiana aplikacja jest modyfikowana i wszystkie instrukcje odczytujące coś z pamięci są podmieniane na zestaw instrukcji, który powoduje komunikat do hiperwizora ze sprawdzeniem dostępów.
 
 \section*{Załącznik nr 4: Przełączanie stanu i kontekstu}\addcontentsline{toc}{section}{Załącznik nr 4: Przęłączanie stanu i kontekstu}\label{sec:zalacznik-4}
 
