@@ -137,16 +137,7 @@ systemowego (system operacyjny bądź hiperwizor) i zawiera w sobie opisany wyż
 dodatkowe dane, interpretowane przez oprogramowanie systemowe (np. czas jednostki obliczeniowej, który
 był użyty przez ten program, lub priorytet).
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.85\textwidth]{Images/context-switching-armv8-m.png}
-    \caption{Przełączenie kontekstu w systemie operacyjnym uruchomionym na sprzęcie z jednostką
-    obliczeniową zbudowanej na podstawie architektury \acrshort{arm}v8-\acrshort{m}: deskryptor —
-    struktura przechowująca meta-dane programu; meta-dane programu — dane opisujące program.}
-    \label{fig:armv8-m-context-switch}
-\end{figure}
-
-Stąd przełączenie kontekstu oznacza, że nie jednostka obliczenioa jest odpowiedzialna za wybór i
+Stąd przełączenie kontekstu oznacza, że nie jednostka obliczeniowa jest odpowiedzialna za wybór i
 uruchomienie pewnego programu, tylko oprogramowanie systemowe.
 
 Na \cref{fig:armv8-m-context-switch} jest pokazany przykładowy przebieg takiego przełączenia dla
