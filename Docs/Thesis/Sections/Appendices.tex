@@ -152,4 +152,33 @@ operacyjnego na wykonywanie kodu programu zaproponowanego przez system operacyjn
 kontekstu programu (tzn. przechodzi z trybu głównego uprzywilejowanego do trybu głównego
 nieuprzywilejowanego).
 
+\section*{Załącznik nr 5: Zasób jednostki obliczeniowej}\addcontentsline{toc}{section}{Załącznik nr 5: Zasób jednostki obliczeniowej}\label{sec:zalacznik-5}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.95\textwidth]{Images/time-sharing.png}
+    \caption{Współdielenie zasobów jednostek obliczeniowych przez wiele procesów w technologii \acrshort{amp}}
+    \label{fig:time-sharing}
+\end{figure}
+
+Jednostka obliczeniowa jest pewnym systemem przyjmującym instrukcje, wykonującym je i podającym wynik. Więc podstawową wielkością będzie czas wykonania jednej instrukcji (w przypadku architektury \acrshort{risc} większość instrukcji są wykonywane w przedziale jednego okresu zegara zasilającego jednostkę obliczeniową).
+
+Każdy program wykonywany przez jednostkę obliczeniową jest listą instrukcji, i każdemu programu zależy, aby ta list instrukcji była wykonana jak najszybciej, czyli idealnie jakby jedna jednostka obliczeniowa wykonywała tylko jeden program. Z tego wynika, że programy walczą o czas, na który im pozwolono używać jednostki obliczeniową do wykonania swoich instrukcji. Finalnie mamy — zasobem jednostki obliczeniowej jest czas.
+
+Czas ten można podzielić pomiędzy programami w różny sposób, za to akurat odpowiada nadzorca w oprogramowaniu systemowym.
+
+W przypadku kiedy mamy kilka jednostek obliczeniowych dostępnych dla wszystkich programów, zorganizować zarządzaniem ich zasobów można na dwa sposoby: przydzielać każdemu programu czas oddzielnej jednostki obliczeniowej (techniki \acrshort{amp}) lub połączyć zasoby wszystkich jednostek obliczeniowych i przydzielać jednemu programu pewną część (techniki \acrshort{smp}).
+
+W przypadku wirtualizacji programom są udostępniane \acrshort{vcpu}. Są to w pewny sposób przerobione przez hiperwizor zasoby realnej jednostki obliczeniowej.
+
+Na \cref{fig:time-sharing} jest pokazany przykład współdzielenia zasobów jednostek obliczeniowych przez wiele procesów technologii \acrshort{amp}. Każdemu procesowi jest przypisana pewna część zasobów obliczeniowych reprozentowana przez ilość kwantów czasu (ang. time slice; najmniejsza możliwa ilość czasu jednostki obliczeniowej, którą można przypisać procesu w niektórych realizacja oprogramowania systemowego).
+
+Stąd można zrobić trzy wnioski:
+
+\begin{enumerate}
+    \item Zasobem jednostki obliczeniowej jest jej czas;
+    \item Czas może być przypisywany bezpośrednio, lub on może być podzielony przez oprogramowanie systemowe na pewne minimalne odcinki: kwanty czasu;
+    \item W przypadku obecności wielu jednostek obliczeniowych, zarządzanie ich zasobami odbywa się zgodnie z technikami \acrshort{amp} lub \acrshort{smp}.
+\end{enumerate}
+
 \end{document}
