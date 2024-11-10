@@ -79,7 +79,16 @@ Przy czym, typowo hiperwizor jest zaprojektowany w taki sposób, że przy użyci
 
 W przypadku, kiedy sprzęt nie posiada dedykowanych narzędzi do zapewnienia jakiegoś z rodzajów separacji, można skorzystać z tzw. parawirtualizacji (ang. paravirtualization). W takim przypadku aplikacja, która jest uruchamiana na hiperwizorze jest modyfikowana w sposób taki, aby ona wiedziała, że jest uruchomiona nie na realnym sprzęcie a na wirtualnym i wiedziała o obecności hiperwizora. Przykładem może być separacja pamięciowa. Typowo próba otrzymania dostępu do zabronionej sekcji pamięci RAM jest wykrywana przez \acrshort{mmu}, w przypadku nieobecności tego modułu, uruchamiana aplikacja jest modyfikowana i wszystkie instrukcje odczytujące coś z pamięci są podmieniane na zestaw instrukcji, który powoduje komunikat do hiperwizora ze sprawdzeniem dostępów.
 
-\section*{Załącznik nr 4: Przełączanie stanu i kontekstu}\addcontentsline{toc}{section}{Załącznik nr 4: Przęłączanie stanu i kontekstu}\label{sec:zalacznik-4}
+\section*{Załącznik nr 4: Przełączanie stanu i kontekstu, definicja procesu}\addcontentsline{toc}{section}{Załącznik nr 4: Przęłączanie stanu i kontekstu, definicja procesu}\label{sec:zalacznik-4}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/process-states.png}
+    \caption{Ogólny graf stanów procesu}
+    \label{fig:process-states}
+\end{figure}
+
+Na początku należy oddzielić pojęcie programu od pojęcia procesu. Programem, w przypadku oprogramowania, jest lista instrukcji do wykonania przechowywana w jakimkolwiek miejscu. Program nie posiada, żadnego stanu, on po prostu istnieje. Natomiast procesem jest program z przydzielonym stanem. Każdy stan procesu może zawierać dodatkowe dane, np. priorytet, zasoby, połączenia z innymi procesami i tak dalej. Na \cref{fig:process-states} jest pokazany najbardziej popularne stany procesu i przejścia pomiędzy nimi.
 
 Stan wykonywanego oprogramowania jest określany poprzez następujące elementy:
 
