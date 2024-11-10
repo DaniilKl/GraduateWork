@@ -40,7 +40,7 @@ Pojęcia przełączenia stanów i przełączenia kontekstu są wyjaśnione w
 \subsection{Architektura "nagi metal"}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Images/bare-metal.png}
+    \includegraphics[width=0.55\textwidth]{Images/bare-metal.png}
     \caption{Architektura "nagi metal"}
     \label{fig:bare-metal}
 \end{figure}
@@ -49,7 +49,7 @@ Najprostsza ze względu na ilość poziomów abstrakcji architektura, składają
 wykorzystującej ten sprzęt (\cref{fig:bare-metal}). Dla funkcjonowania (jako system wbudowany) jest
 potrzebna jednostka obliczeniowa dla wykonywania poleceń, pamięć dla przechowywania poleceń, moduły
 wejścia/wyjścia dla kontaktu ze środowiskiem zewnętrznym i kontroler przerwań dla poinformowania
-aplikacji o zdarzeniach na zewnątrz. Zasoby sprzętowe są przydzielane statycznie podczas kompilacji,
+aplikacji o zdarzeniach z zewnątrz. Zasoby sprzętowe są przydzielane statycznie podczas kompilacji,
 nie ma separacji środowisk lub uprzelewanego dostępu. % TODO: uprzelewanego?
 
 Cechy:
@@ -66,39 +66,29 @@ Cechy:
 Uwzględniając powyższe cechy i właściwości, można zrobić wniosek, że taka architektura jest
 przeznaczona dla małych jednostek w systemie, np. czujniki, każda z których ma zdefiniowaną jedną cel.
 Przykładem realizacji danej architektury może być dowolna aplikacja niewykorzystująca systemu
-operacyjnego lub hiperwizora na dowolnej architekturze \acrshort{arm}'owej, chociaż najczęściej będzie
+operacyjnego lub hiperwizora na dowolnej architekturze \acrshort{arm}'owej. Chociaż najczęściej będzie
 wybierana jedna z \acrshort{m} architektur, ponieważ są one dla tego najlepiej przeznaczone.
 
 Dana architektura nie stanowi zainteresowania w ramach tej pracy, skoro nie posiada oprogramowania
-sterującego dostępem do zasobów jednostki obliczeniowej.
+zarządzającego dostępem do zasobów jednostki obliczeniowej.
 
 \subsection{Architektura z systemem operacyjnym}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Images/no-virt.png}
+    \includegraphics[width=0.55\textwidth]{Images/no-virt.png}
     \caption{Architektura z systemem operacyjnym}
     \label{fig:no-virt}
 \end{figure}
 
-Architektura posiadająca jedną warstwę abstrakcji — system operacyjny (\cref{fig:no-virt}),
-oprogramowanie systemowe, które w pełni lub częściowo (zależy od architektury systemu operacyjnego)
-zachowuje kontrolę nad sprzętem. Opiera się o dodatkowe moduły sprzętowe mające na celu separację
-pamięci (najczęściej \acrshort{mpu}, lub też \acrshort{mmu}), aby rozdzielić kod systemu operacyjnego
-od kodu aplikacji, oraz bardziej złożony kontroler przerwań obsługujący nie tylko zdarzenia
-zewnętrzne, ale i zdarzenia wewnętrzne, pozwalające na zmianę stanu systemu.
+Architektura posiadająca jedną warstwę abstrakcji — system operacyjny (\cref{fig:no-virt}), oprogramowanie systemowe, które w pełni lub częściowo (zależy od architektury systemu operacyjnego) zachowuje kontrolę nad sprzętem. Opiera się o dodatkowe moduły sprzętowe zarządzające pamięcią najczęściej \acrshort{mpu}, lub też \acrshort{mmu}), aby rozdzielić kod systemu operacyjnego od kodu aplikacji, oraz bardziej złożony kontroler przerwań obsługujący nie tylko zdarzenia zewnętrzne, ale i zdarzenia wewnętrzne, pozwalające na zmianę stanu systemu.
 
-Jednostka obliczeniowa ma wbudowany podział stanów systemu: stan aplikacji (\acrshort{el}0 w
-architekturze \acrshort{arm}'owej), w którym wykonywany kod nie ma dostępu do zasobów systemowych
-(definicja tych zasobów zależy od systemu operacyjnego) i stan systemu operacyjnego (\acrshort{el}1 w
-architekturze \acrshort{arm}'owej), mający dostęp do wszystkiego. Dla większości systemów
-operacyjnych obecność podziału na stany ze strony sprzętowej (obecności pewnych rejestrów oraz
-instrukcji \acrshort{isa}) jest obowiązkowa.
+Jednostka obliczeniowa ma wbudowany podział stanów systemu: stan aplikacji (\acrshort{el}0 w architekturze \acrshort{arm} \acrshort{a}), w którym wykonywany kod nie ma dostępu do zasobów systemowych (definicja tych zasobów zależy od systemu operacyjnego) i stan systemu operacyjnego (\acrshort{el}1 w architekturze \acrshort{arm} \acrshort{a}), mający dostęp do wszystkiego. Dla większości systemów operacyjnych obecność podziału na stany ze strony sprzętowej (obecności pewnych rejestrów oraz instrukcji \acrshort{isa}) jest obowiązkowa.
 
 Cechy:
 \begin{itemize}
     \item Skomplikowaność: w zależności od architektury systemu operacyjnego (monolityczne jądro,
     mikrojądro, nanojądro) system operacyjny może posiadać różną ilość narzędzi i funkcjonalności;
-    \item Mniejsza wydajność: obecność abstrakcji w samym systemie operacyjnym (sterowniki,
+    \item Mniejsza wydajność: obecność abstrakcji w systemie operacyjnym (sterowniki,
     interpretery aplikacji), przełączanie stanów pomiędzy systemem operacyjnym a aplikacją,
     przełączenie kontekstu pomiędzy aplikacjami;
     \item Większe bezpieczeństwo: możliwość "narzucania" zasad dla aplikacji z poziomu systemu
@@ -132,14 +122,14 @@ systemu operacyjnego.
 \subsection{Architektura z wirtualizacja}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{Images/virt.png}
+    \includegraphics[width=0.65\textwidth]{Images/virt.png}
     \caption{Architektura z wirtualizacją}
     \label{fig:virt}
 \end{figure}
 
 Architektura z wirtualizacją jest osiągana za pomocą dodania kolejnego poziomu abstrakcji do
 poprzednio omówionych architektur (\cref{fig:virt}; \acrshort{el}2 w architekturach
-\acrshort{arm}'owych), tzn. hiperwizor może uruchamiać \acrshort{vm} z aplikacją w architekturze "nagi
+\acrshort{arm} \acrshort{a}), tzn. hiperwizor może uruchamiać \acrshort{vm} z aplikacją w architekturze "nagi
 metał" jak również i z systemem operacyjnym, który już będzie odpowiedzialny za uruchomienie aplikacji.
 
 Typowo hiperwisory potrzebują odpowiedniego sprzętu dla uruchomienia (ang. virtualization support;
@@ -200,8 +190,7 @@ nazwać "hiperwizorem podrzędnym".
 
 Aktualnie architekury \acrshort{arm}'owe wspierają tę architekturę częściowo, tzn. nie ma ani dodanego
 kolejnego \acrshort{el}, ani wsparcia dla trzypoziomowej translacji pamięci, ani dedykowanych
-mechanizmów przekierowywania przerwań, jest tylko podstawowe wsparcie w postaci rozszerzeń do
-architektury \acrshort{arm}v8-\acrshort{a} \cite{nestvirtarm}.
+mechanizmów przekierowywania przerwań, jest tylko podstawowe wsparcie w postaci rozszerzeń do pewnych rejestrów w architekturach \acrshort{arm} \acrshort{a} \cite{nestvirtarm}.
 
 Autor nie miał doświadczeń z tą architekturą, więc nie będzie przedstawiono jej cech. Należy też
 dodać, że nie jest ona często wykorzystywana i wygląda raczej jako architektura eksperymentalna
@@ -214,6 +203,6 @@ skutkuje trzema poziomami zarządzania dostępem do jednostki obliczeniowej: opr
 hiperwizorze nadrzędnym, oprogramowanie w hiperwizorze podrzędnym i oprogramowanie w systemie
 operacyjnym, co by stanowiło ciekawy punkt dla badań, gdyby nie słabe wsparcie dla tej architektury w
 społeczeństwie systemów wbudowanych, co powoduje dużą ilość problemów niebędących centrum uwagi tej
-pracy. Więc nie będzie to omówione w tej pracę.
+pracy. Więc, ta architektura nie będzie omówiona w ramach tej pracy.
 
 \end{document}
