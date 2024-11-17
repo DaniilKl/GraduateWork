@@ -35,7 +35,7 @@ int main(void){
 
 	*GPIOA_ODR |= (1 << LED_PIN);
 
-	xTaskCreate(LED_ON_Task, "LED_ON_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
+	xTaskCreate(LED_ON_Task, "LED_ON_Task", TASK_STACK_LENGHT_WORDS, NULL, 1, NULL);
 	xTaskCreate(LED_OFF_Task, "LED_OFF_Task", TASK_STACK_LENGHT_WORDS, NULL, 0, NULL);
 	vTaskStartScheduler();
 
@@ -57,7 +57,7 @@ void LED_OFF_Task (void *pvParameters){
 	
 	while (1){
 		*GPIOA_ODR &= ~(1 << LED_PIN);
-		vTaskDelay(pdMS_TO_TICKS( 600 ));
+		vTaskDelay(pdMS_TO_TICKS( 1000 ));
 	}
 	vTaskDelete(NULL); 
 }
