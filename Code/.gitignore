@@ -10,6 +10,7 @@ zephyrproject/tools/
 zephyrproject/zephyr/
 zephyrproject/zephyr-sdk-0.16.4/
 .gdb_history
+*.log*
 
 # Ignore any files from particular compilation stages:
 temps/

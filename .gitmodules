@@ -1,0 +1,3 @@
+[submodule "Code/FreeRTOS"]
+	path = Code/FreeRTOS
+	url = git@github.com:DaniilKl/FreeRTOS.git
