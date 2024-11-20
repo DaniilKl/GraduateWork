@@ -6,14 +6,14 @@ SRC_DIR = $(abspath ./src)
 BUILD_DIR = $(abspath ./build)
 
 # FreeRTOS dirs paths:
-FREERTOS_SRC_DIR := $(abspath ../FreeRTOSv202212.01/FreeRTOS/Source)
+FREERTOS_SRC_DIR := $(abspath ../FreeRTOS/FreeRTOS/Source)
 FREERTOS_PORTABLE_SRC_DIR := $(abspath \
-			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM3)
+			     ../FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3)
 FREERTOS_MEM_SRC_DIR := $(abspath \
-			../FreeRTOSv202212.01/FreeRTOS/Source/portable/MemMang)
-FREERTOS_INC_DIR := -I$(abspath ../FreeRTOSv202212.01/FreeRTOS/Source/include/)
+			../FreeRTOS/FreeRTOS/Source/portable/MemMang)
+FREERTOS_INC_DIR := -I$(abspath ../FreeRTOS/FreeRTOS/Source/include/)
 FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
-			     ../FreeRTOSv202212.01/FreeRTOS/Source/portable/GCC/ARM_CM3)
+			     ../FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3)
 
 # FreeRTOS files paths:
 FREERTOS_INC := $(FREERTOS_INC_DIR) \
@@ -50,7 +50,7 @@ DEBUGFLAGS := -ggdb -Og
 
 # For more warnings add -Wall and -Wextra
 CFLAGS := $(TARGETFLAGS) -Wno-error=implicit-function-declaration \
-	  $(DEBUGFLAGS) $(INC) $(DEFINES)
+	  $(DEBUGFLAGS) $(INC) $(DEFINES) -O0
 
 
 OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
