@@ -95,15 +95,6 @@ void SECOND_Task(void *pvParameters);
 void THIRD_Task(void *pvParameters);
 void FOURTH_Task(void *pvParameters);
 
-void task_start_work(uint64_t *counter){
-	*counter++;
-}
-void task_end_work(uint64_t *counter){
-	*counter++;
-}
-
-volatile int global_var = 0;
-
 int main(void){
 	xTaskCreate(FIRST_Task, "FIRST_Task", TASK_STACK_LENGHT_WORDS, NULL, 2, 2, 4, NULL);
 	xTaskCreate(SECOND_Task, "SECOND_Task", TASK_STACK_LENGHT_WORDS, NULL, 5, 1, 4, NULL);
@@ -118,68 +109,44 @@ int main(void){
 }
 
 void FIRST_Task (void *pvParameters){
-	static uint64_t task1_work_started_counter = 0;
-	static uint64_t task1_work_completed_counter = 0;
-
 	while (1){
-		task_start_work(&task1_work_started_counter);
-
 		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
 		do{
 		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
 
-		task_end_work(&task1_work_completed_counter);
 		vTaskDelay(4);
 	}
 	vTaskDelete(NULL);
 }
 
 void SECOND_Task (void *pvParameters){
-	static uint64_t task1_work_started_counter = 0;
-	static uint64_t task1_work_completed_counter = 0;
-
 	while (1){
-		task_start_work(&task1_work_started_counter);
-
 		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
 		do{
 		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
 
-		task_end_work(&task1_work_completed_counter);
 		vTaskDelay(7);
 	}
 	vTaskDelete(NULL);
 }
 
 void THIRD_Task (void *pvParameters){
-	static uint64_t task1_work_started_counter = 0;
-	static uint64_t task1_work_completed_counter = 0;
-
 	while (1){
-		task_start_work(&task1_work_started_counter);
-
 		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
 		do{
 		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
 
-		task_end_work(&task1_work_completed_counter);
 		vTaskDelay(6);
 	}
 	vTaskDelete(NULL);
 }
 
 void FOURTH_Task (void *pvParameters){
-	static uint64_t task1_work_started_counter = 0;
-	static uint64_t task1_work_completed_counter = 0;
-
 	while (1){
-		task_start_work(&task1_work_started_counter);
-
 		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
 		do{
 		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
 
-		task_end_work(&task1_work_completed_counter);
 		vTaskDelay(8);
 	}
 	vTaskDelete(NULL);
