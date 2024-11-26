@@ -3,10 +3,7 @@
 import sys
 import re
 from collections import defaultdict
-
-def read_trace_file(file_path):
-    with open(file_path, 'r') as file:
-        return file.readlines()
+import json
 
 
 def extract_task_from_line(line, task_pattern):
@@ -35,7 +32,7 @@ def process_trace_log(lines):
 
     TasksInf = {}
 
-    vTaskDelay = 0
+    xTaskDelayUntil = 0
     vTaskSwitchContext = 0
     PendSV_Handler = 0
     SysTick_Handler = 0
@@ -50,8 +47,8 @@ def process_trace_log(lines):
         print (line)
 
         # Some of system calls should be tracked between tasks execution:
-        if "vTaskDelay" in line:
-            vTaskDelay += 1
+        if "xTaskDelayUntil" in line:
+            xTaskDelayUntil += 1
             continue
         elif "vTaskSwitchContext" in line:
             vTaskSwitchContext += 1
@@ -119,9 +116,14 @@ def process_trace_log(lines):
             # context switch, therefore only one event could have interrupted
             # the task execution: SysTick, which is being detected earlier.
             # Task might as well end executing just before starting again:
-            if vTaskDelay != 0 and vTaskSuspendAll !=0 and vTaskSwitchContext != 0 and PendSV_Handler != 0:
+            if xTaskDelayUntil != 0 and xTaskResumeAll !=0 and vTaskSwitchContext != 0 and PendSV_Handler != 0:
                 print(f"Task continues execution: {NextTask}")
                 ContextSwitches += 1
+                TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
+                print(f"Task {CurrentTask} end logged: {TasksInf[CurrentTask]['TaskEnd']} ")
+
+                TasksInf[NextTask]["TaskStart"].append(SysTickCount)
+                print(f"Task {NextTask} start logged: {TasksInf[NextTask]['TaskStart']} ")
         elif NextTask != CurrentTask: # Context switch between tasks
             # The context switch between task may appear in two cases:
             # 1. Task is being preempted by another task;
@@ -133,7 +135,7 @@ def process_trace_log(lines):
             # starts execution again:
             #
             # Task has been preempted by another task:
-            if PendSV_Handler != 0 and vTaskSwitchContext != 0 and vTaskDelay == 1:
+            if PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil == 1:
                 print(f"Task {CurrentTask} has been preempted by {NextTask}")
                 ContextSwitches += 1
                 TasksInf[CurrentTask]["TaskPreemptedTimes"] += 1
@@ -143,7 +145,7 @@ def process_trace_log(lines):
                 CurrentTask = NextTask
             # Task ends execution and the following task is a periodic task that
             # starts execution again:
-            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and vTaskDelay != 0 and prvAddCurrentTaskToDelayedList != 0 and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
+            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0 and prvAddCurrentTaskToDelayedList != 0 and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
                 print(f"Task {CurrentTask} ends execution, following {NextTask}")
                 ContextSwitches += 1
                 TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
@@ -154,7 +156,7 @@ def process_trace_log(lines):
                 CurrentTask = NextTask 
             # Task ends execution and the following task is a preempted task
             # that continues execution:
-            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and vTaskDelay != 0 and prvAddCurrentTaskToDelayedList != 0:
+            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0 and prvAddCurrentTaskToDelayedList != 0:
                 ContextSwitches += 1
                 print(f"Task {CurrentTask} ends execution, following preempted {NextTask}")
                 TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
@@ -164,7 +166,7 @@ def process_trace_log(lines):
         print("NextTask inf.:")
         print(TasksInf[CurrentTask])
 
-        vTaskDelay = 0
+        xTaskDelayUntil = 0
         vTaskSwitchContext = 0
         PendSV_Handler = 0
         SysTick_Handler = 0
@@ -176,26 +178,26 @@ def process_trace_log(lines):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: ./trace_analysis.py <path_to_trace_file>")
+    if len(sys.argv) != 3:
+        print("Usage: ./parse.py <path_to_trace_file> <path_to_output_file>")
         sys.exit(1)
 
     trace_log_path = sys.argv[1]
+    output_file_path = sys.argv[2]
     
-    try:
-        # Read the trace file
-        lines = read_trace_file(trace_log_path)
+    with open(trace_log_path, 'r') as file:
+        lines = file.readlines()
 
-        # Process the trace log
-        TasksInf, SysTickCount, ContextSwitches = process_trace_log(lines)
+    # Process the trace log
+    TasksInf, SysTickCount, ContextSwitches = process_trace_log(lines)
 
-        print(TasksInf)
-        print(SysTickCount)
-        print(ContextSwitches)
+    TasksInf["SysTickCount"] = SysTickCount
+    TasksInf["ContextSwitches"] = ContextSwitches
 
-    except FileNotFoundError:
-        print(f"Error: The file '{trace_log_path}' was not found.")
-        sys.exit(1)
+    print(TasksInf)
+
+    with open(output_file_path, 'w') as json_file:
+        json.dump(TasksInf, json_file, indent=4)
 
 
 if __name__ == "__main__":
