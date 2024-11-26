@@ -88,18 +88,12 @@ typedef tskTCB TCB_t;
 
 extern TCB_t * volatile pxCurrentTCB;
 
-#define TASK_STACK_LENGHT_WORDS 1000
+#define TASK_STACK_LENGHT_WORDS 100
 
-void FIRST_Task(void *pvParameters);
-void SECOND_Task(void *pvParameters);
-void THIRD_Task(void *pvParameters);
-void FOURTH_Task(void *pvParameters);
+// Tasks declarations START
 
 int main(void){
-	xTaskCreate(FIRST_Task, "FIRST_Task", TASK_STACK_LENGHT_WORDS, NULL, 2, 2, 4, NULL);
-	xTaskCreate(SECOND_Task, "SECOND_Task", TASK_STACK_LENGHT_WORDS, NULL, 5, 1, 4, NULL);
-	xTaskCreate(THIRD_Task, "THIRD_Task", TASK_STACK_LENGHT_WORDS, NULL, 3, 3, 4, NULL);
-	xTaskCreate(FOURTH_Task, "FOURTH_Task", TASK_STACK_LENGHT_WORDS, NULL, 1, 1, 4, NULL);
+	// Tasks creation START
 
 	vTaskStartScheduler();
 
@@ -108,46 +102,4 @@ int main(void){
 	};
 }
 
-void FIRST_Task (void *pvParameters){
-	while (1){
-		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
-		do{
-		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
-
-		vTaskDelay(4);
-	}
-	vTaskDelete(NULL);
-}
-
-void SECOND_Task (void *pvParameters){
-	while (1){
-		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
-		do{
-		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
-
-		vTaskDelay(7);
-	}
-	vTaskDelete(NULL);
-}
-
-void THIRD_Task (void *pvParameters){
-	while (1){
-		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
-		do{
-		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
-
-		vTaskDelay(6);
-	}
-	vTaskDelete(NULL);
-}
-
-void FOURTH_Task (void *pvParameters){
-	while (1){
-		pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
-		do{
-		}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
-
-		vTaskDelay(8);
-	}
-	vTaskDelete(NULL);
-}
+// Tasks definition START

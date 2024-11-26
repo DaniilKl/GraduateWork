@@ -58,10 +58,10 @@
 //#define	configTIMER_TASK_PRIORITY
 //#define configTIMER_TASK_STACK_DEPTH
 #define configCPU_CLOCK_HZ															( 50000000 )
-#define configTICK_RATE_HZ															( ( TickType_t ) 10000 )
-#define configMAX_PRIORITIES														( 6UL )
-#define configMINIMAL_STACK_SIZE												( ( unsigned short ) 130 )
-#define configTOTAL_HEAP_SIZE														( ( size_t ) ( 22800 ) )
+#define configTICK_RATE_HZ															( ( TickType_t ) 1000 )
+#define configMAX_PRIORITIES														( 26UL )
+#define configMINIMAL_STACK_SIZE												( ( unsigned short ) 20 )
+#define configTOTAL_HEAP_SIZE														( ( size_t ) ( 63800 ) )
 #define configMAX_TASK_NAME_LEN													( 10 )
 #define configIDLE_SHOULD_YIELD													0
 #define configQUEUE_REGISTRY_SIZE												8
