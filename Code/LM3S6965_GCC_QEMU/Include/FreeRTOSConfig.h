@@ -155,10 +155,14 @@ header file. */
  * Custom definitions.
  ******************************************************************************/
 //#define USE_FREERTOS_CLASSIC_SCHEDULER
-//define USE_FCFS_SCHEDULER
-#define USE_RR_SCHEDULER
+
+//#define USE_FCFS_SCHEDULER
+
+//#define USE_RR_SCHEDULER
 /* Time slice for Round Robin scheduler in ticks: */
-#define RR_TIME_SLICE 4
+//#define RR_TIME_SLICE 4
+
+#define USE_SJF_SCHEDULER
 
 
 #endif /* FREERTOS_CONFIG_H */
