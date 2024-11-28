@@ -145,7 +145,7 @@ def process_trace_log(lines):
                 CurrentTask = NextTask
             # Task ends execution and the following task is a periodic task that
             # starts execution again:
-            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0 and prvAddCurrentTaskToDelayedList != 0 and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
+            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0  and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
                 print(f"Task {CurrentTask} ends execution, following {NextTask}")
                 ContextSwitches += 1
                 TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)

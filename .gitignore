@@ -1,6 +1,6 @@
 # Ignore files with shell aliases:
 .shaliases
-	../FreeRTOSv202212.01/
 .opeocd-server-logs
 compile_commands.json
 .gdb_history
+Code/zephyrproject/
