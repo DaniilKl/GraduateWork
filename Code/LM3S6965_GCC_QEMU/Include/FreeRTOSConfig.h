@@ -159,10 +159,12 @@ header file. */
 //#define USE_FCFS_SCHEDULER
 
 //#define USE_RR_SCHEDULER
-/* Time slice for Round Robin scheduler in ticks: */
+/* Time slice for Round Robin scheduler in ticks, must be a power of 2:*/
 //#define RR_TIME_SLICE 4
 
-#define USE_SJF_SCHEDULER
+#define USE_SRTN_SCHEDULER
+
+//define USE_SJF_SCHEDULER
 
 
 #endif /* FREERTOS_CONFIG_H */
