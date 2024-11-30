@@ -28,6 +28,7 @@ typedef struct tskTaskControlBlock       /* The old naming convention is used to
     TickType_t xTaskTimeExecuted;                /* Number of tick a task has been executing. */
     TickType_t xTaskExecutionTime;              /* Number of ticks needed for task to be executed. NOTE: for task load simulation only. */
     TickType_t xTaskCurrentExecutionTime;       /* Set to xTaskExecutionTime and decreased every SysTick. NOTE: for task load simulation only. */
+    TickType_t xTaskExecutionPeriod;            /* Is used for periodic tasks only. */
     TickType_t xTaskExecutionDeadline;          /* Deadline for a task. */
     char pcTaskName[ configMAX_TASK_NAME_LEN ]; /*< Descriptive name given to the task when created.  Facilitates debugging only. */ /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
 

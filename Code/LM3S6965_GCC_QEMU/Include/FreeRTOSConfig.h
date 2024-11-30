@@ -85,7 +85,7 @@
 	#define configUSE_TASK_NOTIFICATIONS 									0
 	#define configUSE_TICKLESS_IDLE                       0
 	#define configUSE_TIMERS				                      0
-	#define configUSE_TIME_SLICING                        1
+	#define configUSE_TIME_SLICING                        0
 	//config_*_HOOK definitions:
 	#define configUSE_IDLE_HOOK														0
 	#define configUSE_TICK_HOOK														0
@@ -162,9 +162,19 @@ header file. */
 /* Time slice for Round Robin scheduler in ticks, must be a power of 2:*/
 //#define RR_TIME_SLICE 4
 
-#define USE_SRTN_SCHEDULER
+//#define USE_SRTN_SCHEDULER
 
-//define USE_SJF_SCHEDULER
+//#define USE_SJF_SCHEDULER
+
+#define USE_DM_SCHEDULER
+
+//#define USE_RM_SCHEDULER
+
+#if defined(USE_DM_SCHEDULER) || defined(USE_RM_SCHEDULER)
+	#define USE_FREERTOS_CLASSIC_SCHEDULER
+	#define configUSE_PREEMPTION 1
+	#define configUSE_TIME_SLICING 0
+#endif
 
 
 #endif /* FREERTOS_CONFIG_H */
