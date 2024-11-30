@@ -16,9 +16,9 @@ def PrepareTasksStrings(TasksMetadata):
         TasksDeclarationStrings += f"void {TasksMetadata[Tasks[i]]['TaskName']}(void *pvParameters);" + "\n"
 
         TasksCreationStrings += "        #ifdef USE_FREERTOS_CLASSIC_SCHEDULER\n"
-        TasksCreationStrings += f"        xTaskCreate({TasksMetadata[Tasks[i]]['TaskName']}, \"{TasksMetadata[Tasks[i]]['TaskName']}\", TASK_STACK_LENGHT_WORDS, NULL, {TasksMetadata[Tasks[i]]['TaskPriority']}, {TasksMetadata[Tasks[i]]['TaskExecutionTime']}, {TasksMetadata[Tasks[i]]['TaskDeadline']}, NULL);" + "\n"
+        TasksCreationStrings += f"        xTaskCreate({TasksMetadata[Tasks[i]]['TaskName']}, \"{TasksMetadata[Tasks[i]]['TaskName']}\", TASK_STACK_LENGHT_WORDS, NULL, {TasksMetadata[Tasks[i]]['TaskPriority']}, {TasksMetadata[Tasks[i]]['TaskExecutionTime']}, {TasksMetadata[Tasks[i]]['TaskPeriod']}, {TasksMetadata[Tasks[i]]['TaskDeadline']}, NULL);" + "\n"
         TasksCreationStrings += "        #else\n"
-        TasksCreationStrings += f"        xTaskCreate({TasksMetadata[Tasks[i]]['TaskName']}, \"{TasksMetadata[Tasks[i]]['TaskName']}\", TASK_STACK_LENGHT_WORDS, NULL, {TasksMetadata[Tasks[i]]['TaskExecutionTime']}, {TasksMetadata[Tasks[i]]['TaskDeadline']}, NULL);" + "\n"
+        TasksCreationStrings += f"        xTaskCreate({TasksMetadata[Tasks[i]]['TaskName']}, \"{TasksMetadata[Tasks[i]]['TaskName']}\", TASK_STACK_LENGHT_WORDS, NULL, {TasksMetadata[Tasks[i]]['TaskExecutionTime']}, {TasksMetadata[Tasks[i]]['TaskPeriod']}, {TasksMetadata[Tasks[i]]['TaskDeadline']}, NULL);" + "\n"
         TasksCreationStrings += "        #endif\n"
 
         TasksDefinitionStrings += f"void {TasksMetadata[Tasks[i]]['TaskName']} (void *pvParameters)" + "{\n"
