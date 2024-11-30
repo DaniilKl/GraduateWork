@@ -166,7 +166,7 @@ header file. */
 
 //#define USE_SJF_SCHEDULER
 
-#define USE_DM_SCHEDULER
+//#define USE_DM_SCHEDULER
 
 //#define USE_RM_SCHEDULER
 
@@ -176,6 +176,13 @@ header file. */
 	#define configUSE_TIME_SLICING 0
 #endif
 
+//#define USE_EDF_SCHEDULER
+
+#define USE_PREEMPTIVE_EDF_SCHEDULER
+
+#ifdef USE_PREEMPTIVE_EDF_SCHEDULER
+	#define USE_EDF_SCHEDULER
+#endif
 
 #endif /* FREERTOS_CONFIG_H */
 
