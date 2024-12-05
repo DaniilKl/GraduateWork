@@ -24,7 +24,7 @@ częścią większego systemu.
 \section*{Załącznik nr 2: ARM TrustZone}\addcontentsline{toc}{section}{Załącznik nr 2: ARM TrustZone}\label{sec:zalacznik-2}
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\textwidth]{Images/trustzone-m.png}
+    \includegraphics[width=0.75\textwidth]{Images/trustzone-m.png} 
     \caption{TrustZone dla architektury \acrshort{arm} v8-M. Kolorami są dodatkowo odznaczone środowiska: zielony — środowisko zaufane, czerwony — środowisko niezaufane}
     \label{fig:trustzone-m}
 \end{figure}
@@ -44,7 +44,7 @@ Dla architektury ARMv8-A został dodany \acrshort{el}3, w którym jest zamieszcz
 (\cref{fig:trustzone-a}), realizowany przez oprogramowanie \acrshort{arm}'owe Trusted
 Firmware A (referencyjna implementacja monitoru bezpieczeństwa). Faktycznie ten monitor bezpieczeństwa
 jest pewnym mostem przekazującym polecenia ze środowiska niezaufanego do środowiska zaufanego oraz
-przełączający procesor w bezpieczny tryb za pomocą \acrshort{smccc}.
+przełączający procesor w bezpieczny tryb za pomocą \acrshort{smccc}. 
 \cite{smccc}\cite{trustzoneaarch64} % TODO: automatic images indexing
 
 Dla architektury ARMv8-M zostały dodane rozszerzenia pozwalające na separację środowiska zaufanego od
@@ -77,7 +77,7 @@ poziomów uprawnień. Dokładniej to jest opisane w \hyperref[sec:zalacznik-4]{z
 
 Przy czym, typowo hiperwizor jest zaprojektowany w taki sposób, że przy użyciu wszystkich tych rodzai separacji, aplikacja (lub system operacyjny), uruchomiana na tym hiperwizorze, wcale nie musi wiedzieć że jest uruchomiana nie wprost na rzeczywistym sprzęcie. Taki rodzaj wirtualizacji jest nazywany wirtualizacja natywną (ang. native virtualization, także ang. full virtualization, lub ang. hardware-accelerated virtualization).
 
-W przypadku, kiedy sprzęt nie posiada dedykowanych narzędzi do zapewnienia jakiegoś z rodzajów separacji, można skorzystać z tzw. parawirtualizacji (ang. paravirtualization). W takim przypadku aplikacja, która jest uruchamiana na hiperwizorze jest modyfikowana w sposób taki, aby ona wiedziała, że jest uruchomiona nie na realnym sprzęcie a na wirtualnym i wiedziała o obecności hiperwizora. Przykładem może być separacja pamięciowa. Typowo próba otrzymania dostępu do zabronionej sekcji pamięci RAM jest wykrywana przez \acrshort{mmu}, w przypadku nieobecności tego modułu, uruchamiana aplikacja jest modyfikowana i wszystkie instrukcje odczytujące coś z pamięci są podmieniane na zestaw instrukcji, który powoduje komunikat do hiperwizora ze sprawdzeniem dostępów.
+W przypadku, kiedy sprzęt nie posiada dedykowanych narzędzi do zapewnienia jakiegoś z rodzajów separacji, można skorzystać z tzw. parawirtualizacji (ang. paravirtualization). W takim przypadku aplikacja, która jest uruchamiana na hiperwizorze jest modyfikowana w sposób taki, aby ona wiedziała, że jest uruchomiona nie na realnym sprzęcie a na wirtualnym i wiedziała o obecności hiperwizora. Przykładem może być separacja pamięciowa. Typowo próba otrzymania dostępu do zabronionej sekcji pamięci RAM jest wykrywana przez \acrshort{mmu}, w przypadku nieobecności tego modułu, uruchamiana aplikacja jest modyfikowana i wszystkie instrukcje odczytujące coś z pamięci są podmieniane na zestaw instrukcji, który powoduje komunikat do hiperwizora ze sprawdzeniem dostępów. 
 
 \section*{Załącznik nr 4: Przełączanie stanu i kontekstu, definicja procesu}\addcontentsline{toc}{section}{Załącznik nr 4: Przęłączanie stanu i kontekstu, definicja procesu}\label{sec:zalacznik-4}
 
@@ -96,16 +96,16 @@ Stan wykonywanego oprogramowania jest określany poprzez następujące elementy:
     \item Zawartości rejestrów ogólnego przeznaczenia: zawierają wyniki wykonywania ostatnich
     instrukcji;
     \item Rejestry wskazujące na adres następnej komendy (PC w architekturach \acrshort{arm}'owych),
-    adres powrotu (LR w architekturach \acrshort{arm}'owych) i adres aktualnie używanego stosu (MSP
+    adres powrotu (LR w architekturach \acrshort{arm}'owych) i adres aktualnie używanego stosu (MSP 
     lub PSP w architekturach \acrshort{arm}): określają "kierunek" (tzn. co będzie wykonane następne,
     gdzie wrócić po wykonaniu i tak dalej) wykonywanych instrukcji oprogramowania;
-    \item Zawartość aktualnie używanego stosu: tak samo jak i poprzedni punkt, określa "kierunek"
+    \item Zawartość aktualnie używanego stosu: tak samo jak i poprzedni punkt, określa "kierunek" 
     wykonywania instrukcji oprogramowania, przechowuje historie wykonywanych instrukcji oprogramowania
     (np. przy przerwaniu, do niego są zapisywane pewne rejestry, które po zakończeniu przerwania są
     odczytywane z powrotem, pozwalając na wznowienie wykonywanego programu);
     \item Rejestry systemowe (np. PSR i rejestry masek przerwań w architekturach \acrshort{arm}'owych):
-    określają między innymi tryb jednostki obliczeniowej, w którym program jest wykonywany, co z kolei
-    określa poziom dostępu do zasobów sprzętowych.
+    określają między innymi tryb jednostki obliczeniowej, w którym program jest wykonywany, co z kolei 
+    określa poziom dostępu do zasobów sprzętowych. 
 \end{itemize}
 
 Z powyższego wynika, że stan wykonywanego oprogramowania — to jest zbiór pewnych wartości
@@ -127,7 +127,7 @@ zmiany trybu jednostki obliczeniowej, ponieważ każdy tryb jednostki obliczenio
 \end{figure}
 
 Na \cref{fig:armv8-m-modes} są pokazane tryby jednostki obliczeniowej zbudowanej na podstawie
-architektury \acrshort{arm}v8-\acrshort{m}. Taka jednostka posiada trzy tryby z dwoma poziomami
+architektury \acrshort{arm}v8-\acrshort{m}. Taka jednostka posiada trzy tryby z dwoma poziomami 
 dostępu: tryb główny (główny uprzywilejowany i główny nieuprzywilejowany) i tryb przerwania. Każdy z
 tych trybów ma swój stos, w którym jest przechowywany stan aktualnie wykonywanego oprogramowania.
 Adres na każdy ze stosów jest przechowywany w rejestrach MSP i PSP \cite{armv8mintro}.
@@ -171,7 +171,7 @@ W przypadku kiedy mamy kilka jednostek obliczeniowych dostępnych dla wszystkich
 
 W przypadku wirtualizacji programom są udostępniane \acrshort{vcpu}. Są to w pewny sposób przerobione przez hiperwizor zasoby realnej jednostki obliczeniowej.
 
-Na \cref{fig:time-sharing} jest pokazany przykład współdzielenia zasobów jednostek obliczeniowych przez wiele procesów technologii \acrshort{amp}. Każdemu procesowi jest przypisana pewna część zasobów obliczeniowych reprozentowana przez ilość kwantów czasu (ang. time slice; najmniejsza możliwa ilość czasu jednostki obliczeniowej, którą można przypisać procesu w niektórych realizacja oprogramowania systemowego).
+Na \cref{fig:time-sharing} jest pokazany przykład współdzielenia zasobów jednostek obliczeniowych przez wiele procesów w technologii \acrshort{amp}. Każdemu procesowi jest przypisana pewna część zasobów obliczeniowych reprozentowana przez ilość kwantów czasu (ang. time slice; najmniejsza możliwa ilość czasu jednostki obliczeniowej, którą można przypisać procesu w niektórych realizacja oprogramowania systemowego).
 
 Stąd można zrobić trzy wnioski:
 
@@ -180,5 +180,1848 @@ Stąd można zrobić trzy wnioski:
     \item Czas może być przypisywany bezpośrednio, lub on może być podzielony przez oprogramowanie systemowe na pewne minimalne odcinki: kwanty czasu;
     \item W przypadku obecności wielu jednostek obliczeniowych, zarządzanie ich zasobami odbywa się zgodnie z technikami \acrshort{amp} lub \acrshort{smp}.
 \end{enumerate}
+
+\section*{Załącznik nr 6: Narzędzia do pomiaru i analizy}\addcontentsline{toc}{section}{Załącznik nr 6: Narzędza do pomiaru i analizy}\label{sec:zalacznik-6}
+
+\subsection*{generate.py}\addcontentsline{toc}{subsection}{generate.py}
+
+% TODO
+
+\begin{lstlisting}[language=Python]
+\end{lstlisting}
+
+\subsection*{insert.py}\addcontentsline{toc}{subsection}{insert.py}
+
+\begin{lstlisting}[language=Python]
+#!/usr/bin/env python3
+
+import sys
+import re
+import json
+
+def PrepareTasksStrings(TasksMetadata):
+  asks = list(TasksMetadata)
+  TasksCount = len(Tasks)
+
+  TasksDeclarationStrings = "\n"
+  TasksCreationStrings = "\n"
+  TasksDefinitionStrings = "\n"
+
+  for i in range(0, TasksCount):
+    TasksDeclarationStrings += f"void {TasksMetadata[Tasks[i]]['TaskName']}" +
+      "(void *pvParameters);" + "\n"
+
+    TasksCreationStrings += f"        xTaskCreate({TasksMetadata[Tasks[i]]" +
+      f"['TaskName']},\"{TasksMetadata[Tasks[i]]['TaskName']}\"," +
+      " TASK_STACK_LENGHT_WORDS, NULL," +
+      f"{TasksMetadata[Tasks[i]]['TaskPriority']}," +
+      f" {TasksMetadata[Tasks[i]]['TaskExecutionTime']}," +
+      f{TasksMetadata[Tasks[i]]['TaskDeadline']}, NULL);" + "\n"
+
+    TasksDefinitionStrings += f"void {TasksMetadata[Tasks[i]]['TaskName']}" +
+      " (void *pvParameters)" + "{\n"
+    TasksDefinitionStrings += "        TickType_t xLastWakeTime = 0;\n\n"
+    TasksDefinitionStrings += "        while (1){\n"
+    TasksDefinitionStrings += "                pxCurrentTCB->" +
+      "xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;\n"
+    TasksDefinitionStrings += "                do{\n"
+    TasksDefinitionStrings += "                }while( pxCurrentTCB->" +
+      "xTaskCurrentExecutionTime != 0 );\n\n"
+    TasksDefinitionStrings += f"                vTaskDelayUntil(&xLastWakeTime, " +
+      f"{TasksMetadata[Tasks[i]]['TaskPeriod']});" + "\n"
+    TasksDefinitionStrings += "        }\n\n"
+    TasksDefinitionStrings += "        vTaskDelete(NULL);\n"
+    TasksDefinitionStrings += "}\n\n"
+
+  return TasksDeclarationStrings, TasksCreationStrings, TasksDefinitionStrings
+    
+
+def InsertTaskStrings(InputCFile, OutputCFile, TasksDeclarationStrings,
+  TasksCreationStrings, TasksDefinitionStrings):
+  with open(InputCFile, 'r') as file:
+    CFileContent = file.read()
+
+  def InsertNewLines(CFileContent, StartComment, StringToInsert):
+    Pattern = re.escape(StartComment)
+    NewContent = re.sub(Pattern, lambda m: m.group(0) + StringToInsert,
+      CFileContent, flags=re.DOTALL)
+    return NewContent
+
+  CFileContent = InsertNewLines(CFileContent,
+    "// Tasks declarations START", TasksDeclarationStrings)
+  CFileContent = InsertNewLines(CFileContent,
+    "// Tasks creation START", TasksCreationStrings)
+  CFileContent = InsertNewLines(CFileContent,
+    "// Tasks definition START", TasksDefinitionStrings)
+
+  with open(OutputCFile, 'w') as file:
+    file.write(CFileContent)
+
+if __name__ == "__main__":
+  if len(sys.argv) != 4:
+    print("Usage: python script.py <input_c_file>" +
+      <tasks_metadata_file> <output_c_file_path>")
+    sys.exit(1)
+
+  InputCFile = sys.argv[1]
+  TasksMetadataFile = sys.argv[2]
+  OutputCFile = sys.argv[3]
+
+  with open(TasksMetadataFile, 'r') as json_file:
+    TasksMetadata = json.load(json_file)
+
+  TasksDeclarationStrings, TasksCreationStrings,
+    TasksDefinitionStrings = PrepareTasksStrings(TasksMetadata)
+
+  InsertTaskStrings(InputCFile, OutputCFile,
+    TasksDeclarationStrings, TasksCreationStrings, TasksDefinitionStrings)
+\end{lstlisting}
+
+Przykład użycia w Linux:
+
+\begin{lstlisting}[language=Bash]
+~# ./insert.py ../LM3S6965_GCC_QEMU/src/main.c_sample \
+./generation-output.json \
+../LM3S6965_GCC_QEMU/src/main.c
+\end{lstlisting}
+
+Gdzie: "../LM3S6965\_GCC\_QEMU/src/main.c\_sample" jest względną ścieżką do pliku \textit{main.c\_sample}, "./generation-output.json" jest względną ścieżką do danych wygenerowanych przez skrypt \textit{generate.py}, "../LM3S6965\_GCC\_QEMU/src/main.c" jest względną ścieżką do pliku ze wklejonym wygenerowanym kodem w języku C.
+
+\subsection*{Makefile}\addcontentsline{toc}{subsection}{Makefile}
+
+\begin{lstlisting}
+CC = ~/Toolchains/arm-none-eabi-13.2.Rel1/bin/arm-none-eabi-gcc-13.2.1
+
+# Common variables:
+BIN = FreeRTOS_QEMU.elf
+SRC_DIR = $(abspath ./src)
+BUILD_DIR = $(abspath ./build)
+
+# FreeRTOS dirs paths:
+FREERTOS_SRC_DIR := $(abspath ../FreeRTOS/FreeRTOS/Source)
+FREERTOS_PORTABLE_SRC_DIR := $(abspath \
+			     ../FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3)
+FREERTOS_MEM_SRC_DIR := $(abspath \
+			../FreeRTOS/FreeRTOS/Source/portable/MemMang)
+FREERTOS_INC_DIR := -I$(abspath ../FreeRTOS/FreeRTOS/Source/include/)
+FREERTOS_PORTABLE_INC_DIR := -I$(abspath \
+			     ../FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM3)
+
+# FreeRTOS files paths:
+FREERTOS_INC := $(FREERTOS_INC_DIR) \
+		$(FREERTOS_PORTABLE_INC_DIR)
+FREERTOS_SRC_FILES := tasks.c list.c heap_1.c port.c
+
+# Local files paths
+LOCAL_INC := -I$(abspath ./Include)
+LOCAL_SRC_FILES := startup.c main.c
+
+# Global files paths
+INC := $(FREERTOS_INC) $(LOCAL_INC)
+SRC_FILES := $(FREERTOS_SRC_FILES) $(LOCAL_SRC_FILES)
+
+# Search path
+VPATH = src:$(FREERTOS_SRC_DIR) \
+	$(FREERTOS_PORTABLE_SRC_DIR) \
+	$(FREERTOS_MEM_SRC_DIR) \
+	$(wildcard $(abspath ./src))
+
+# Object files
+OBJ_FILES := $(SRC_FILES:%.c=$(BUILD_DIR)/%.o)
+
+# Flags:
+DEFINES := -DHEAP1
+
+TARGETFLAGS := -mthumb -mcpu=cortex-m3
+
+LINKERFLAGS := $(TARGETFLAGS) -T $(abspath ./linker_script.ld) \
+	       -Wl,-Map=$(BUILD_DIR)/project.map,--cref -save-temps -lc \
+	       -nostartfiles -static
+
+DEBUGFLAGS := -ggdb -Og
+
+# For more warnings add -Wall and -Wextra
+CFLAGS := $(TARGETFLAGS) -Wno-error=implicit-function-declaration \
+	  $(DEBUGFLAGS) $(INC) $(DEFINES) -O0
+
+
+OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)
+
+
+# Rules:
+$(BUILD_DIR)/$(BIN): $(OBJ_FILES)
+	$(CC) $(LINKERFLAGS) $+ -o $(@)
+
+$(BUILD_DIR)/%.o: %.c $(BUILD_DIR)
+	$(CC) $(CFLAGS) -MMD -c $< -o $@
+
+$(BUILD_DIR):
+	$(shell [ -d ./build ] || mkdir build)
+
+.PHONY: clean
+
+clean:
+	rm -rf ./build
+\end{lstlisting}
+
+\subsection*{parse.py}\addcontentsline{toc}{subsection}{parse.py}
+
+\begin{lstlisting}[language=Python]
+#!/usr/bin/env python3
+
+import sys
+import re
+from collections import defaultdict
+import json
+
+
+def extract_task_from_line(line, task_pattern):
+  for word in line.split():
+    print(f"For word: {word}")
+
+    if word.endswith(task_pattern):
+      return word
+    elif word == task_pattern:
+      return word
+    else:
+      continue
+
+  return None
+
+
+def key_exists_first_level(dictionary, key):
+  return key if key in dictionary else None
+
+
+def process_trace_log(lines):
+  SysTickCount = 0
+  ContextSwitches = 0
+
+  CurrentTask = None
+
+  TasksInf = {}
+
+  xTaskDelayUntil = 0
+  vTaskSwitchContext = 0
+  PendSV_Handler = 0
+  SysTick_Handler = 0
+  xTaskIncrementTick = 0
+  prvAddCurrentTaskToDelayedList = 0
+  xTaskResumeAll = 0
+
+  for line in lines:
+    NextTask = None 
+
+      # Some of system calls should be tracked between tasks execution:
+      if "xTaskDelayUntil" in line:
+        xTaskDelayUntil += 1
+        continue
+      elif "vTaskSwitchContext" in line:
+        vTaskSwitchContext += 1
+        continue
+      elif "PendSV_Handler" in line:
+        PendSV_Handler += 1
+        continue
+      elif "SysTick_Handler" in line:
+        SysTick_Handler += 1
+        continue
+      elif "xTaskIncrementTick" in line:
+        xTaskIncrementTick += 1
+        continue
+      elif "prvAddCurrentTaskToDelayedList" in line:
+        prvAddCurrentTaskToDelayedList += 1
+        continue
+      elif "xTaskResumeAll" in line:
+        xTaskResumeAll += 1
+        continue
+
+      NextTask = extract_task_from_line(line, "_Task")
+      # Maybe the idle task is executing:
+      if NextTask == None:
+        NextTask = extract_task_from_line(line, "prvIdleTask")
+        # If not idle task, that it is probably some other communicate that
+        # is not tracked here:
+        if NextTask == None:
+          continue
+
+      # If this is the first appearance of the task, the task should be added
+      # to the list:
+      if key_exists_first_level(TasksInf, NextTask) == None:
+        TasksInf[NextTask] = {}
+        TasksInf[NextTask]["TaskName"] = NextTask 
+        TasksInf[NextTask]["TaskStart"] = []
+        TasksInf[NextTask]["TaskEnd"] = []
+        TasksInf[NextTask]["TaskPreemptedTimes"] = 0
+
+      # Check for SysTick:
+      if SysTick_Handler != 0 and xTaskIncrementTick != 0:
+        SysTickCount += 1
+
+      if CurrentTask == None: # First task to execute since system started
+        TasksInf[NextTask]["TaskStart"].append(SysTickCount)
+        CurrentTask = NextTask
+      elif NextTask == CurrentTask: # Task continues execution
+        # If a task just continues execution, this means there were no
+        # context switch, therefore only one event could have interrupted
+        # the task execution: SysTick, which is being detected earlier.
+        # Task might as well end executing just before starting again:
+        if xTaskDelayUntil != 0 and xTaskResumeAll !=0 and
+          vTaskSwitchContext != 0 and PendSV_Handler != 0:
+          ContextSwitches += 1
+          TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
+          TasksInf[NextTask]["TaskStart"].append(SysTickCount)
+      elif NextTask != CurrentTask: # Context switch between tasks
+        # The context switch between task may appear in two cases:
+        # 1. Task is being preempted by another task;
+        # 2. Task ends execution.
+        # 
+        # In case the task ended execution there might be two cases:
+        # 1. Following task was a preempted task and it continues execution;
+        # 2. Following task is a periodic task wich was not preempted but
+        # starts execution again:
+        #
+        # Task has been preempted by another task:
+        if PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil == 1:
+          ContextSwitches += 1
+          TasksInf[CurrentTask]["TaskPreemptedTimes"] += 1
+          TasksInf[NextTask]["TaskStart"].append(SysTickCount)
+          CurrentTask = NextTask
+        # Task ends execution and the following task is a periodic task that
+        # starts execution again:
+        elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and
+          xTaskDelayUntil != 0 and prvAddCurrentTaskToDelayedList != 0 and
+          xTaskResumeAll != 0 and
+          len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
+          ContextSwitches += 1
+          TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
+          TasksInf[NextTask]["TaskStart"].append(SysTickCount)
+          CurrentTask = NextTask 
+        # Task ends execution and the following task is a preempted task
+        # that continues execution:
+        elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and
+          xTaskDelayUntil != 0 and prvAddCurrentTaskToDelayedList != 0:
+          ContextSwitches += 1
+          TasksInf[CurrentTask]["TaskEnd"].append(SysTickCount)
+          CurrentTask = NextTask
+  
+    xTaskDelayUntil = 0
+    vTaskSwitchContext = 0
+    PendSV_Handler = 0
+    SysTick_Handler = 0
+    xTaskIncrementTick = 0
+    prvAddCurrentTaskToDelayedList = 0
+    xTaskResumeAll = 0
+
+  return TasksInf, SysTickCount, ContextSwitches
+
+
+def main():
+  if len(sys.argv) != 3:
+    print("Usage: ./parse.py <path_to_trace_file> <path_to_output_file>")
+    sys.exit(1)
+
+  trace_log_path = sys.argv[1]
+  output_file_path = sys.argv[2]
+    
+  with open(trace_log_path, 'r') as file:
+    lines = file.readlines()
+
+  # Process the trace log
+  TasksInf, SysTickCount, ContextSwitches = process_trace_log(lines)
+
+  TasksInf["SysTickCount"] = SysTickCount
+  TasksInf["ContextSwitches"] = ContextSwitches
+
+  print(TasksInf)
+
+  with open(output_file_path, 'w') as json_file:
+    json.dump(TasksInf, json_file, indent=4)
+
+
+if __name__ == "__main__":
+  main()
+\end{lstlisting}
+
+Przykład użycia w Linux:
+
+\begin{lstlisting}[language=Bash]
+~# ./parse.py ../LM3S6965_GCC_QEMU/qemu.log_short ./parsing-results.json
+\end{lstlisting}
+
+Gdzie: "../LM3S6965\_GCC\_QEMU/qemu.log" jest ścieżką względną do pliku z logami Qemu, "./parsing-results.json" jest ścieżką względną do pliku, gdzie skrypt zapisze dane.
+
+\subsection*{analyze.py}\addcontentsline{toc}{subsection}{analyze.py}
+
+\begin{lstlisting}[language=Python]
+#!/usr/bin/env python3
+
+import sys
+import re
+from collections import defaultdict
+import math
+import json
+
+
+def SortOutTasksByPriority(TasksMetadata):
+  TasksSortedByPriority = sorted(
+    TasksMetadata.items(),  # Get all key-value pairs from the dictionary
+    key=lambda item: item[1]['TaskPriority'],  # Sort by 'TaskPriority' value
+    reverse=True  # Highest priority first
+  )
+
+  return TasksSortedByPriority
+
+
+def GetHigherPriorityTasks(TasksSortedByPriority, Percentage):
+  TaskCount = len(TasksSortedByPriority)
+  Tasks = list(TasksSortedByPriority)
+  HighestPriorityTasks = []
+    
+  HighLevelPriorityTasksAmount = TaskCount * (Percentage / 100)
+  HighLevelPriorityTasksAmount = math.ceil(HighLevelPriorityTasksAmount)
+
+  for i in range(0, HighLevelPriorityTasksAmount):
+    HighestPriorityTasks.append(Tasks[i][1]['TaskName'])
+
+  return HighestPriorityTasks
+
+
+def ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighestPriorityPercentage):
+  MetDeadline = {}
+  MissDeadline = {}
+  MissDeadlineHighestPriority = {}
+  TasksSortedByPriority = SortOutTasksByPriority(TasksMetadata)
+  HighestPriorityTasksList = GetHigherPriorityTasks(TasksSortedByPriority,
+                               HighestPriorityPercentage)
+
+  for task, inf in TasksParsedInf.items():
+    MetDeadline[task] = 0
+    MissDeadline[task] = 0
+
+    for i in range(0, len(inf["TaskEnd"])):
+      AbsoluteDeadline = i * TasksMetadata[task]["TaskPeriod"] +
+        TasksMetadata[task]["TaskDeadline"]
+
+      if inf["TaskEnd"][i] <= AbsoluteDeadline:
+        MetDeadline[task] += 1
+      elif inf["TaskEnd"][i] > AbsoluteDeadline:
+        MissDeadline[task] += 1
+
+  for i in range(0, len(HighestPriorityTasksList)):
+    MissDeadlineHighestPriority[HighestPriorityTasksList[i]]=
+      MissDeadline[HighestPriorityTasksList[i]]
+
+  return MetDeadline, MissDeadline, MissDeadlineHighestPriority
+
+def ComputeLoadFactor(TasksMetadata):
+  Tasks = list(TasksMetadata)
+  TasksCount = len(Tasks)
+  LoadFactor = 0
+
+  for i in range(0, TasksCount):
+    LoadFactor +=
+      TasksMetadata[Tasks[i]]["TaskExecutionTime"]/
+        TasksMetadata[Tasks[i]]["TaskPeriod"]
+
+  return LoadFactor
+
+
+def ComputeTaskMeanExecutionTime(TasksMetadata):
+  Tasks = list(TasksMetadata)
+  TasksCount = len(Tasks)
+  TaskMeanExecutionTime = 0
+  TasksExecutionTime = 0
+
+  for i in range(0, TasksCount):
+    TasksExecutionTime += TasksMetadata[Tasks[i]]["TaskExecutionTime"]
+
+  TaskMeanExecutionTime = TasksExecutionTime / TasksCount
+
+  return TaskMeanExecutionTime
+
+
+def main():
+  if len(sys.argv) != 5:
+    print("Usage: ./analyze.py <path_to_tasks_metadata_file> +
+      "<high_priority_tasks_percentage> <path_to_parsed_trace_data_file>" +
+      "<path_to_output_file>")
+      sys.exit(1)
+
+  TasksMetadataFile = sys.argv[1]
+  HighPriorityTasksPercentage = int(sys.argv[2])
+  ParsedTraceDataFile = sys.argv[3]
+  OutputFilePath = sys.argv[4]
+
+  with open(TasksMetadataFile, 'r') as json_file:
+    TasksMetadata = json.load(json_file)
+  with open(ParsedTraceDataFile, 'r') as json_file:
+    ParsingResults = json.load(json_file)
+
+  SysTickCount = ParsingResults["SysTickCount"]
+  ContextSwitchCount = ParsingResults["ContextSwitches"]
+
+  # Extract all tasks information from ParsingResults:
+  TasksParsedInf = {
+    key: value
+    for key, value in ParsingResults.items()
+    if key.endswith("_Task")  # Check if the key ends with "_Task"
+  }
+
+  TasksAnalysysData = {}
+  TasksAnalysysData['MetDeadline'] = {}
+  TasksAnalysysData['MissDeadline'] = {}
+  TasksAnalysysData['MetDeadline'], TasksAnalysysData['MissDeadline'],
+    TasksAnalysysData['MissDeadlineHighPriorityTasks'] =
+    ComputeMetMissDeadline(TasksMetadata, TasksParsedInf,
+    HighPriorityTasksPercentage)
+    TasksAnalysysData['LoadFactor'] = ComputeLoadFactor(TasksMetadata)
+  TasksAnalysysData['MeanTaskExecutionTime'] =
+    ComputeTaskMeanExecutionTime(TasksMetadata)
+
+  with open(OutputFilePath, 'w') as json_file:
+    json.dump(TasksAnalysysData, json_file, indent=4)
+
+
+if __name__ == "__main__":
+  main()
+\end{lstlisting}
+
+Przykład użycia w Linux:
+
+\begin{lstlisting}[language=Bash]
+~# ./analyze.py ./tasks-list.json_1 10 ./parsing-results.json ./analyzing-results.json
+\end{lstlisting}
+
+Gdzie: "./tasks-list.json" jest ścieżką względną do pliku z danymi wygenerowanymi przez skrypt \textit{generate.py}, "./parsing-results.json" jest ścieżką względną do pliku utworzonego przez skrypt \textit{parse.py}, "./analyzing-results.json" plik wyjściowy z rezultatami analizy.
+
+\subsection*{draw.py}\addcontentsline{toc}{subsection}{draw.py}
+
+% TODO
+
+\begin{lstlisting}[language=Python]
+\end{lstlisting}
+
+\section*{Załącznik nr 7: Modyfikacje jądra FreeRTOS}\addcontentsline{toc}{section}{Załącznik nr 7: Modyfikacja jądra FreeRTOS}\label{sec:zalacznik-7}
+
+Modyfikacje przedstawione poniżej zostały zamieszczone w formacie generowanym przez narzędzie Git poleceniem \textit{git diff}. Wygenerowane wyjście zostało zmodyfikowane poprzez usunięcie pewnych komentarzy i części kodu w celu zmniejszenia długości linijek, aby zmieścić się w ramach formatu PDF, w którym jest przechowywana ta praca. Więc nie są to zmiany jeden do jednego w porównaniu do tych, które zostały wprowadzone w rzeczywistości. Jednak prezentują one wszystkie niezbędne modyfikacje potrzebne, aby zrozumieć sposób implementacji poszczególnych algorytmów.
+
+\subsection{Dodanie dodatkowych parametrów do TCB i symulacja czasu wykonywania procesu}
+
+\begin{lstlisting}[language=C]
+diff --git a/portable/GCC/ARM_CM3/port.c b/portable/GCC/ARM_CM3/port.c
+index 8d07379dcff8..2763cb3110ce 100644
+--- a/portable/GCC/ARM_CM3/port.c
++++ b/portable/GCC/ARM_CM3/port.c
+@@ -107,6 +107,84 @@
+     #define portTASK_RETURN_ADDRESS    prvTaskExitError
+ #endif
+
++typedef struct tskTaskControlBlock
++{
++    volatile StackType_t * pxTopOfStack;
++
++    #if ( portUSING_MPU_WRAPPERS == 1 )
++        xMPU_SETTINGS xMPUSettings;
++    #endif
++
++    ListItem_t xStateListItem;
++    ListItem_t xEventListItem;
++    UBaseType_t uxPriority;
++    StackType_t * pxStack;
++    TickType_t xTaskStarted;
++    TickType_t xTaskTimeExecuted;
++    TickType_t xTaskExecutionTime;
++    TickType_t xTaskCurrentExecutionTime;
++    TickType_t xTaskExecutionDeadline;
++    char pcTaskName[ configMAX_TASK_NAME_LEN ];
++
++    #if ( ( portSTACK_GROWTH > 0 ) || ( configRECORD_STACK_HIGH_ADDRESS == 1 ) )
++        StackType_t * pxEndOfStack;
++    #endif
++
++    #if ( portCRITICAL_NESTING_IN_TCB == 1 )
++        UBaseType_t uxCriticalNesting;
++    #endif
++
++    #if ( configUSE_TRACE_FACILITY == 1 )
++        UBaseType_t uxTCBNumber;
++        UBaseType_t uxTaskNumber;
++    #endif
++
++    #if ( configUSE_MUTEXES == 1 )
++        UBaseType_t uxBasePriority;
++        UBaseType_t uxMutexesHeld;
++    #endif
++
++    #if ( configUSE_APPLICATION_TASK_TAG == 1 )
++        TaskHookFunction_t pxTaskTag;
++    #endif
++
++    #if ( configNUM_THREAD_LOCAL_STORAGE_POINTERS > 0 )
++        void * pvThreadLocalStoragePointers[ configNUM_THREAD_LOCAL_STORAGE_POINTERS ];
++    #endif
++
++    #if ( configGENERATE_RUN_TIME_STATS == 1 )
++        configRUN_TIME_COUNTER_TYPE ulRunTimeCounter;
++    #endif
++
++    #if ( ( configUSE_NEWLIB_REENTRANT == 1 ) ||
++        ( configUSE_C_RUNTIME_TLS_SUPPORT == 1 ) )
++        configTLS_BLOCK_TYPE xTLSBlock;
++    #endif
++
++    #if ( configUSE_TASK_NOTIFICATIONS == 1 )
++        volatile uint32_t ulNotifiedValue[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];
++        volatile uint8_t ucNotifyState[ configTASK_NOTIFICATION_ARRAY_ENTRIES ];
++    #endif
++
++    /* See the comments in FreeRTOS.h with the definition of
++     * tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE. */
++    #if ( tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE != 0 )
++        uint8_t ucStaticallyAllocated;
++    #endif
++
++    #if ( INCLUDE_xTaskAbortDelay == 1 )
++        uint8_t ucDelayAborted;
++    #endif
++
++    #if ( configUSE_POSIX_ERRNO == 1 )
++        int iTaskErrno;
++    #endif
++} tskTCB;
++
+ /*
+  * Setup the timer to generate the tick interrupts.  The implementation in this
+  * file is weak to allow application writers to change the timer used to
+diff --git a/portable/GCC/ARM_CM3/port.c b/portable/GCC/ARM_CM3/port.c
+index 44c24339e304..22cf9b0ff7e1 100644
+--- a/portable/GCC/ARM_CM3/port.c
++++ b/portable/GCC/ARM_CM3/port.c
+@@ -187,6 +187,14 @@ typedef struct tskTaskControlBlock
+     #endif
+ } tskTCB;
+ 
++typedef tskTCB TCB_t;
++
++/*lint -save -e956 A manual analysis and inspection has been used to determine
++ * which static variables must be declared volatile. */
++extern TCB_t * volatile pxCurrentTCB;
++
+ /*
+  * Setup the timer to generate the tick interrupts.  The implementation in this
+  * file is weak to allow application writers to change the timer used to
+@@ -449,6 +527,10 @@ void xPortSysTickHandler( void )
+              * the PendSV interrupt.  Pend the PendSV interrupt. */
+             portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT;
+         }
++
++        // NOTE: this is for task load simulation only:
++        if( pxCurrentTCB->xTaskCurrentExecutionTime != 0 )
++            pxCurrentTCB->xTaskCurrentExecutionTime--;
+     }
+     portENABLE_INTERRUPTS();
+ }
+diff --git a/tasks.c b/tasks.c
+index d97085d87369..8c1275ab0524 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -264,6 +264,11 @@ typedef struct tskTaskControlBloc
+     ListItem_t xEventListItem; 
+     UBaseType_t uxPriority;
+     StackType_t * pxStack;
++    TickType_t xTaskStarted;
++    TickType_t xTaskTimeExecuted;
++    TickType_t xTaskExecutionTime;
++    TickType_t xTaskCurrentExecutionTime;
++    TickType_t xTaskExecutionDeadline;
+     char pcTaskName[ configMAX_TASK_NAME_LEN ];
+ 
+     #if ( ( portSTACK_GROWTH > 0 ) || ( configRECORD_STACK_HIGH_ADDRESS == 1 ) )
+@@ -536,6 +541,8 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+                                   const uint32_t ulStackDepth,
+                                   void * const pvParameters,
+                                   UBaseType_t uxPriority,
++                                  TickType_t xTaskExecutionTime,
++                                  TickType_t xTaskExecutionDeadline,
+                                   TaskHandle_t * const pxCreatedTask,
+                                   TCB_t * pxNewTCB,
+                                   const MemoryRegion_t * const xRegions ) (...);
+@@ -723,6 +730,8 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...));
+                             const configSTACK_DEPTH_TYPE usStackDepth,
+                             void * const pvParameters,
+                             UBaseType_t uxPriority,
++                            TickType_t xTaskExecutionTime,
++                            TickType_t xTaskExecutionDeadline,
+                             TaskHandle_t * const pxCreatedTask )
+     {
+         TCB_t * pxNewTCB;
+@@ -798,7 +807,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...)
+             }
+             #endif /* tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE */
+ 
+-            prvInitialiseNewTask( pxTaskCode, pcName,
+-              ( uint32_t ) usStackDepth, pvParameters, uxPriority, pxCreatedTask,
+-              pxNewTCB, NULL );
++            prvInitialiseNewTask( pxTaskCode, pcName,
++              ( uint32_t ) usStackDepth, pvParameters, uxPriority, xTaskExecutionTime,
++              xTaskExecutionDeadline, pxCreatedTask, pxNewTCB, NULL );
+             prvAddNewTaskToReadyList( pxNewTCB );
+             xReturn = pdPASS;
+         }
+@@ -818,6 +827,8 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+                                   const uint32_t ulStackDepth,
+                                   void * const pvParameters,
+                                   UBaseType_t uxPriority,
++                                  TickType_t xTaskExecutionTime,
++                                  TickType_t xTaskExecutionDeadline,
+                                   TaskHandle_t * const pxCreatedTask,
+                                   TCB_t * pxNewTCB,
+                                   const MemoryRegion_t * const xRegions )
+@@ -923,6 +934,13 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+     }
+ 
+     pxNewTCB->uxPriority = uxPriority;
++
++    pxNewTCB->xTaskStarted = xTaskGetTickCount();
++    pxNewTCB->xTaskTimeExecuted = 1;
++    pxNewTCB->xTaskExecutionTime = xTaskExecutionTime;
++    pxNewTCB->xTaskCurrentExecutionTime = xTaskExecutionTime;
++    pxNewTCB->xTaskExecutionDeadline = xTaskExecutionDeadline;
++
+     #if ( configUSE_MUTEXES == 1 )
+     {
+         pxNewTCB->uxBasePriority = uxPriority;
+@@ -1990,6 +2008,8 @@ void vTaskStartScheduler( void )
+                                configMINIMAL_STACK_SIZE,
+                                ( void * ) NULL,
+                                portPRIVILEGE_BIT,
++                               0,
++                               0,
+                                &xIdleTaskHandle );
+     }
+     #endif /* configSUPPORT_STATIC_ALLOCATION */
+@@ -2203,6 +2223,8 @@ BaseType_t xTaskResumeAll( void )
+                     listREMOVE_ITEM( &( pxTCB->xStateListItem ) );
+                     prvAddTaskToReadyList( pxTCB );
+ 
++                    pxTCB->xTaskStarted = xTaskGetTickCount();
++
+                     /* If the moved task has a priority higher than or equal to
+                      * the current task then a yield must be performed. */
+                     if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
+@@ -2792,6 +2814,8 @@ BaseType_t xTaskIncrementTick( void )
+                     /* It is time to remove the item from the Blocked state. */
+                     listREMOVE_ITEM( &( pxTCB->xStateListItem ) );
+ 
++                    pxTCB->xTaskTimeExecuted = 1;
++
+                     /* Is the task waiting on an event also?  If so remove
+                      * it from the event list. */
+                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) )
+                       != NULL )
+@@ -2890,6 +2914,8 @@ BaseType_t xTaskIncrementTick( void )
+         #endif
+     }
+ 
++    pxCurrentTCB->xTaskTimeExecuted++;
++
+     return xSwitchRequired;
+ }
+ /*-----------------------------------------------------------*/
+\end{lstlisting}
+
+\subsection{Wyłączenie standardowych algorytmów FreeRTOS}
+
+\begin{lstlisting}[language=C]
+
+\end{lstlisting}
+
+\subsubsection{FCFS}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index efc7bf6a02d8..1999910c21d0 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -197,6 +197,18 @@
+ #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+ #endif
+ 
++#ifdef USE_FCFS_SCHEDULER
++    #define taskFCFS_Scheduler()                                \
++    {                                                                         \
++        ListItem_t ListItem;                                                  \
++                                                                              \
++        if ( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists ) ) == 0 )         \
++            pxCurrentTCB = pxIdleTaskTCB;                                     \
++        else                                                                  \
++            listGET_OWNER_OF_NEXT_ENTRY( pxCurrentTCB, &( pxReadyTasksLists ) );\
++    } /* taskFCFS_Scheduler */
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -355,7 +367,8 @@ portDONT_DISCARD PRIVILEGED_DATA TCB_t * volatile (...);
+ #ifdef USE_FREERTOS_CLASSIC_SCHEDULER
+ PRIVILEGED_DATA static List_t pxReadyTasksLists[ configMAX_PRIORITIES ];
+ #else
+-PRIVILEGED_DATA static List_t pxReadyTasksLists;
++PRIVILEGED_DATA static List_t pxReadyTasksLists;
++portDONT_DISCARD PRIVILEGED_DATA TCB_t * volatile pxIdleTaskTCB = NULL;
+ #endif
+ PRIVILEGED_DATA static List_t xDelayedTaskList1;
+ PRIVILEGED_DATA static List_t xDelayedTaskList2;
+@@ -839,6 +852,15 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
++            #ifdef USE_FCFS_SCHEDULER
++            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
++              pvParameters, xTaskExecutionTime, xTaskExecutionDeadline,
++              pxCreatedTask, pxNewTCB, NULL );
++
++            if( pcName == configIDLE_TASK_NAME )
++                pxIdleTaskTCB = pxNewTCB;
++            else
++                prvAddNewTaskToReadyList( pxNewTCB );
++            #endif
++
+             xReturn = pdPASS;
+         }
+         else
+@@ -2905,6 +2927,13 @@ BaseType_t xTaskIncrementTick( void )
+                         #endif
+                     }
+                     #endif /* configUSE_PREEMPTION */
++
++                    #ifdef USE_FCFS_SCHEDULER
++                    /* If a task has been unblocked while the idle task runs -
++                     * call to scheduler for context switch. */
++                    if (pxCurrentTCB == pxIdleTaskTCB)
++                        xSwitchRequired = pdTRUE;
++                    #endif
+                 }
+             }
+         }
+@@ -3142,6 +3171,11 @@ void vTaskSwitchContext( void )
+          * optimised asm code. */
+         taskSELECT_HIGHEST_PRIORITY_TASK();
+         #endif
++
++        #ifdef USE_FCFS_SCHEDULER
++        taskFCFS_Scheduler();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+\end{lstlisting}
+
+\subsubsection{RR}
+
+\begin{lstlisting}[language=C]
+diff --git a/include/task.h b/include/task.h
+index 4109396d3fb3..e2dda7724dd0 100644
+--- a/include/task.h
++++ b/include/task.h
+@@ -252,6 +252,9 @@ typedef enum
+ #define taskSCHEDULER_NOT_STARTED    ( ( BaseType_t ) 1 )
+ #define taskSCHEDULER_RUNNING        ( ( BaseType_t ) 2 )
+ 
++#define taskModulo(dividend, divisor) \
++    (dividend & (divisor - 1))           \
++
+ 
+ /*-----------------------------------------------------------
+ * TASK CREATION API
+diff --git a/tasks.c b/tasks.c
+index 1999910c21d0..5867f07c504e 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -209,6 +209,19 @@
+     } /* taskFCFS_Scheduler */
+ #endif
+ 
++#ifdef USE_RR_SCHEDULER
++    #define taskRR_SCHEDULER()                                \
++    {                                                                         \
++        pxCurrentTCB->xTaskTimeExecuted = 1;                                  \
++        if (listCURRENT_LIST_LENGTH(&(pxReadyTasksLists)) == 0 )              \
++            pxCurrentTCB = pxIdleTaskTCB;                                     \
++        else                                                                  \
++        /* listGET_OWNER_OF_NEXT_ENTRY indexes through the list, so the tasks of \
++         * the  same priority get an equal share of the processor time. */    \
++            listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -852,7 +865,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (..);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+-            #ifdef USE_FCFS_SCHEDULER
++            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
+               pvParameters, xTaskExecutionTime, xTaskExecutionDeadline,
+               pxCreatedTask, pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -2928,7 +2941,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+-                    #ifdef USE_FCFS_SCHEDULER
++                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -2956,6 +2969,17 @@ BaseType_t xTaskIncrementTick( void )
+         }
+         #endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configU(...)
+ 
++        #ifdef USE_RR_SCHEDULER
++        if( ( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists ) ) > ( UBaseType_t ) 1 )
++          && (taskModulo(pxCurrentTCB->xTaskTimeExecuted, RR_TIME_SLICE) == 0) )
++        {
++            xSwitchRequired = pdTRUE;
++        }
++        else
++        {
++            mtCOVERAGE_TEST_MARKER();
++        }
++        #endif
++
+         #if ( configUSE_TICK_HOOK == 1 )
+         {
+             /* Guard against the tick hook being called when the pended tick
+@@ -3176,6 +3200,10 @@ void vTaskSwitchContext( void )
+         taskFCFS_Scheduler();
+         #endif
+ 
++        #ifdef USE_RR_SCHEDULER
++        taskRR_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+\end{lstlisting}
+
+\subsubsection{SJF}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index 5867f07c504e..6c58aba4ffb2 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -222,6 +222,34 @@
+     }
+ #endif
+ 
++#ifdef USE_SJF_SCHEDULER
++    #define taskSJF_SCHEDULER()                                                 \
++    {                                                                          \
++        pxCurrentTCB = NULL;                                                   \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxCurrentReadyListLength =                                 \
++          listCURRENT_LIST_LENGTH(&(pxReadyTasksLists));                       \
++                                                                               \
++        if (uxCurrentReadyListLength == 0 )                                    \
++            pxCurrentTCB = pxIdleTaskTCB;                                      \
++        else                                                                   \
++        /* Find the shortst job in the redy list: */                           \
++        while(uxCurrentReadyListLength != 0)                                   \
++        {                                                                      \
++            if(pxCurrentTCB == NULL)                                           \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++            }                                                                  \
++            else                                                               \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB, &(pxReadyTasksLists));  \
++                if(pxTempTCB->xTaskExecutionTime < pxCurrentTCB->xTaskExecutionTime)\
++                    pxCurrentTCB = pxTempTCB;                                  \
++            }                                                                  \
++            uxCurrentReadyListLength--;                                        \
++        }                                                                      \
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -865,7 +893,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+-            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER)
++            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++              defined(USE_SJF_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
+               pvParameters, xTaskExecutionTime, xTaskExecutionDeadline,
+               pxCreatedTask, pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -1161,6 +1189,28 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+             }
+         }
+         #endif
++        #ifdef USE_SJF_SCHEDULER
++        else
++        {
++            /* If the scheduler is not already running, make this task the
++             * current task if it is the shortes task to be created so far. */
++            if( xSchedulerRunning == pdFALSE )
++            {
++                if(pxCurrentTCB->xTaskExecutionTime > pxNewTCB->xTaskExecutionTime)
++                {
++                    pxCurrentTCB = pxNewTCB;
++                }
++                else
++                {
++                    mtCOVERAGE_TEST_MARKER();
++                }
++            }
++            else
++            {
++                mtCOVERAGE_TEST_MARKER();
++            }
++        }
++        #endif
+ 
+         uxTaskNumber++;
+ 
+@@ -2941,7 +2991,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+-                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER)
++                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++                      defined(USE_SJF_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -3204,6 +3254,10 @@ void vTaskSwitchContext( void )
+         taskRR_SCHEDULER();
+         #endif
+ 
++        #ifdef USE_SJF_SCHEDULER
++        taskSJF_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+\end{lstlisting}
+
+\subsubsection{SRTN}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index 6c58aba4ffb2..5626e2120c78 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -250,6 +250,36 @@
+     }
+ #endif
+ 
++#ifdef USE_SRTN_SCHEDULER
++    #define taskComputeRemaningExecutionTime(pxTCB) ((pxTCB->xTaskExecutionTime + \
++      1) - pxTCB->xTaskTimeExecuted)
++
++    #define taskSRTN_SCHEDULER()                                                 \
++    {                                                                          \
++        pxCurrentTCB = NULL;                                                   \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxCurrentReadyListLength =                                 \
++          listCURRENT_LIST_LENGTH(&(pxReadyTasksLists));                       \
++                                                                               \
++        if (uxCurrentReadyListLength == 0)                                    \
++            pxCurrentTCB = pxIdleTaskTCB;                                      \
++        else                                                                   \
++        /* Find the shortst job in the redy list: */                           \
++        while(uxCurrentReadyListLength != 0)                                   \
++        {                                                                      \
++            if(pxCurrentTCB == NULL)                                           \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++            }                                                                  \
++            else                                                               \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB, &(pxReadyTasksLists));  \
++                if(taskComputeRemaningExecutionTime(pxTempTCB) <               \
++                  taskComputeRemaningExecutionTime(pxCurrentTCB))              \
++                    pxCurrentTCB = pxTempTCB;                                  \
++            }                                                                  \
++            uxCurrentReadyListLength--;                                        \
++        }                                                                      \
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -893,7 +923,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+             #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-              defined(USE_SJF_SCHEDULER)
+             #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName,
+               ( uint32_t ) usStackDepth, pvParameters, xTaskExecutionTime,
+               xTaskExecutionDeadline, pxCreatedTask, pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -1211,6 +1241,30 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+             }
+         }
+         #endif
++        #ifdef USE_SRTN_SCHEDULER
++        else
++        {
++            /* If task starts execution for the first time than its
++             * xTaskTimeExecuted equals to its initial value, which is 1, so no
++             * need to compute remaning execution for a new task because it
++             * equals to total execution time left of the task. */
++            if( xSchedulerRunning == pdFALSE )
++            {
++                if(pxNewTCB->xTaskExecutionTime <
++                  taskComputeRemaningExecutionTime(pxCurrentTCB))
++                {
++                    pxCurrentTCB = pxNewTCB;
++                }
++                else
++                {
++                    mtCOVERAGE_TEST_MARKER();
++                }
++            }
++            else
++            {
++                mtCOVERAGE_TEST_MARKER();
++            }
++        }
++        #endif
+ 
+         uxTaskNumber++;
+ 
+@@ -2951,6 +3005,19 @@ BaseType_t xTaskIncrementTick( void )
+ 
+                     pxTCB->xTaskTimeExecuted = 1;
+ 
++                    #ifdef USE_SRTN_SCHEDULER
++                    /* If a periodic task starts execution again its remaining
++                     * execution time equals to total execution time:*/
++                    if (pxTCB->xTaskExecutionTime <
++                      taskComputeRemaningExecutionTime(pxCurrentTCB))
++                    {
++                        xSwitchRequired = pdTRUE;
++                    }
++                    else
++                    {
++                        mtCOVERAGE_TEST_MARKER();
++                    }
++                    #endif
++
+                     /* Is the task waiting on an event also?  If so remove
+                      * it from the event list. */
+                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) )
+                       != NULL )
+@@ -2991,7 +3058,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+                     #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-                      defined(USE_SJF_SCHEDULER)
+                     #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -3258,6 +3325,10 @@ void vTaskSwitchContext( void )
+         taskSJF_SCHEDULER();
+         #endif
+ 
++        #ifdef USE_SRTN_SCHEDULER
++        taskSRTN_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+\end{lstlisting}
+
+\subsubsection{RM and DM}
+
+\begin{lstlisting}[language=C]
+diff --git a/include/task.h b/include/task.h
+index e2dda7724dd0..0dca24bcb552 100644
+--- a/include/task.h
++++ b/include/task.h
+@@ -363,6 +363,7 @@ typedef enum
+                             UBaseType_t uxPriority,
+                             #endif
+                             TickType_t xTaskExecutionTime,
++                            TickType_t xTaskExecutionPeriod,
+                             TickType_t xTaskExecutionDeadline,
+                             TaskHandle_t * const pxCreatedTask ) (...);
+ #endif
+diff --git a/portable/GCC/ARM_CM3/port.c b/portable/GCC/ARM_CM3/port.c
+index 22cf9b0ff7e1..98f7a0172a0a 100644
+--- a/portable/GCC/ARM_CM3/port.c
++++ b/portable/GCC/ARM_CM3/port.c
+@@ -130,6 +130,7 @@ typedef struct tskTaskControlBlock
+     TickType_t xTaskTimeExecuted;
+     TickType_t xTaskExecutionTime;
+     TickType_t xTaskCurrentExecutionTime;
++    TickType_t xTaskExecutionPeriod;
+     TickType_t xTaskExecutionDeadline;
+     char pcTaskName[ configMAX_TASK_NAME_LEN ];
+ 
+diff --git a/tasks.c b/tasks.c
+index 5626e2120c78..6280edeb0659 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -280,6 +280,101 @@
+     }
+ #endif
+ 
++#ifdef USE_DM_SCHEDULER
++    #define taskDM_RECOMPUTE_PRIORITIES(pxNewTaskTCB)                          \
++    {                                                                          \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxTopPriority = uxTopReadyPriority;                        \
++        UBaseType_t uxCurrentReadyListLength = 0;                              \
++                                                                               \
++        if(uxPriority == 0)                                                    \
++            pxNewTCB->uxPriority = 0;                                          \
++        /*If list is empty, the there is only idle task present, which has     \
++         * priority 0 (lowest). The a new task will get priority 1: */         \
++        else if(uxTopPriority == 0)                                            \
++            pxNewTaskTCB->uxPriority = 1;                                      \
++        /* Otherwise the earlier the task deadline the higher the task priority: */\
++        else                                                                   \
++        {                                                                      \
++            while(uxTopPriority != 0)                               \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB,                         \
++                  &pxReadyTasksLists[uxTopPriority]);                          \
++                                                                               \
++                if(pxTempTCB->xTaskExecutionDeadline >                         \
++                  pxNewTaskTCB->xTaskExecutionDeadline)                        \
++                {                                                              \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority + 1;      \
++                    break                                                      \
++                }                                                              \
++                else if (pxTempTCB->xTaskExecutionDeadline <                   \
++                  pxNewTaskTCB->xTaskExecutionDeadline)                        \
++                {                                                              \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority;          \
++                                                                               \
++                    uxCurrentReadyListLength =                                 \
++                      listCURRENT_LIST_LENGTH(&pxReadyTasksLists[uxTopPriority]);\
++                                                                               \
++                    while (uxCurrentReadyListLength != 0)                      \
++                    {                                                          \
++                        listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB,                 \
++                          &(pxReadyTasksLists[uxTopPriority]));                \
++                        pxTempTCB->uxPriority++;                               \
++                        uxCurrentReadyListLength--;                            \
++                    }                                                          \
++                }                                                              \
++                else                                                           \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority;          \
++                                                                               \
++                uxTopPriority--;                                               \
++            }                                                                  \
++        }                                                                      \
++    }
++#endif
++
++#ifdef USE_RM_SCHEDULER
++    #define taskRM_RECOMPUTE_PRIORITIES(pxNewTaskTCB)                          \
++    {                                                                          \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxTopPriority = uxTopReadyPriority;                        \
++        UBaseType_t uxCurrentReadyListLength = 0;                              \
++                                                                               \
++        if(uxPriority == 0)                                                    \
++            pxNewTCB->uxPriority = 0;                                          \
++        /*If top priority is 0 is empty, the there is only idle task present,  \
++         * which has priority 0 (lowest). The a new task will get priority 1: */\
++        else if(uxTopPriority == 0)                                            \
++            pxNewTaskTCB->uxPriority = 1;                                      \
++        /* Otherwise the larger the task arrival rate the higher the task      \
++         * priority:*/                                                         \
++        else                                                                   \
++        {                                                                      \
++            while(uxTopPriority != 0)                                     \
++            {                                                                  \
++                listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB,                         \
++                  &(pxReadyTasksLists[uxTopPriority]));                        \
++                                                                               \
++                if(pxTempTCB->xTaskPeriod > pxNewTaskTCB->xTaskPeriod)         \
++                {                                                              \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority + 1;      \
++                    break;                                                     \
++                }                                                              \
++                else if (pxTempTCB->xTaskPeriod < pxNewTaskTCB->xTaskPeriod)   \
++                {                                                              \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority;          \
++                                                                               \
++                    uxCurrentReadyListLength =                                 \
++                      listCURRENT_LIST_LENGTH(&pxReadyTasksLists[uxTopPriority]);\
++                                                                               \
++                    while (uxCurrentReadyListLength != 0)                      \
++                    {                                                          \
++                        listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB,                 \
++                          &(pxReadyTasksLists[uxTopPriority]));                \
++                        pxTempTCB->uxPriority++;                               \
++                        uxCurrentReadyListLength--;                            \
++                    }                                                          \
++                }                                                              \
++                else                                                           \
++                    pxNewTaskTCB->uxPriority = pxTempTCB->uxPriority;          \
++                                                                               \
++                uxTopPriority--;                                               \
++            }                                                                  \
++        }                                                                      \
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -366,6 +461,7 @@ typedef struct tskTaskControlBlock
+     TickType_t xTaskTimeExecuted;
+     TickType_t xTaskExecutionTime;
+     TickType_t xTaskCurrentExecutionTime;
++    TickType_t xTaskExecutionPeriod;
+     TickType_t xTaskExecutionDeadline;
+     char pcTaskName[ configMAX_TASK_NAME_LEN ];
+ 
+@@ -651,6 +747,7 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+                                   UBaseType_t uxPriority,
+                                   #endif
+                                   TickType_t xTaskExecutionTime,
++                                  TickType_t xTaskExecutionPeriod,
+                                   TickType_t xTaskExecutionDeadline,
+                                   TaskHandle_t * const pxCreatedTask,
+                                   TCB_t * pxNewTCB,
+@@ -842,6 +939,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+                             UBaseType_t uxPriority,
+                             #endif
+                             TickType_t xTaskExecutionTime,
++                            TickType_t xTaskExecutionPeriod,
+                             TickType_t xTaskExecutionDeadline,
+                             TaskHandle_t * const pxCreatedTask )
+     {
+@@ -919,12 +1017,12 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             #endif /* tskSTATIC_AND_DYNAMIC_ALLOCATION_POSSIBLE */
+ 
+             #ifdef USE_FREERTOS_CLASSIC_SCHEDULER
+-            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
+-              pvParameters, uxPriority, xTaskExecutionTime, xTaskExecutionDeadline,
+-              pxCreatedTask, pxNewTCB, NULL );
++            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
++            pvParameters, uxPriority, xTaskExecutionTime, xTaskExecutionPeriod,
++            xTaskExecutionDeadline, pxCreatedTask, pxNewTCB, NULL );
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+             #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+             defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER)
+-            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
+-              pvParameters, xTaskExecutionTime, xTaskExecutionDeadline, pxCreatedTask,
+-              pxNewTCB, NULL );
++            prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
++              pvParameters, xTaskExecutionTime, xTaskExecutionPeriod,
++              xTaskExecutionDeadline, pxCreatedTask, pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+                 pxIdleTaskTCB = pxNewTCB;
+@@ -953,6 +1051,7 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+                                   UBaseType_t uxPriority,
+                                   #endif
+                                   TickType_t xTaskExecutionTime,
++                                  TickType_t xTaskExecutionPeriod,
+                                   TickType_t xTaskExecutionDeadline,
+                                   TaskHandle_t * const pxCreatedTask,
+                                   TCB_t * pxNewTCB,
+@@ -1066,8 +1165,17 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+     pxNewTCB->xTaskTimeExecuted = 1;
+     pxNewTCB->xTaskExecutionTime = xTaskExecutionTime;
+     pxNewTCB->xTaskCurrentExecutionTime = xTaskExecutionTime;
++    pxNewTCB->xTaskExecutionPeriod = xTaskExecutionPeriod;
+     pxNewTCB->xTaskExecutionDeadline = xTaskExecutionDeadline;
+ 
++     #ifdef USE_DM_SCHEDULER
++    taskDM_RECOMPUTE_PRIORITIES(pxNewTCB);
++    #endif   
++
++    #ifdef USE_RM_SCHEDULER
++    taskRM_RECOMPUTE_PRIORITIES(pxNewTCB);
++    #endif
++
+     #if ( configUSE_MUTEXES == 1 )
+     {
+         pxNewTCB->uxBasePriority = uxPriority;
+@@ -2195,6 +2303,7 @@ void vTaskStartScheduler( void )
+                                #endif
+                                0,
+                                0,
++                               0,
+                                &xIdleTaskHandle );
+     }
+     #endif /* configSUPPORT_STATIC_ALLOCATION */
+@@ -3071,9 +3180,8 @@ BaseType_t xTaskIncrementTick( void )
+         /* Tasks of equal priority to the currently running task will share
+          * processing time (time slice) if preemption is on, and the application
+          * writer has not explicitly turned time slicing off. */
+-        #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
++        #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) ) &&
++          defined(USE_FREERTOS_CLASSIC_SCHEDULER)
+         {
+-            #ifdef USE_FREERTOS_CLASSIC_SCHEDULER
+             if( listCURRENT_LIST_LENGTH(
+               &( pxReadyTasksLists[ pxCurrentTCB->uxPriority ] ) ) >
+               ( UBaseType_t ) 1 )
+             {
+                 xSwitchRequired = pdTRUE;
+@@ -3082,7 +3190,6 @@ BaseType_t xTaskIncrementTick( void )
+             {
+                 mtCOVERAGE_TEST_MARKER();
+             }
+-            #endif
+         }
+         #endif
+
+\end{lstlisting}
+
+\subsubsection{EDF}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index 6280edeb0659..5dbdf33a7aa6 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -375,6 +375,36 @@
+     }
+ #endif
+ 
++#ifdef USE_EDF_SCHEDULER
++    #define taskCalculateDeadline(pxTCB) (pxTCB->xTaskStarted +
++      pxTCB->xTaskExecutionDeadline)
++
++    #define taskEDF_SCHEDULER()                                                 \
++    {                                                                          \
++        pxCurrentTCB = NULL;                                                   \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxCurrentReadyListLength =                                 \
++          listCURRENT_LIST_LENGTH(&(pxReadyTasksLists));                       \
++                                                                               \
++        if (uxCurrentReadyListLength == 0 )                                    \
++            pxCurrentTCB = pxIdleTaskTCB;                                      \
++        else                                                                   \
++        /* Find the shortst job in the redy list: */                           \
++            while(uxCurrentReadyListLength != 0)                                   \
++            {                                                                      \
++                if(pxCurrentTCB == NULL)                                           \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++                }                                                                  \
++                else                                                               \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB, &(pxReadyTasksLists));  \
++                    if(taskCalculateDeadline(pxTempTCB) <                          \
++                      taskCalculateDeadline(pxCurrentTCB))                         \
++                        pxCurrentTCB = pxTempTCB;                                  \
++                }                                                                  \
++                uxCurrentReadyListLength--;                                        \
++            }                                                                      \
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -1021,7 +1051,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+-            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER)
++            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++              defined(USE_EDF_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName, ( uint32_t ) usStackDepth,
+               pvParameters, xTaskExecutionTime, xTaskExecutionPeriod,
+               xTaskExecutionDeadline, pxCreatedTask, pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -1373,6 +1403,28 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+             }
+         }
+         #endif
++        #ifdef USE_EDF_SCHEDULER
++        else
++        {
++            /* If the scheduler is not already running, make this task the
++             * current task if it has earliest deadline. */
++            if( xSchedulerRunning == pdFALSE )
++            {
++                if(taskCalculateDeadline(pxCurrentTCB) >
++                  taskCalculateDeadline(pxNewTCB))
++                {
++                    pxCurrentTCB = pxNewTCB;
++                }
++                else
++                {
++                    mtCOVERAGE_TEST_MARKER();
++                }
++            }
++            else
++            {
++                mtCOVERAGE_TEST_MARKER();
++            }
++        }
++        #endif
+ 
+         uxTaskNumber++;
+ 
+@@ -3127,6 +3179,17 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif
+ 
++                    #ifdef USE_PREEMPTIVE_EDF_SCHEDULER
++                    if (taskCalculateDeadline(pxTCB) <
++                      taskCalculateDeadline(pxCurrentTCB))
++                    {
++                        xSwitchRequired = pdTRUE;
++                    }
++                    else
++                    {
++                        mtCOVERAGE_TEST_MARKER();
++                    }
++                    #endif
++
+                     /* Is the task waiting on an event also?  If so remove
+                      * it from the event list. */
+                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) )
+                       != NULL )
+@@ -3167,7 +3230,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+-                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER)
++                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++                      defined(USE_EDF_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -3436,6 +3499,10 @@ void vTaskSwitchContext( void )
+         taskSRTN_SCHEDULER();
+         #endif
+ 
++        #ifdef USE_EDF_SCHEDULER
++        taskEDF_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+\end{lstlisting}
+
+\subsubsection{LLF}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index 5dbdf33a7aa6..12403396c255 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -405,6 +405,37 @@
+     }
+ #endif
+ 
++#ifdef USE_LLF_SCHEDULER
++    #define taskComputeRemaningExecutionTime(pxTCB) ((pxTCB->xTaskExecutionTime +
++      1) - pxTCB->xTaskTimeExecuted)
++    #define taskComputeLaxity(pxTCB) ((pxTCB->xTaskStarted +
++      pxTCB->xTaskExecutionDeadline) - (xTaskGetTickCount() +
++      taskComputeRemaningExecutionTime(pxTCB)))
++
++    #define taskLLF_SCHEDULER()                                                \
++    {                                                                          \
++        pxCurrentTCB = NULL;                                                   \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxCurrentReadyListLength =                                 \
++          listCURRENT_LIST_LENGTH(&(pxReadyTasksLists));                       \
++                                                                               \
++        if (uxCurrentReadyListLength == 0 )                                    \
++            pxCurrentTCB = pxIdleTaskTCB;                                      \
++        else                                                                   \
++        /* Find the shortst job in the redy list: */                           \
++            while(uxCurrentReadyListLength != 0)                                   \
++            {                                                                      \
++                if(pxCurrentTCB == NULL)                                           \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++                }                                                                  \
++                else                                                               \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB, &(pxReadyTasksLists));  \
++                    if(taskComputeLaxity(pxTempTCB) <                              \
++                      taskComputeLaxity(pxCurrentTCB))                             \
++                        pxCurrentTCB = pxTempTCB;                                  \
++                }                                                                  \
++                uxCurrentReadyListLength--;                                        \
++            }                                                                      \
++    }
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -1051,7 +1082,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+-            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
+-              defined(USE_EDF_SCHEDULER)
++            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++              defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName,
+             ( uint32_t ) usStackDepth, pvParameters, xTaskExecutionTime,
+             xTaskExecutionPeriod, xTaskExecutionDeadline, pxCreatedTask, pxNewTCB,
+             NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -1425,6 +1456,28 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+             }
+         }
+         #endif
++        #ifdef USE_LLF_SCHEDULER
++        else
++        {
++            /* If the scheduler is not already running, make this task the
++             * current task if it has earliest deadline. */
++            if( xSchedulerRunning == pdFALSE )
++            {
++                if(taskComputeLaxity(pxCurrentTCB) >
++                  taskComputeLaxity(pxNewTCB))
++                {
++                    pxCurrentTCB = pxNewTCB;
++                }
++                else
++                {
++                    mtCOVERAGE_TEST_MARKER();
++                }
++            }
++            else
++            {
++                mtCOVERAGE_TEST_MARKER();
++            }
++        }
++        #endif
+ 
+         uxTaskNumber++;
+ 
+@@ -3190,6 +3243,17 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif
+ 
++                    #ifdef USE_PREEMPTIVE_LLF_SCHEDULER
++                    if (taskComputeLaxity(pxTCB) <
++                      taskComputeLaxity(pxCurrentTCB))
++                    {
++                        xSwitchRequired = pdTRUE;
++                    }
++                    else
++                    {
++                        mtCOVERAGE_TEST_MARKER();
++                    }
++                    #endif
++
+                     /* Is the task waiting on an event also?  If so remove
+                      * it from the event list. */
+                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) )
+                       != NULL )
+@@ -3230,7 +3294,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+-                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
+-                      defined(USE_EDF_SCHEDULER)
++                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++                      defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -3503,6 +3567,10 @@ void vTaskSwitchContext( void )
+         taskEDF_SCHEDULER();
+         #endif
+ 
++        #ifdef USE_LLF_SCHEDULER
++        taskLLF_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+
+\end{lstlisting}
+
+\subsubsection{DARTS}
+
+\begin{lstlisting}[language=C]
+diff --git a/tasks.c b/tasks.c
+index 12403396c255..93fd98ab6d2e 100644
+--- a/tasks.c
++++ b/tasks.c
+@@ -436,6 +436,39 @@
+     }
+ #endif
+ 
++#ifdef USE_DARTS_SCHEDULER
++    #define taskComputeRemaningExecutionTime(pxTCB) ((pxTCB->xTaskExecutionTime + 1)
++      - pxTCB->xTaskTimeExecuted)
++    #define taskComputeLaxity(pxTCB) ((pxTCB->xTaskStarted +
++      pxTCB->xTaskExecutionDeadline) - (xTaskGetTickCount() +
++      taskComputeRemaningExecutionTime(pxTCB)))
++    #define taskComputeScore(pxTCB)
++      ((float)taskComputeRemaningExecutionTime(pxTCB)/(((float)pxTCB->xTaskStarted +
++      (float)pxTCB->xTaskExecutionDeadline) * (float)taskComputeLaxity(pxTCB)))
++
++    #define taskDARTS_SCHEDULER()                                              \
++    {                                                                          \
++        pxCurrentTCB = NULL;                                                   \
++        tskTCB *pxTempTCB = NULL;                                              \
++        UBaseType_t uxCurrentReadyListLength =                                 \
++          listCURRENT_LIST_LENGTH(&(pxReadyTasksLists));                       \
++                                                                               \
++        if (uxCurrentReadyListLength == 0 )                                    \
++            pxCurrentTCB = pxIdleTaskTCB;                                      \
++        else                                                                   \
++        /* Find the shortst job in the redy list: */                           \
++            while(uxCurrentReadyListLength != 0)                                   \
++            {                                                                      \
++                if(pxCurrentTCB == NULL)                                           \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxCurrentTCB, &(pxReadyTasksLists));\
++                }                                                                  \
++                else                                                               \
++                {                                                                  \
++                    listGET_OWNER_OF_NEXT_ENTRY(pxTempTCB, &(pxReadyTasksLists));  \
++                    if(taskComputeScore(pxTempTCB) > taskComputeScore(pxCurrentTCB))\
++                        pxCurrentTCB = pxTempTCB;                                  \
++                }                                                                  \
++                uxCurrentReadyListLength--;                                        \
++            }                                                                      \
++    }
++
++#endif
++
+ /*-----------------------------------------------------------*/
+ 
+ /* pxDelayedTaskList and pxOverflowDelayedTaskList are switched when the tick
+@@ -1082,7 +1115,7 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB ) (...);
+             prvAddNewTaskToReadyList( pxNewTCB );
+             #endif
+ 
+-            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
+-              defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER)
++            #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++              defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++              defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER) ||
++              defined(USE_DARTS_SCHEDULER)
+             prvInitialiseNewTask( pxTaskCode, pcName,
+               ( uint32_t ) usStackDepth, pvParameters, xTaskExecutionTime,
+               xTaskExecutionPeriod, xTaskExecutionDeadline, pxCreatedTask,
+               pxNewTCB, NULL );
+ 
+             if( pcName == configIDLE_TASK_NAME )
+@@ -1478,6 +1511,26 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+             }
+         }
+         #endif
++        #ifdef USE_DARTS_SCHEDULER
++        else
++        {
++            if( xSchedulerRunning == pdFALSE )
++            {
++                if(taskComputeScore(pxCurrentTCB) < taskComputeScore(pxNewTCB))
++                {
++                    pxCurrentTCB = pxNewTCB;
++                }
++                else
++                {
++                    mtCOVERAGE_TEST_MARKER();
++                }
++            }
++            else
++            {
++                mtCOVERAGE_TEST_MARKER();
++            }
++        }
++        #endif
+ 
+         uxTaskNumber++;
+ 
+@@ -3254,6 +3307,17 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif
+ 
++                    #ifdef USE_DARTS_SCHEDULER
++                    if (taskComputeScore(pxTCB) > taskComputeScore(pxCurrentTCB))
++                    {
++                        xSwitchRequired = pdTRUE;
++                    }
++                    else
++                    {
++                        mtCOVERAGE_TEST_MARKER();
++                    }
++                    #endif
++
+                     /* Is the task waiting on an event also?  If so remove
+                      * it from the event list. */
+                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) )
+                       != NULL )
+@@ -3294,7 +3358,7 @@ BaseType_t xTaskIncrementTick( void )
+                     }
+                     #endif /* configUSE_PREEMPTION */
+ 
+-                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
+-                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
+-                      defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER)
++                    #if defined(USE_FCFS_SCHEDULER) || defined(USE_RR_SCHEDULER) ||
++                      defined(USE_SJF_SCHEDULER) || defined(USE_SRTN_SCHEDULER) ||
++                      defined(USE_EDF_SCHEDULER) || defined(USE_LLF_SCHEDULER) ||
++                      defined(USE_DARTS_SCHEDULER)
+                     /* If a task has been unblocked while the idle task runs -
+                      * call to scheduler for context switch. */
+                     if (pxCurrentTCB == pxIdleTaskTCB)
+@@ -3571,6 +3635,10 @@ void vTaskSwitchContext( void )
+         taskLLF_SCHEDULER();
+         #endif
+ 
++        #ifdef USE_DARTS_SCHEDULER
++        taskDARTS_SCHEDULER();
++        #endif
++
+         traceTASK_SWITCHED_IN();
+ 
+         /* After the new task is switched in, update the global errno. */
+
+\end{lstlisting}
 
 \end{document}
