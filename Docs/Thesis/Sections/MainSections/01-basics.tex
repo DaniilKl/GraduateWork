@@ -50,7 +50,7 @@ wykorzystującej ten sprzęt (\cref{fig:bare-metal}). Dla funkcjonowania (jako s
 potrzebna jednostka obliczeniowa dla wykonywania poleceń, pamięć dla przechowywania poleceń, moduły
 wejścia/wyjścia dla kontaktu ze środowiskiem zewnętrznym i kontroler przerwań dla poinformowania
 aplikacji o zdarzeniach z zewnątrz. Zasoby sprzętowe są przydzielane statycznie podczas kompilacji,
-nie ma separacji środowisk lub uprzelewanego dostępu. % TODO: uprzelewanego?
+nie ma separacji środowisk lub uprzywilejowanego dostępu.
 
 Cechy:
 \begin{itemize}
@@ -64,10 +64,10 @@ Cechy:
 \end{itemize}
 
 Uwzględniając powyższe cechy i właściwości, można zrobić wniosek, że taka architektura jest
-przeznaczona dla małych jednostek w systemie, np. czujniki, każda z których ma zdefiniowaną jedną cel.
+przeznaczona dla małych jednostek w systemie, np. czujniki, każda z których ma zdefiniowany jedny cel.
 Przykładem realizacji danej architektury może być dowolna aplikacja niewykorzystująca systemu
 operacyjnego lub hiperwizora na dowolnej architekturze \acrshort{arm}'owej. Chociaż najczęściej będzie
-wybierana jedna z \acrshort{m} architektur, ponieważ są one dla tego najlepiej przeznaczone.
+wybierana jedna z architektur z rodziny \acrshort{arm} \acrshort{m}, ponieważ są one dla tego najlepiej przystosowane.
 
 Dana architektura nie stanowi zainteresowania w ramach tej pracy, skoro nie posiada oprogramowania
 zarządzającego dostępem do zasobów jednostki obliczeniowej.
@@ -82,12 +82,12 @@ zarządzającego dostępem do zasobów jednostki obliczeniowej.
 
 Architektura posiadająca jedną warstwę abstrakcji — system operacyjny (\cref{fig:no-virt}), oprogramowanie systemowe, które w pełni lub częściowo (zależy od architektury systemu operacyjnego) zachowuje kontrolę nad sprzętem. Opiera się o dodatkowe moduły sprzętowe zarządzające pamięcią najczęściej \acrshort{mpu}, lub też \acrshort{mmu}), aby rozdzielić kod systemu operacyjnego od kodu aplikacji, oraz bardziej złożony kontroler przerwań obsługujący nie tylko zdarzenia zewnętrzne, ale i zdarzenia wewnętrzne, pozwalające na zmianę stanu systemu.
 
-Jednostka obliczeniowa ma wbudowany podział stanów systemu: stan aplikacji (\acrshort{el}0 w architekturze \acrshort{arm} \acrshort{a}), w którym wykonywany kod nie ma dostępu do zasobów systemowych (definicja tych zasobów zależy od systemu operacyjnego) i stan systemu operacyjnego (\acrshort{el}1 w architekturze \acrshort{arm} \acrshort{a}), mający dostęp do wszystkiego. Dla większości systemów operacyjnych obecność podziału na stany ze strony sprzętowej (obecności pewnych rejestrów oraz instrukcji \acrshort{isa}) jest obowiązkowa.
+Jednostka obliczeniowa ma wbudowany podział stanów systemu: stan aplikacji (np. \acrshort{el}0 w architekturach z rodziny \acrshort{arm} \acrshort{a}), w którym wykonywany kod nie ma dostępu do zasobów systemowych (definicja tych zasobów zależy od systemu operacyjnego) i stan systemu operacyjnego (np. \acrshort{el}1 w architekturach z rodziny \acrshort{arm} \acrshort{a}), mający dostęp do wszystkiego. Dla większości systemów operacyjnych obecność podziału na stany ze strony sprzętowej (obecności pewnych rejestrów oraz instrukcji \acrshort{isa}) jest obowiązkowa.
 
 Cechy:
 \begin{itemize}
     \item Skomplikowaność: w zależności od architektury systemu operacyjnego (monolityczne jądro,
-    mikrojądro, nanojądro) system operacyjny może posiadać różną ilość narzędzi i funkcjonalności;
+    mikrojądro, nanojądro) system operacyjny może posiadać różną ilość narzędzi i funkcjonalności, ale ogólnie jest to bardziej skomplikowana architektura z powodu potrzeby wykorzystania dodatkowego sprzętu systemowego i dodaniu kilku poziomów abstrakcji (np. w sterownikach);
     \item Mniejsza wydajność: obecność abstrakcji w systemie operacyjnym (sterowniki,
     interpretery aplikacji), przełączanie stanów pomiędzy systemem operacyjnym a aplikacją,
     przełączenie kontekstu pomiędzy aplikacjami;
@@ -103,8 +103,7 @@ Cechy:
 \end{itemize}
 
 Taką architekturę oprogramowania można spotkać na wszystkich architekturach \acrshort{arm}'owych (tzn.
-na \acrshort{arm} \acrshort{m}, \acrshort{arm} \acrshort{a} i \acrshort{arm} \acrshort{r}), popularne
-przykłady:
+z wszystkich trzech rodzin architektur: \acrshort{arm} \acrshort{m}, \acrshort{arm} \acrshort{a} i \acrshort{arm} \acrshort{r}), popularne przykłady:
 
 \begin{itemize}
     \item FreeRTOS;
@@ -128,9 +127,8 @@ systemu operacyjnego.
 \end{figure}
 
 Architektura z wirtualizacją jest osiągana za pomocą dodania kolejnego poziomu abstrakcji do
-poprzednio omówionych architektur (\cref{fig:virt}; \acrshort{el}2 w architekturach
-\acrshort{arm} \acrshort{a}), tzn. hiperwizor może uruchamiać \acrshort{vm} z aplikacją w architekturze "nagi
-metał" jak również i z systemem operacyjnym, który już będzie odpowiedzialny za uruchomienie aplikacji.
+poprzednio omówionych architektur (\cref{fig:virt}; \acrshort{el}2 w architekturach z rodziny
+\acrshort{arm} \acrshort{a}), tzn. hiperwizor może uruchamiać \acrshort{vm} z aplikacją w architekturze "nagi metał" jak również i z systemem operacyjnym, który już będzie odpowiedzialny za uruchomienie aplikacji.
 
 Typowo hiperwisory potrzebują odpowiedniego sprzętu dla uruchomienia (ang. virtualization support;
 głównie chodzi tu o rozszerzenia do obsługi przerwań oraz separacji pamięci, a także dodaniu
@@ -157,10 +155,7 @@ Cechy:
     dostępem do zasobów jednostki obliczeniowej: z dynamicznego zarządzanie na zarządzanie statyczne.
 \end{itemize}
 
-Tę architekturę oprogramowania systemowego można spotkać na architekturach sprzętowych \acrshort{arm}
-\acrshort{a} i \acrshort{arm} \acrshort{r}, skoro one mają sprzęt specjalnie przeznaczony dla
-wirtualizacji. Możliwe jest także uruchomienie na architekturach nieprzeznaczonych dla wirtualizacji,
-w takim przypadku niezbędne będzie użycie parawirtualizacji. Przykłady realizacji:
+Tę architekturę oprogramowania systemowego można spotkać na architekturach sprzętowych z rodzin  \acrshort{arm} \acrshort{a} i \acrshort{arm} \acrshort{r}, skoro one mają sprzęt specjalnie przeznaczony dla wirtualizacji. Możliwe jest także uruchomienie na architekturach nieprzeznaczonych dla wirtualizacji, w takim przypadku niezbędne będzie użycie parawirtualizacji. Przykłady realizacji:
 
 \begin{itemize}
     \item Jailhouse;
@@ -188,9 +183,9 @@ Wirtualizacja zagnieżdżona (ang. nested virtualization) polega na stworzeniu \
 \acrshort{vm} (\cref{fig:virt-nestet}), co oznacza też dodanie dodatkowego hiperwizora, którego można
 nazwać "hiperwizorem podrzędnym".
 
-Aktualnie architekury \acrshort{arm}'owe wspierają tę architekturę częściowo, tzn. nie ma ani dodanego
-kolejnego \acrshort{el}, ani wsparcia dla trzypoziomowej translacji pamięci, ani dedykowanych
-mechanizmów przekierowywania przerwań, jest tylko podstawowe wsparcie w postaci rozszerzeń do pewnych rejestrów w architekturach \acrshort{arm} \acrshort{a} \cite{nestvirtarm}.
+Aktualnie architektury \acrshort{arm}'owe wspierają tę architekturę częściowo, tzn. nie ma ani dodanego
+kolejnego \acrshort{el}, ani wsparcia dla trzypoziomowej translacji pamięci, ani dedykowanych 
+mechanizmów przekierowywania przerwań, jest tylko podstawowe wsparcie w postaci rozszerzeń do pewnych rejestrów w architekturach z rodziny \acrshort{arm} \acrshort{a} \cite{nestvirtarm}.
 
 Autor nie miał doświadczeń z tą architekturą, więc nie będzie przedstawiono jej cech. Należy też
 dodać, że nie jest ona często wykorzystywana i wygląda raczej jako architektura eksperymentalna

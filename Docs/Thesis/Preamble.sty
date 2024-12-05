@@ -39,6 +39,35 @@
     % Redefine cleveref names for figures:
     \crefname{figure}{rys.}{rys.}
     \Crefname{figure}{Rys.}{Rys.}
+    \usepackage{xcolor}
+    \usepackage{listings}
+    % Configuration for code listings:
+    \lstdefinestyle{mystyle}{
+        backgroundcolor=\color{gray!10},
+        showspaces=false,
+        showstringspaces=false,
+        basicstyle=\footnotesize,
+        numbers=left,
+        numberstyle=\small,
+        stepnumber=1,
+        numbersep=10pt,
+        frame=lines,
+        keywordstyle=\bfseries
+    }
+    \lstset{style=mystyle}
+    \renewcommand{\lstlistingname}{Przykład}
+    % For pseudocode blocks:
+    \usepackage{algorithm}
+    \usepackage{algpseudocode}
+    \usepackage{float}
+    \floatname{algorithm}{Algorytm}
+    \usepackage{caption}
+    \captionsetup[algorithm]{font=small, labelfont=bf}
+    \crefname{algorithm}{alg.}{Alg.}
+    \Crefname{algorithm}{alg.}{Alg.}
+    % Math packages:
+    \usepackage{amsmath}
+    \usepackage{unicode-math}
 
 %Other definitions:
     %Change the title of the Table of content:

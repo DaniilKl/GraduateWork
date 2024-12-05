@@ -1,0 +1,809 @@
+\documentclass[../../main]{subfiles}
+\graphicspath{{\subfix{../../Images/}}}
+
+\begin{document}
+
+W tej części pracy będzie omówiona analiza algorytmów zarządzania zasobami jednostki obliczeniowej w systemie wykorzystującym architekturę oprogramowania z systemem operacyjnym (\cref{fig:no-virt}). 
+
+Dla tych celów został wybrany FreeRTOS, jako jeden z najbardziej stabilnych i najdłużej istniejących mikrojądr na rynku z otwartym kodem źródłowym. Fajne jest także że FreeRTOS używa licencji MIT, pozwalającą na dowolne modyfikowanie kodu źródłowego.
+
+FreeRTOS ma następujące cechy:
+
+\begin{itemize}
+    \item Jest mikrojądrem;
+    \item Ma funkcjonalności:
+    \begin{itemize}
+        \item Komunikacja międzyprocesowa: powiadomienia wprost pomiędzy procesami, kolejki, strumienie, bufery;
+        \item Zarządzanie jednostką obliczeniową: jeden algorytm priorytetowy z wywłaszczaniem i kwantyzacją czasu;
+        \item Zarządzanie pamięcią: jest dostępne kilka realizacji dynamicznej alokacji pamięci oraz jedna realizacja statycznej alokacji pamięci;
+        \item Synchronizacja: mutexy i semafory;
+        \item Liczniki realizowane przez oprogramowanie (ang. software timers);
+    \end{itemize}
+    \item Ma wsparcie dla większości architektur sprzętowych.
+\end{itemize}
+
+Więc jest to dobry wybór, aby szybko przejść przez wprowadzenie do oprogramowania i zająć się docelowym zadaniem.
+
+\subsection{Używana platforma}
+
+%\begin{figure}[h]
+%
+%    \begin{subfigure}{0.5\textwidth}
+%        \includegraphics[width=0.9\linewidth, height=6cm]{overleaf-logo} 
+%        \caption{Caption1}
+%        \label{fig:subim1}
+%    \end{subfigure}
+%    \begin{subfigure}{0.5\textwidth}
+%        \includegraphics[width=0.9\linewidth, height=6cm]{mesh}
+%        \caption{Caption 2}
+%        \label{fig:subim2}
+%    \end{subfigure}
+%
+%    \caption{Caption for this figure with two images}
+%    \label{fig:image2}
+%\end{figure}
+
+Ograniczenia co do platformy, na której będzie uruchomiony system operacyjny:
+
+\begin{itemize}
+    \item Możliwość uruchomienia systemu operacyjnego bez potrzeby dodania wsparcia dla platformy;
+    \item Możliwość debugowania i śledzenia wykonywania instrukcji na platformie nie przerywając ciąg wykonywanych instrukcji (ang. real time tracing).
+\end{itemize}
+
+Początkowo planowano użyć w tym celu platformy NUCLEO-64 F401RE, skoro używa ona mikrokontrolera bazującego na jednostce obliczeniowej \acrshort{arm} Cortex \acrshort{m}4, bazującej się na architekturze \acrshort{arm}v7\acrshort{m}. Jest to dobrze znana i zbadana architektura wspierana przez FreeRTOS.
+
+Problem pojawił się przy debugowaniu i śledzeniu wykonywanych instrukcji bez interwencji. Ten mikrokontroler ma wbudowane narzędzie \acrshort{etm} które pozwala to zrobić. Jednak, aby skorzystać z tego, jest potrzebny debugger (np. Segger J-Link), który kosztuje kilkaset złotych. Więc zdecydowano zrezygnować z tej platformy.
+
+Jako alternatywy do platformy sprzętowej zdecydowano użyć emulatora Qemu, który może emulować docelową architekturę. Jako emulowaną płytkę wybrano Stellaris LM3S6965EVB. Jest to platforma producenta Texas Instruments bazująca na mikrokontrolerze LM3S6965, który ma jedno jądro Cortex M3, który też używa architektury \acrshort{arm}v7\acrshort{m}. Ta platforma jest wspierana przez FreeRTOS i ma oddzielny projekt przykładowy, co ułatwiło wprowadzenie.
+
+W dalszej części pracy ta platforma emulowana będzie nazywana po prostu "platformą" lub "LM3S6965EVB", jeżeli będzie potrzeba rozróżnienia.
+
+\subsection{Sposób pomiaru i analizy}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Images/generate-parse-analyze.png}
+    \caption{Zestaw narzędzi i je połączenie z Qemu}
+    \label{fig:generate-parse-analyze}
+\end{figure}
+
+Skoro platforma docelowa jest emulowana przez Qemu - jest możliwość skorzystać z wszystkich możliwości Qemu do śledzenia zachowania. Natomiast, "śledzenie" oznacza ciągle odczytywanie wykonywanych instrukcji lub funkcji wykonywanych na platformie do, w przypadku Qemu, pliku tekstowego. Ponieważ Qemu wykonuje instrukcje z taką samą prędkością co i realna platforma (nie jest to do końca prawda, będzie to omówione później), ten plik tekstowy w przeciągu kilku sekund działania platformy zbiera kilka milionów linijek informacji, co jest niemożliwe do analizy manualnej.
+
+Aby to ogarnąć, był stworzony zestaw narzędzi w języku Python automatyzujących ten proces. Finalna architektura jest pokazana na \cref{fig:generate-parse-analyze}, gdzie każdy wątek odpowiada za:
+
+\begin{itemize}
+    \item \textit{generate.py}: generuje plik JSON z danymi o procesach. Parametry wejściowe: .
+    \item \textit{insert.py}: na podstawie wygenerowanych danych procesów z poprzedniego kroku są tworzone funkcję w języku C (ponieważ każdy proces jest reprezentowany jako funkcja w języku C; szczegóły w załączniku) z wykorzystanie parametrów z wygenerowanego przez generate.py pliku JSON. Następnie wytworzone funkcje są "wklejane" do odpowiednio przygotowanego pliku \textit{main.c\_sample} i otrzymany plik o nazwie \textit{main.c} jest zapisywany w systemie plików, gdzie jego może znaleźć kompilator.
+    \item \acrshort{gcc}: otrzymuje \textit{main.c} i pozostały kod systemu operacyjnego i kompiluje FreeRTOS przechodząc przez cały proces kompilacji programu w języku C, tzn. od etapu preprocesora do linkowania i tworzy plik binarny dla architektury \acrshort{arm}v7\acrshort{m}. Ten plik jest zapisywany w systemie plików, gdzie jego może znaleźć Qemu.
+    \item Qemu: odczytuje plik binarny i uruchamia jego. Przy uruchomieniu system operacyjny przechodzi przez inicjalizację i zaczyna wykonywać poprzednio zdefiniowane procesy. Podczas wykonywania, Qemu zapisuję informacje o wykonywanych funkcjach systemowych do pliku tekstowego, który jest zapisywany w systemie plików, gdzie jego można otworzyć i przeanalizować.
+    \item \textit{parse.py}: otwiera i analizuje plik tekstowy z informacją o wykonywanych funkcjach zapisany poprzednio przez Qemu. Po analizie dane dla każdego wykonywanego procesu są zapisywane w pliku JSON w systemie plików. Zapisywane dane: rozpoczęcie wykonywania każdego z procesów, zakończenie wykonywania każdego z procesów i ilość wywłaszczań dla każdego z procesów.
+    \item \textit{analyze.py}: odczytuje plik JSON otrzymany z poprzedniego kroku i oblicza następujące wskaźniki: ilość sukcesów w osiągnięciu celu przed najgorszym terminem osiągnięcia celu dla każdego z procesów, ilość porażek w osiągnięciu celu przed najgorszym terminem osiągnięcia celu dla każdego z procesów, ilość porażek w osiągnięciu celu przed najgorszym terminem osiągnięcia celu dla pewnej ilości procesów o najwyższym priorytecie ogólne przeciążenie systemu (ang. load factor) i średni czas potrzebny dla osiągnięcia celu przez wszystkie procesy.
+    \item \textit{draw.py}: tworzy wykresy na podstawie pliku JSON stworzonego w poprzednim kroku.
+\end{itemize}
+
+Szczególnie każdy z elementów przedstawionych na \cref{fig:generate-parse-analyze} jest przedstawiony w \hyperref[sec:zalacznik-6]{załączniku nr 6}.
+
+\subsubsection{Problemy i założenia}
+
+Przy tworzeniu wyżej przedstawionej listy narzędzi ujawniło się kilka problemów, które wpłynęły nie tylko na proces pomiaru i analizy, ale i na proces generowania procesów, jak również i na implementację algorytmów.
+
+Wykorzystanie Qemu zamiast realnej płytki wprowadziło komplikacje, ponieważ Qemu jest emulatorem uruchamianym wewnątrz systemu operacyjnego użytkownika (w ramach tej pracy była wykorzystywana dystrybucja Linux'a o nazwie Ubuntu i wersji 22.04.1 na architekturze sprzętowej x86\_64) jako aplikacja. To znaczy, że Qemu dzieli zasoby jednostki obliczeniowej użytkownika z innymi procesami, co oznacza, że w pewnym momencie Qemu może nie dostawać czasu na wykonanie swoich instrukcji, co z kolei oznacza, że instrukcje Qemu nie są wykonywane w czasie rzeczywistym.
+
+Z kolei, Qemu uruchamia wewnątrz siebie emulowaną platformę, na której jest uruchamiany badany system operacyjny. Skoro instrukcję Qemu nie są wykonywane w czasie rzeczywistym - to emulowana platforma nie działa w czasie rzeczywistym. Czyli, jeżeli zegar systemowy emulowanej platformy był skonfigurowany na 50 MHz, to nie oznacza, że po uruchomieniu Qemu, rejestr przechowujący wartość zegara systemowego będzie modyfikowany z częstotliwością 50 MHz. Może być to dowolna inna częstotliwość, w zależności jak dużo zasobów jednostki obliczeniowej użytkownika i z jakim zakresem dostaję Qemu. Może to nawet nie być periodyczne. Z tego wynika, że nie można mierzyć czas wykonywania czegokolwiek uruchamianego wewnątrz Qemu w sekundach, a częstość w hercach.
+
+W takim przypadku, w jaki sposób mierzyć i nadawać długość wykonywania procesów, chwilę rozpoczęcia i zakończenia ich wykonywania?
+
+Pierwszym pomysłem było użycie wartości zegara systemowego emulowanej przez Qemu architektury. Czyli mierzyć wszystkie wielkości systemowe w różnicach pomiędzy wartościami zegara, które są dostępne w pewnym miejscu w pamięci. Jest to możliwe do zrobienia wewnątrz systemu (tzn. FreeRTOS może sięgać po wartości zegara) jak również można to zrobić zewnątrz. Analiza ciągły odczyt pamięci architektury emulowanej umożliwia też analizę wykonywanych działań w systemie. Skoro, oprócz rejestru ze stanem zegara w pamięci też można znaleźć inne rejestry, np. wskaźnik na aktualnie używany przez emulowaną przez jednostkę obliczeniową stos, co umożliwia też śledzenie wykonywanych procesów.
+
+Byłoby to fajnie, gdyby nie problem, że Qemu nie emuluje mikroarchitekturę (tzn. właściwości sprzętowe), tylko architekturę, widzianą przez programistę systemowego i programistę aplikacji. To znaczy, że Qemu emuluje wykonywanie instrukcji dla pewnej architektury (\acrshort{arm}v7\acrshort{m}) tylko nie emuluje jak te instrukcje są wykonywane w odpowiedniej mikroarchitekturze.
+
+Głównym problemem jest to, że nie wiadomo ile okresów emulowanego zegara systemowego zajmie wykonywanie jednej instrukcji emulowanej architektury. Np. dla Cortex M3 czas potrzebny na wykonanie instrukcji \textit{cmp} jest równy jednemu okresu zegara systemowego. Kiedy Cortex M3 jest emulowany przez Qemu, nie wiadomo czy instrukcja \textit{cmp} zostanie wykonana w ciągu jednego okresu emulowanego zegara systemowego.
+
+Uwzględniając powyższe, można zrobić wniosek, że pomiar emulowanego zegara systemowego i porównywanie zdarzeń, bazując na tych pomiarach, nie zawsze będzie sensowne. Ponieważ pomiędzy np. dwoma periodycznymi wydarzeniami w systemie rejestr zawierający wartość zegara systemowego może być zmieniony różnie, czasem wartość wzrośnie o jedną liczbę, zaś następnym razem to będzie inna liczba.
+
+Więc, aby mieć możliwość analizować efektywność używanych algorytmów, symulować czas potrzebny procesu na osiągniecie celu i robić pomiary, jako miara czasu (czyli minimalny odcinek czasu) została wybrana wartość zegara systemu operacyjnego, zwanego w FreeRTOS jako \textit{SysTick} (ang. System Tick). Nie jest ważne ile realnego czasu minie pomiędzy chwilami, kiedy zegar systemu operacyjnego zmienia swój stan. Ważne, że ta zmiana się odbyła i coś innego było robione pomiędzy chwilami zmian stanu, i to coś było robione dokładnie tyle czasu, ile minęło pomiędzy tymi dwoma zmianami stanu zegara systemu operacyjnego.
+
+Czyli, teraz czas wykonywania procesu będzie mierzony nie w sekundach lub ich ułamkach, tylko w okresach zegara systemu operacyjnego. Na przykład, można powiedzieć, że proces potrzebuje 100 okresów zegara systemu operacyjnego, na osiągniecie swojego celu. Że proces jest periodyczny i pomiędzy dwoma momentami czasu, kiedy ten proces przechodzi do gotowości do wykonania, mija 500 okresów zegara systemu operacyjnego, i tak dalej. Jednostka, reprezentująca okres zegara systemu operacyjnego w dalszej części pracy będzie nazywana \textit{SysTick}.
+
+Owszem, takie założenie jest możliwe do użycia, kiedy nie jest ważne, ile dokładnie czasu minęło pomiędzy zmianami stanu zegara systemu operacyjnego.
+
+Podczas pomiaru i analizy nie będzie uwzględniony czas wykonywania jakichkolwiek innych funkcji systemu operacyjnego, ponieważ: większość funkcji systemu operacyjnego została usunięta podczas kompilacji jako funkcję zbędne w ramach tej pracy, oraz dlatego, że celem tej pracy jest determinizm, a nie wydajność systemu. Uwzględniając powyższe założenia, można zrobić wniosek, że wydajność końcowego systemu w ramach tej pracy nie wpłynie na analizę determinizmu, ponieważ jako miara czasu został przyjęty fakt zmiany stanu zegara systemu operacyjnego, nie uwzględniając, ile realnego czasu minęło pomiędzy dwoma zmianami, oraz ile czasu zajęła ta zmiana.
+
+\subsubsection{Generacja parametrów, tworzenie procesów}
+
+Generacja parametrów dla tworzenia procesów, jak już było opisane wyżej (\cref{fig:generate-parse-analyze}), odbywa się za pomocą skryptu \textit{generate.py}.
+
+Skrypt ten otrzymuje następujące parametry w formacie JSON (zamieszczone poniżej dane są przykładowe):
+
+\begin{lstlisting}[caption={Parametry wejściowe do generacji}, label={lst:input-generation-parameters}]
+{
+    "TaskAmount": 10,
+    "PriorityOverlapping": 0,
+    "StdMeanPeriod": [1600,100],
+    "LowUpPeriod": [2,30],
+    "StdMeanDeadline": [1400,100],
+    "LowUpDeadline": [2,1],
+    "StdMeanExec": [20,10],
+    "LowUpExec": [10,300],
+    "StdMeanPriority": [126,250],
+    "LowUpPriority": [1,251]
+}
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{TaskAmount}: liczba procesów;
+    \item \textit{PriorityOverlapping}: flaga sygnalizująca, czy priorytety zdefiniowane dla procesów mogą się powtarzać;
+    \item \textit{StdMeanPeriod}: parametry rozkładu normalnego (rozkładu Gaussa) używanego dla generacji okresu gotowości do wykonywania procesów periodycznych.: pierwszy element tabeli jest odchyleniem standardowym, a drugi - wartością oczekiwaną.
+    \item \textit{LowUpPeriod}: ograniczenia dla wartości okresu, odpowiednio dolne i górne;
+    \item \textit{StdMeanDeadline}: parametry rozkładu normalnego (rozkładu Gaussa) używanego dla generacji najgorszego terminu osiągnięcia celu przez proces: pierwszy element tabeli jest odchyleniem standardowym, a drugi - wartością oczekiwaną.
+    \item \textit{LowUpDeadline}: ograniczenia dla wartości najgorszego terminu osiągnięcia celu przez proces, odpowiednio dolne i górne.
+    \item \textit{StdMeanExec}: parametry rozkładu normalnego (rozkładu Gaussa) używanego dla generacji czasu potrzebnego procesu na osiągnięcie swojego celu: pierwszy element tabeli jest odchyleniem standardowym, a drugi - wartością oczekiwaną.
+    \item \textit{LowUpExec}: ograniczenia dla wartości czasu potrzebnego procesu na osiągnięcie swojego celu, odpowiednio dolne i górne.
+    \item \textit{StdMeanPriority}: parametry rozkładu normalnego (rozkładu Gaussa) używanego dla generacji priorytetu przypisywanego każdemu procesu: pierwszy element tabeli jest odchyleniem standardowym, a drugi - wartością oczekiwaną.
+    \item \textit{LowUpPriority}: ograniczenia dla wartości priorytetu, odpowiednio dolne i górne.
+\end{itemize}
+
+Przyczyna użycia w generacji czasu potrzebnego procesu na osiągnięcie celu będzie wytłumaczone w następnych częściach pracy.
+
+Rozkłady prawdopodobieństwa były wybrane dla generacji, aby w przybliżeniu odzwierciedlić rozkład parametrów procesów w rzeczywistych sytuacjach. To znaczy, że w rzeczywistości wszystkie procesy nie mogą mieć jednakowe lub w przybliżeniu jednakowe parametry, tylko ich wartości są rozrzucone na pewnym przedziale. Zadaniem rozkładów prawdopodobieństwa będzie dokładnie symulacja tej niejednorodności.
+
+Wszystkie wymienione powyżej parametry są dobierane ręcznie, aby zasymulować pewny rzeczywisty przypadek. Na przykład, można wygenerować parametry procesów w sposób, kiedy w systemie będzie duża ilość procesów o małych priorytetach i długich do wykonania procesów o większym priorytecie, a następnie przekazać to do Qemu, aby sprawdzić pewny algorytm w takich warunkach.
+
+Wygenerowane dany są zapisywane w formacie JSON w następującej postaci (przykład dla jednego procesu):
+
+\begin{lstlisting}[caption={Wygenerowane parametry procesu}, label={lst:proces-parameters-generated}]
+{
+    "v1_Task": {
+        "TaskName": "v1_Task",
+        "TaskPriority": 57,
+        "TaskExecutionTime": 13,
+        "TaskDeadline": 30,
+        "TaskPeriod": 106
+    }
+}
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{TaskName}: nazwa procesu.
+    \item \textit{TaskPriority}: priorytet procesu.
+    \item \textit{TaskExecutionTime}: czas potrzebny procesu na osiągnięcie celu, jednostka - \textit{SysTick}.
+    \item \textit{TaskDeadline}: najgorszy termin osiągnięcia celu przez proces, jednostka - \textit{SysTick}.
+    \item \textit{TaskPeriod}: okres gotowości do wykonywania procesu, jednostka - \textit{SysTick}.
+\end{itemize}
+
+Te dane są interpretowane przez skrypt \textit{insert.py} i na ich podstawie jest generowany kod w języku C i wklejany we wspomniany wyżej (\cref{fig:generate-parse-analyze}) plik \textit{main.c\_sample}. Na przykładzie \ref{lst:c-generated} jest pokazany wygenerowany kod w języku C dla danych z przykładu \ref{lst:proces-parameters-generated}:
+
+\begin{lstlisting}[language=C, caption={Wygenerowany kod w języku C}, label={lst:c-generated}]
+void v1_Task(void *pvParameters);
+
+int main(void){
+  xTaskCreate(v1_Task, "v1_Task", TASK_STACK_LENGHT_WORDS, NULL, 57, 13, 30, NULL);
+
+  vTaskStartScheduler();
+  while(1){};
+}
+
+void v1_Task (void *pvParameters){
+  TickType_t xLastWakeTime = 0;
+
+  while (1){
+    pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
+    do{}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
+
+    vTaskDelayUntil(&xLastWakeTime, 106);
+    }
+    vTaskDelete(NULL);
+}
+\end{lstlisting}
+
+A więc został wygenerowany prototyp funkcji reprezentującej proces, polecenie na stworzenie procesu w systemie operacyjnym za pomocą funkcji \textit{xTaskCreate} i procesu w postaci ciał funkcji \textit{v1\_Task}.
+
+Tu należy też zauważyć, że jest to część wygenerowanego pliku obcięta w celu prezentacji przykładu, nie zawiera ona wszystkich definicji i poleceń.
+
+Zawartość skryptów \textit{generate.py} i \textit{insert.py} jest zamieszczona w \hyperref[sec:zalacznik-6]{załączniku nr 6}.
+
+\subsubsection{Kompilacja i wybór algorytmów}
+
+Kompilacja systemu operacyjnego była robiona narzędziami Make i \acrshort{gcc}. Make zbiera cały kod źródłowy w jeden projekt i przekazuje do narzędzi \acrshort{gcc}.
+
+Spośród zbieranego przez Make kodu źródłowego jest plik \textit{FreeRTOS.h}, który zawiera definicje preprocesora języka C konfigurujące FreeRTOS. W dalszej części pracy zostały tam też dodane definicje umożliwiające wybieranie używanego algorytmu.
+
+Zawartość pliku konfigurującego używanego przez Make jest zamieszczona w \hyperref[sec:zalacznik-6]{załączniku nr 6}.
+
+\subsubsection{Sposób zbierania danych o procesach}
+
+Zgodnie z założeniem opisanym powyżej wszystkie operacje w systemie są mierzone w okresach zegara systemu operacyjnego (czyli FreeRTOS'a). Zostało tylko znaleźć sposób, w jaki można mierzyć te okresy, oraz wydarzenia spowodowane tokiem zmian wartości zegara systemowego.
+
+Jak już powiedziano wyżej, można do tego użyć możliwość odczytywania pomięci emulowanego systemu i późniejszej jej analizy. Ten sposób był uznany przez autora za zbytnio skomplikowany. Jako alternatywy zdecydowano użyć możliwości Qemu pokazywać funkcję, które są wykonywane w pewnym momencie w emulowanym systemie. Przykład:
+
+\begin{lstlisting}[language=C, caption={Przykładowe logi z Qemu}, label={lst:qemu-example-logs}]
+Stopped execution of TB chain before 0x7df2b4031880 v1_Task
+Trace 0: 0x7df2b401e280 SysTick_Handler
+Trace 0: 0x7df2b401e480 SysTick_Handler
+Trace 0: 0x7df2b401e700 xTaskIncrementTick
+Trace 0: 0x7df2b401f200 xTaskIncrementTick
+Trace 0: 0x7df2b401f980 SysTick_Handler
+Trace 0: 0x7df2b40200c0 SysTick_Handler
+Trace 0: 0x7df2b4031880 v1_Task
+Stopped execution of TB chain before 0x7df2b4031880 v1_Task
+Trace 0: 0x7df2b401e280 SysTick_Handler
+Trace 0: 0x7df2b401e480 SysTick_Handler
+Trace 0: 0x7df2b401e700 xTaskIncrementTick
+Trace 0: 0x7df2b401f200 xTaskIncrementTick
+Trace 0: 0x7df2b401f980 SysTick_Handler
+Trace 0: 0x7df2b40200c0 SysTick_Handler
+Trace 0: 0x7df2b4031880 v1_Task
+\end{lstlisting}
+
+Jest to kawałek logów wykonywania funkcji FreeRTOS'a z Qemu. Tu widać funkcje: \textit{v1\_Task}, \textit{SysTick\_Handler} i \textit{xTaskIncrementTick}. Pierwsza funkcja jest nazwą jednego z procesów zdefiniowanych przed uruchomieniem systemu, zaś ostatnie dwie są funkcję jądra FreeRTOS'a, odpowiadające za modyfikacje wartości zegara systemu operacyjnego.
+
+Posiadając wiedzę o tych funkcjach i o kolejności ich wykonywania można wywnioskować, co jest robione w danej chwile w systemie operacyjnym. Na przykład, w powyższym kodzie są przedstawione dwa momenty zmiany stanu zegara systemu operacyjnego wraz z procesem, który jest wykonywany pomiędzy tymi zmianami.
+
+Za pomocą tej wiedzy można napisać listę reguł opisujących pewne działania podjęte przez system operacyjny. Skoro te logi są dość duże, zdecydowano napisać skrypt w języku Python dla automatycznej analizy, który używa tych reguł do wykrycia potrzebnych dla analizy procesów. Jak wspomniano wyżej (\cref{fig:generate-parse-analyze}), skrypt ten nazywa się \textit{parse.py}.
+
+W tym skrypcie były zdefiniowane reguły, na podstawie których można wykryć następujące wydarzenia:
+
+\begin{itemize}
+    \item Moment, kiedy proces pierwszy raz pojawia się w systemie.
+    \item Moment, kiedy proces znowu zaczyna swoje wykonywanie.
+    \item Moment, kiedy proces zostaje wywłaszczony poprzez inny proces.
+    \item Moment, kiedy proces kontynuuje wykonywanie po wywłaszczeniu.
+    \item Moment, kiedy proces kończy wykonywanie.
+    \item Moment, kiedy jest modyfikowana wartość zegara systemu operacyjnego.
+\end{itemize}
+
+Skrypt zapisuje, przy jakiej wartości zegara systemu operacyjnego te wydarzenia się pojawiają. Wartość zegara jest obliczana też na podstawie, zgodnie z przykładem powyżej, rejestrowanej działalności systemu operacyjnego. Przykład zapisanych danych w formacie JSON w przypadku wykonywania jednego procesu:
+
+\begin{lstlisting}[caption={Przykłądowe pomiary dla jednego procesu}, label={lst:example-process-measurements}]
+"v1_Task": {
+    "TaskName": "v1_Task",
+    "TaskStart": [8,44],
+    "TaskEnd": [11,47],
+    "TaskPreemptedTimes": 0
+},
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{TaskName}: zawiera nazwę procesu.
+    \item \textit{TaskStart}: zawiera tabelę zawierającą stany zegara systemu operacyjnego podczas gdy proces zaczynał swoje wykonywanie, jednostka - \textit{SysTick}.
+    \item \textit{TaskEnd}: zawiera tabelę zawierającą stany zegara, kiedy proces skończył swoje wykonanie, jednostka - \textit{SysTick}.
+    \item \textit{TaskPreemptedTimes}: pokazuje, ile razy w analizowanym odcinku czasu proces został wywłaszczony.
+\end{itemize}
+
+Dokładny kod tego skryptu jest zamieszczony w \hyperref[sec:zalacznik-6]{załączniku nr 6}.
+
+\subsubsection{Analiza i wyniki w postaci graficznej}
+
+Dane otrzymane ze skryptu \textit{parse.py} są przekazywane do skryptu \textit{analyze.py}, który analizuje te dane i generuje potrzebne dane do opisu zachowania procesów w analizowanym odcinku, poniżej są zamieszczone przykładowe dane dla przypadku z czterema procesami:
+
+\begin{lstlisting}[caption={Przykładowe wyniki analizy dla czterech procesów}, label={lst:example-process-analisys}]
+{
+    "MetDeadline": {
+        "v3_Task": 5,
+        "v2_Task": 3,
+        "v4_Task": 4,
+        "v1_Task": 2
+    },
+    "MissDeadline": {
+        "v3_Task": 0,
+        "v2_Task": 0,
+        "v4_Task": 0,
+        "v1_Task": 0
+    },
+    "MissDeadlineHighPriorityTasks": {
+        "v1_Task": 0
+    },
+    "LoadFactor": 0.5951709401709402,
+    "MeanTaskExecutionTime": 2.75
+}
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{MetDeadline}: lista procesów oraz wartości, pokazujących ile razy w badanym przypadku każdy z procesów osiągnął swoją cel, spełniając ograniczenia czasowe; ten parametr nie posiada jednostek.
+    \item \textit{MissDeadline}: lista procesów oraz wartości, pokazujących ile razy w badanym przypadku każdy z procesów osiągnął swoją cel, nie spełniając ograniczeń czasowych; ten parametr nie posiada jednostek.
+    % TODO MissDeadlineHighPriorityTasks
+    \item \textit{LoadFactor}: przeciążenie systemu dla analizowanego przypadku; ten parametr nie posiada jednostek.
+    \item \textit{MeanTaskExecutionTime}: średni czas potrzebny procesu na osiągnięcie swojego celu, jest mierzony w wartościach zegara systemu operacyjnego. 
+\end{itemize}
+
+Oprócz danych otrzymanych z poprzedniego kroku \textit{analyze.py} potrzebuje też danych otrzymanych ze skryptu \textit{generate.py}. \cref{alg:timings-algorithm} pokazuje algorytm obliczenia spełnienia ograniczeń czasowych (czyli \textit{MetDeadline} i \textit{MissDeadline}) na podstawie danych otrzymanych ze skryptów \textit{parse.py} i \textit{analyze.py}.
+
+\begin{algorithm}
+\caption{Algorytm liczący spełnienie ograniczeń czasowych dla każdego z procesów}\label{alg:timings-algorithm}
+\begin{algorithmic}[1]
+\For {proces \textbf{in} lista procesów}
+  \State MetDeadline[proces]=0
+  \State MissDeadline[proces]=0
+  \ForAll {indeks \textbf{in} oblicz rozmiar TaskEnd[proces]}
+    \State czas gotowości do wykonywania = indeks * TaskPeriod[proces]
+    \State najgorszy czas osiągnięcia celu = czas gotowości do wykonywania + TaskDeadline[proces]
+    \If {TaskEnd[proces] <= najgorszy czas osiągnięcia celu}
+      \State MetDeadline[proces] = MetDeadline[proces] + 1
+    \ElsIf {TaskEnd[proces] > najgorszy czas osiągnięcia celu}
+      \State MissDeadline[proces] = MissDeadline[proces] + 1
+    \EndIf
+  \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Natomiast obciążenie systemu (ang. utilization factor) jest obliczany według następującej formuły:
+
+\Large
+\[
+U = \sum_{i=1}^{n} \frac{T_{ex\_i}}{T_{dead\_i}}
+\]
+\normalsize
+
+Gdzie: $U$ - współczynnik obciążenia systemu; $n$ - ilość procesów, $T_{ex\_i}$ - czas potrzebny każdemu procesu na osiągnięcie celu, jednostka - \textit{SysTick}; $T_{dead\_i}$ - najgorszy czas osiągnięcia celu dla każdego z procesów, jednostka - \textit{SysTick}.
+
+Średni czas potrzebny procesu na osiągnięcie swojego celu jest obliczany zgodnie z następującą formułą:
+
+\Large
+\[
+T_{exav}= \frac{1}{n}\sum_{i=1}^nT_{ex\_i}
+\]
+\normalsize
+
+Gdzie: $T_{exav}$ - średni czas potrzebny procesu na osiągnięcie swojego celu, jednostka - \textit{SysTick}; $n$ - ilość procesów;  $T_{ex\_i}$ - czas potrzebny każdemu procesu na osiągnięcie celu, jednostka - \textit{SysTick}.
+
+Kod skryptu \textit{analyze.py} jest zamieszczony w \hyperref[sec:zalacznik-6]{załączniku nr 6}.
+
+% TODO draw.py
+
+\subsection{Implementacja wybranych algorytmów w FreeRTOS}
+
+W tej części pracy będą omówione wybrane algorytmy zarządzania zasobami jednostki obliczeniowej, oraz będzie opisana ich implementacja w FreeRTOS. Początek będzie poświęcony standardowym algorytmom FreeRTOS'a i potrzebnym modyfikacjom jądra, umożliwiającym dodanie nowych algorytmów.
+
+\subsubsection{Standardowe algorytmy w FreeRTOS}
+
+FreeRTOS ma jeden standardowy algorytm, który posiada trzy odmiany. Algorytm ten nazywa się HPF (ang. Highest Priority First), zasada działania jest następująca: pierwszy otrzymuje zasoby jednostki obliczeniowej proces o największym statycznie zdefiniowanym priorytecie. Priorytet jest definiowany przez użytkownika przy programowaniu systemu i nie zmienia się w ciągu pracy systemu.
+
+Początkowo ten algorytm nie wykorzystuje wywłaszczania, ale wywłaszczanie można włączyć dodając do pliku \textit{FreeRTOSConfig.h} definicję preprocesora \textit{configUSE\_PREEMPTION} z wartością \textit{1}. To jest druga odmiana algorytmu. Trzecią odmianą jest dodanie współdzielenia czasu przez procesy o tym samym priorytecie. Jest to możliwe po dodaniu do pliku \textit{FreeRTOSConfig.h} definicję preprocesora \textit{configUSE\_TIME\_SLICING} o wartości \textit{1}.
+
+\subsubsection{Kluczowe pojęcia w FreeRTOS}
+
+Metadane każdego procesu w FreeRTOS są przechowywane w strukturach zwanych \acrshort{tcb}, na przykładzie \ref{lst:freertos-tcb} jest przedstawiony \acrshort{tcb} używany podczas pracy przed wprowadzeniem modyfikacji.
+
+\begin{lstlisting}[language=C, label={lst:freertos-tcb}, caption={Przykładowy TCB przed zmianami}]
+typedef struct tskTaskControlBlock
+{
+    volatile StackType_t * pxTopOfStack;
+    ListItem_t xStateListItem;
+    ListItem_t xEventListItem;
+    UBaseType_t uxPriority;
+    StackType_t * pxStack;
+    char pcTaskName[ ( 10 ) ];
+} tskTCB;
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{pxTopOfStack}: wskaźnik na ostatni element w stosie procesu, jest potrzebny dla dyspozytora.
+    \item \textit{xStateListItem}: lista, do której proces jest aktualnie przypisany, w tym przypadku może to być lista procesów uśpionych (\textit{pxDelayedTaskList}) jak również i lista procesów gotowych do wykonania (\textit{pxReadyTasksLists}). W zależności od listy, do której jest przypisany proces, można wnioskować o stanie tego procesu, czyli, odpowiednio, uśpiony lub gotowy do wykonywania.
+    \item \textit{xEventListItem}: podstawowa funkcjonalność FreeRTOS'a, która nie jest używana w tej prace, a więc nie będzie tu opisana.
+    \item \textit{uxPriority}: zmienna przechowująca priorytet procesu.
+    \item \textit{pxStack}: wskaźnik na stos procesu.
+    \item \textit{pcTaskName}: tabela z nazwą procesu. 
+\end{itemize}
+
+Struktura pokazana na przykładzie \ref{lst:freertos-tcb} już przeszła przez preprocesor języka C, więc jest pozbawiona wszystkich zbędnych elementów, niepotrzebnych w ramach tej pracy.
+
+Proces jest tworzony jako funkcja w języku C (przykład \ref{lst:c-generated}), i rejestrowany w systemie za pomocą funkcji \textit{xTaskCreate}. Po rejestracji wszystkich procesów w systemie jest uruchamiany nadzorca systemu operacyjnego za pomocą funkcji \textit{vTaskStartScheduler}, podczas uruchomienia którego, jest tworzony tzw. proces zerowy, który jest wykonywany, gdy żaden inny proces nie jest gotowy do wykonania.
+
+Podczas pracy systemu, procesom są przydzielane zasoby jednostki obliczeniowej zgodnie z zasadami zdefiniowanymi przez planistę.
+
+Podczas wykonywania procesy zmieniają swoje stany. W trakcie tej pracy będą używane tylko dwa stany procesu: gotowy do wykonywania i uśpiony. Te stany są definiowane poprzez przepisanie procesu do odpowiedniej listy, odpowiednio, \textit{pxReadyTasksLists} i \textit{pxDelayedTaskList}. Te listy są strukturami języka C. Ich dokładny opis nie jest potrzebny, ponieważ nie będą one modyfikowane w ramach tej pracy.
+
+Podczas pracy FreeRTOS przechowuje wskaźnik na \acrshort{tcb} aktualnie wykonywanego procesu w globalnej zmiennej \textit{pxCurrentTCB}.
+
+\subsubsection{Problemy i założenia}
+
+Napotkane problemy:
+
+\begin{itemize}
+    \item Problem z priorytetami w FreeRTOS.
+    \item Problem z symulacją czasu wykonywania procesu.
+    \item Problem z metadanymi procesów.
+\end{itemize}
+
+W tej prace wybrane do integracji w FreeRTOS algorytmy zarządzania zasobami jednostki obliczeniowej posiadają różne właściwości. Problemem jest to, że FreeRTOS został zbudowany w sposób, który ściśle wiąże cały kod systemu operacyjnego z algorytmem, a dokładniej ze sposobem definiowania, zarządzania i używania priorytetów procesów. Te priorytety są używane wszędzie w kodzie FreeRTOS'a, a najważniejsze, że listy, do których są przepisywane wskaźniki na \acrshort{tcb} (czyli \textit{pxReadyTasksLists} i \textit{pxDelayedTaskList}), też wykorzystują priorytety.
+
+Struktura kodu systemu operacyjnego, która używa pewnych danych systemowych, do definiowania większości obiektów systemu są sensowne, gdy te dane są definiowane przed definiowaniem tych pozostałych obiektów systemu.
+
+To jest dobre rozwiązanie dla standardowego algorytmu używanego w FreeRTOS, skoro w takim przypadku priorytety, które są używane do definiowania większości obiektów w FreeRTOS, są definiowane przez użytkownika na etapie programowania. Natomiast w ramach tej pracy będą implementowane algorytmy nieużywające priorytetów (np. FCFS), lub algorytmy używające priorytetów dynamiczne.
+
+Aby zaimplementować te algorytmy, były wprowadzone modyfikacje, dostosowujące FreeRTOS do przypadków, gdy priorytety są dynamiczne lub nie są używane w ogóle. Aktywacja tych modyfikacji i przywrócenie standardowego kodu byłą zrobiona za pomocą manipulacji definicją preprocesora języka C o nazwie \textit{USE\_FREERTOS\_CLASSIC\_SCHEDULER} w pliku \textit{FreeRTOSConfig.h}.
+
+Podczas badań był potrzebny też sposób na symulację czasu, potrzebnego procesu na osiągnięcie swojego celu. Skoro w ramach tego zadanie będzie analizowana wydajność algorytmów - to cel procesu nie jest ważny, jak również nie jest ważne, w jaki sposób każdy z procesów będzie osiągał ten cel. Natomiast jest ważne, aby można było łatwo i dokładnie określić ile czasu potrzebuje proces na osiągnięcie swojego celu.
+
+Uwzględniając powyższe, zdecydowano symulować wykonywanie procesu za pomocą pętli. Na przykładzie \ref{rst:process-structure-example} jest pokazana wybrana struktura procesu.
+
+\begin{lstlisting}[language=C, label={rst:process-structure-example}, caption={Używana struktura procesu}]
+void v1_Task (void *pvParameters){
+  TickType_t xLastWakeTime = 0;
+
+  while (1){
+    pxCurrentTCB->xTaskCurrentExecutionTime = pxCurrentTCB->xTaskExecutionTime;
+    do{}while( pxCurrentTCB->xTaskCurrentExecutionTime != 0 );
+
+    vTaskDelayUntil(&xLastWakeTime, 106);
+  }
+
+  vTaskDelete(NULL);
+}
+\end{lstlisting}
+
+Gdzie:
+
+\begin{itemize}
+    \item \textit{v1\_Task}: przykładowa nazwa procesu.
+    \item \textit{pvParameters}: parametry, które mogą być przekazane procesu. Nie są one wykorzystywane w tej prace i nie będą tu omówione.
+    \item \textit{xLastWakeTime}: zmienna potrzebna dla periodycznego uśpienia procesu po osiągnięciu celu.
+    \item \textit{xTaskCurrentExecutionTime}: zmienna przechowująca czas, którego proces potrzebuje dla osiągnięcia celu, jest zmniejszana dla wykonywanego procesu o jeden przy każdej zmianie stanu zegara systemu operacyjnego .
+    \item \textit{xTaskExecutionTime}: czas, który proces potrzebuje na osiągnięcie celu od początku, jest statycznie definiowany i niezmieniany podczas wykonywania.
+    \item \textit{vTaskDelayUntil}: funkcja powodująca uśpienie procesu na zdefiniowany okres, w tym przypadku jest to 106 SysTick. Ten okres jest okresem gotowości procesu do wykonywania, znanym także jako \textit{TaskPeriod} (było to przedstawione na przykładzie \ref{lst:proces-parameters-generated}).
+    \item \textit{vTaskDelete}: funkcja, która teoretycznie nigdy nie musi wykonać się, jest ona częścią struktury procesu zgodnie z wymogami FreeRTOS'a i nie będzie tu opisana.
+\end{itemize}
+
+Jak widać z przykładu \ref{rst:process-structure-example}, proces wykonuje się, dopóki nie zużyje czas potrzebny na wykonanie (zdefiniowany statycznie przed uruchomieniem systemu poprzez zmienną \textit{xTaskExecutionTime}) nie upłynie (co jest sygnalizowane przyrównaniem zmiennej \textit{xTaskCurrentExecutionTime} do zera). Podczas wykonania proces znajduje się w pustej pętli i niczego nie robi. Wartość zmiennej \textit{xTaskExecutionTime} jest generowana przez skrypt \textit{generate.py} (czyli jest to \textit{TaskExecutionTime} z przykładu \ref{lst:proces-parameters-generated}), zaś wartość zmiennej \textit{xTaskCurrentExecutionTime} jest dynamicznie definiowana podczas rejestrowania procesu, oraz, jak widać na przykładzie \ref{rst:process-structure-example}, kiedy proces wychodzi z uśpienia (czyli funkcja \textit{vTaskDelayUntil} kończy swoje wykonywanie).
+
+Tu należy też zauważyć, że zmienna \textit{pxCurrentTCB} nie powinna być udostępniana procesom i powinna być dostępna tylko dla jądra systemu operacyjnego. Natomiast, w ramach tej pracy były pominięte kwestie bezpieczeństwa i standardów napisania kodu, aby w krótszy cas zaimplementować potrzebne algorytmy i przeprowadzić potrzebne badania. Zresztą, te kwestie nie są w zakresie tej pracy, więc można je pominąć.
+
+Jak widać na przykładzie \ref{rst:process-structure-example}, do \acrshort{tcb} zostały dodane nowe elementy pozwalające na symulację czasu potrzebnego procesu na osiągnięcie swojego celu, są to zmienne \textit{xTaskCurrentExecutionTime} i \textit{xTaskExecutionTime}.
+
+Oprócz tych dwóch nowych elementów zostały też dodane kilka innych elementów, potrzebnych do implementacji niektórych z algorytmów. Nowy \acrshort{tcb}, który był wykorzystywany w ramach tej pracy jest pokazany na przykładzie \ref{rst:new-tcb}
+
+\begin{lstlisting}[language=C, label={rst:new-tcb}, caption={Zmodyfikowany \acrshort{tcb}}]
+typedef struct tskTaskControlBlock
+{
+    volatile StackType_t * pxTopOfStack;
+    ListItem_t xStateListItem;
+    ListItem_t xEventListItem;
+    StackType_t * pxStack;
+    TickType_t xTaskStarted;
+    TickType_t xTaskTimeExecuted;
+    TickType_t xTaskExecutionTime;
+    TickType_t xTaskCurrentExecutionTime;
+    TickType_t xTaskExecutionPeriod;
+    TickType_t xTaskExecutionDeadline;
+    char pcTaskName[ ( 10 ) ];
+} tskTCB;
+\end{lstlisting}
+
+Gdzie nowe elementy (w porównaniu do przykładu \ref{rst:process-structure-example}):
+
+\begin{itemize}
+    \item \textit{xTaskStarted}: przechowuje wartość zegara systemu operacyjnego, kiedy proces został przypisany do listy procesów gotowych do wykonywania.
+    \item \textit{xTaskTimeExecuted}: przechowuje ilość zmian stanu zegara systemu operacyjnego z momentu kiedy proces zaczął wykonywanie. W przypadku, kiedy proces zaczął wykonywanie, zaś został wywłaszczony przez inny proces - logowanie czasu do tej zmiennej jest wstrzymywane do momentu, kiedy proces powróci do wykonania po wywłaszczeniu.
+    \item \textit{xTaskExecutionTime}: było wyjaśnione w przykładzie \ref{rst:process-structure-example}.
+    \item \textit{xTaskCurrentExecutionTime}: było wyjaśnione w przykładzie \ref{rst:process-structure-example}.
+    \item \textit{xTaskExecutionPeriod}: okres gotowości procesu do wykonywania, jest generowane przez skrypt \textit{generate.py} (zgodnie z \ref{lst:proces-parameters-generated} to jest \textit{TaskPeriod}).
+    \item \textit{xTaskExecutionDeadline}: najgorszy termin osiągnięcia celu przez proces, jest generowane przez skrypt \textit{generate.py} (zgodnie z \ref{lst:proces-parameters-generated} to jest \textit{TaskDeadline}).
+\end{itemize}
+
+Niektóre z tych nowych elementów są inicjalizowane statycznie podczas rejestrowania proces, zaś niektóre są modyfikowane podczas pracy systemu.
+
+\subsubsection{Sposób integracji nowych algorytmów}
+
+Poprzednio było pokazane (\cref{fig:cpu-resources-mult}), że za zarządzanie zasobami jednostki obliczeniowej w systemie operacyjnym jest odpowiedzialny jeden moduł, zwany także nadzorcą. Dalej nadzorca był podzielony (\cref{fig:armv8-m-context-switch}) na dyspozytora i planistę.
+
+Jednak w rzeczywistości, funkcje planisty i dyspozytora pełni nie jedna jakaś funkcja i ten moduł nie jest rozmieszczony gdzieś w jednym konkretnym miejscu w kodzie systemu operacyjnego, tylko jest to kod rozrzucony po całym systemie, który jednak można podzielić na części i wyodrębnić. Podział taki będzie specyficzny dla każdego systemu operacyjnego, ponieważ zależy on od jego implementacji.
+
+Natomiast w FreeRTOS można podzielić planistę na następujące części:
+
+\begin{enumerate}
+    \item Kod, który jest wykonywany przy rejestracji procesu w systemie. W FreeRTOS ten kod znajduje się wewnątrz funkcji \textit{prvAddNewTaskToReadyList}.
+    \item Kod, który jest wykonywany w pewnych przypadkach powodujących przełączenie kontekstu. W FreeRTOS ten kod znajduje się wewnątrz funkcji \textit{vTaskSwitchContext}.
+    \item Kod, który jest wykonywany periodycznie. W FreeRTOS ten kod znajduje się wewnątrz \textit{xTaskIncrementTick}.
+\end{enumerate}
+
+Który z tych punktów trzeba implementowac - zależy od algorytmu, natomiast punkt drugi jest zawsze obowiązkowy. Na przykład, punkt trzeci pewnie będzie potrzebny algorytmom, które chcą odwoływać się do planisty przy każdej zmianie wartości zegara systemowego, nie zależnie od tego, czy było jakieś wydarzenie powodujące zmianę kontekstu (np. algorytmy DARTS i RR tego potrzebują).
+
+A więc wyjaśnienia implementacji poszczególnych algorytmów w dalszej części pracy będą odwoływać się do tych trzech punktów.
+
+\subsubsection{FCFS}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu FCFS}\label{alg:fcfs-algorithm}
+\begin{algorithmic}[1]
+\State pxCurrentTCB = Wybierz pierwszy proces z listy(\textit{pxReadyTasksLists})
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:fcfs-algorithm} demonstruje algorytm FCFS w postaci pseudokodu. Jak widać, jest to algorytm liniowy, nie potrzebujący żadnych warunków lub pętel. Nie ma on też jakichkolwiek skomplikowanych obliczeń matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Żeby każdy proces przechodzący do stanu gotowości był zapisywany na koniec listy \textit{pxReadyTasksLists}. Nie zależnie od tego czy to jest nowy proces, czy to jest proces periodyczny kontynuujący swoje wykonywanie po uśpieniu.
+    \item Żeby planista przydzielał dostęp do jednostki obliczeniowej pierwszemu procesu z listy \textit{pxReadyTasksLists}.
+    \item Żeby zmiana kontekstu odbywała się tylko wtedy, gdy aktualnie wykonywany proces osiąga swój cel. Czyli ten algorytm nie posiada funkcjonalności wywłaszczania.
+\end{itemize}
+
+Z tego wynika, że w FreeRTOS trzeba było zaimplementować trzy rzeczy:
+
+\begin{enumerate}
+    \item Wybranie pierwszego zarejestrowanego procesu jako pierwszego procesu gotowego do wykonywania jeszcze przed momentem uruchomienia nadzorcy, czyli w funkcji \textit{prvAddNewTaskToReadyList}.
+    \item Wybranie pierwszego procesu z kolejki \textit{prvAddNewTaskToReadyList} do wykonania w momencie, gdy aktualny proces osiąga swój cel i jednostka obliczeniowa zostaje zwolniona, czyli potrzebna była modyfikacja funkcji  \textit{vTaskSwitchContext}.
+    \item Każdy proces zmieniający swój stan na gotowość do wykonywania musi być dodany do końca listy \textit{prvAddNewTaskToReadyList}.
+\end{enumerate}
+
+Akurat, FreeRTOS w swojej standardowej implementacji dodaje wszystkie proces na koniec listy \textit{prvAddNewTaskToReadyList}, więc implementacja trzeciego punktu nie była potrzebna.
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{SJF}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu SJF}\label{alg:sjf-algorithm}
+\begin{algorithmic}[1]
+\ForAll {procesTCB \textbf{in} \textit{pxReadyTasksLists}}
+    \If {procesTCB.\textit{xTaskExecutionTime} < \textit{pxCurrentTCB}.\textit{xTaskExecutionTime} }
+        \State \textit{pxCurrentTCB}=procesTCB
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:sjf-algorithm} demonstruje pseudokod algorytmu SJF. Ten algorytm nie jest liniowy, używa on pętli i warunków. Nie używa on jednak jakichkolwiek działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Żeby czas potrzebny procesowi na osiągnięcie celu był wiadomy.
+    \item Żeby przed uruchomieniem nadzorcy został wybrany na wykonanie proces z najmniejszym czasem osiągnięcia celu.
+    \item Żeby zmiana kontekstu odbywała się tylko wtedy, gdy aktualnie wykonywany proces osiąga swój cel. Czyli ten algorytm nie posiada funkcjonalności wywłaszczania.
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Natomiast do implementacji zostały dwie rzeczy:
+
+\begin{enumerate}
+    \item Modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przed uruchomieniem nadzorcy został wybrany do wykonania proces zgodnie z algorytmem SJF.
+    \item Modyfikacja funkcji \textit{vTaskSwitchContext} aby przy każdym wywołaniu planisty zasoby jednostki obliczeniowej zostały przedzielone procesowi zgodnie z algorytmem SJF.
+\end{enumerate}
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{SRTN}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu SRTN}\label{alg:srtn-algorithm}
+\begin{algorithmic}[1]
+\ForAll {procesTCB \textbf{in} \textit{pxReadyTasksLists}}
+    \State procesTCB.RemainingExecutionTime = procesTCB.\textit{xTaskExecutionTime} - procesTCB.\textit{xTaskTimeExecuted}
+    \State \textit{pxCurrentTCB}.RemainingExecutionTime = \textit{pxCurrentTCB}.\textit{xTaskExecutionTime} - \textit{pxCurrentTCB}.\textit{xTaskTimeExecuted}
+    \If {procesTCB.RemainingExecutionTime < \textit{pxCurrentTCB}.RemainingExecutionTime }
+        \State \textit{pxCurrentTCB}=procesTCB
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:srtn-algorithm} demonstruje pseudokod algorytmu SRTN. Ten algorytm nie jest liniowy, używa on pętli i warunków. Nie używa on jednak jakichkolwiek działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Żeby czas potrzebny procesowi na osiągnięcie celu był wiadomy, a czas, przez który proces był wykonywany -  był logowany.
+    \item Żeby przed uruchomieniem nadzorcy został wybrany na wykonanie proces zgodnie z algorytmem SRTN.
+    \item Żeby zmiana kontekstu odbywała się nie tylko wtedy, gdy aktualnie wykonywany proces osiągnie swoją cel, ale i w przypadku, kiedy w liście pojawia się proces, który zgodnie z algorytmem SRTN, ma większy priorytet. Czyli ten algorytm potrzebuje implementacji funkcjonalności wywłaszczania, która jest wywoływana przy pojawieniu nowych procesów w liście \textit{pxReadyTasksLists}. 
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Natomiast do implementacji zostały trzy rzeczy:
+
+\begin{enumerate}
+    \item Modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przed uruchomieniem nadzorcy został wybrany do wykonania proces zgodnie z algorytmem SRTN.
+    \item Modyfikacja funkcji \textit{vTaskSwitchContext} aby przy każdym wywołaniu planisty zasoby jednostki obliczeniowej zostały przedzielone procesowi zgodnie z algorytmem SJF.
+    \item Modyfikacja funkcji \textit{xTaskIncrementTick}, aby zaimplementować funkcjonalność wywłaszczania.
+\end{enumerate}
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{RR}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu RR}\label{alg:RR-algorithm}
+\begin{algorithmic}[1]
+\If {\textit{pxCurrentTCB}.\textit{xTaskTimeExecuted} >= kwant czasu}
+    pxCurrentTCB = Wybierz pierwszy proces z listy(pxReadyTasksLists)
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:rr-algorithm} demonstruje pseudokod algorytmu RR. Ten algorytm nie jest liniowy, ponieważ używa on warunków. Nie używa on jednak jakichkolwiek pętli lub działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Logowanie czasu wykonywania procesu. 
+    \item Podział zasobów jednostki obliczeniowej na części, zwane także kwantem czasu. Jeden kwant czasu jest pewną, konfigurowaną przy programowaniu wielokrotnością okresu zegara systemu operacyjnego.
+    \item Żeby przed uruchomieniem nadzorcy został wybrany na wykonanie proces zgodnie z algorytmem RR.
+    \item Żeby zmiana kontekstu odbywała się nie tylko wtedy, gdy aktualnie wykonywany proces osiągnie swoją cel, ale i w przypadku, kiedy aktualnie wykonywany proces wyczerpie wydany jemu przez planistę kwant czasu. Czyli ten algorytm potrzebuje implementacji funkcjonalności wywłaszczania. 
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Natomiast do implementacji zostały trzy rzeczy:
+
+\begin{enumerate}
+    \item Modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przed uruchomieniem nadzorcy został wybrany do wykonania proces zgodnie z algorytmem RR.
+    \item Modyfikacja funkcji \textit{vTaskSwitchContext} aby przy każdym wywołaniu planisty zasoby jednostki obliczeniowej zostały przedzielone procesowi zgodnie z algorytmem SJF.
+    \item Modyfikacja funkcji \textit{xTaskIncrementTick}, aby zaimplementować funkcjonalność wywłaszczania przy warunku, że aktualnie wykonywany proces wyczerpie wydany jemu kwant czasu.
+\end{enumerate}
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{RM}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu RM}\label{alg:rm-algorithm}
+\begin{algorithmic}[1]
+\If {Lista jest pusta(\textit{pxReadyTasksLists})}
+    \State TCBNowegoProcesu.\textit{uxPriority} = najniższy priorytet
+\Else
+    \For {proces \textbf{in} \textit{pxReadyTasksKists}}
+        \If {proces.\textit{xTaskPeriod} > TCBNowegoProcesu.\textit{xTaskPeriod}}
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority} + 1
+        \ElsIf {proces.\textit{xTaskPeriod} < TCBNowegoProcesu.\textit{xTaskPeriod}}
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority}
+            \State proces.\textit{uxPriority} = proces.\textit{uxPriority} + 1
+        \Else
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority}
+        \EndIf
+    \EndFor
+\EndIf
+\State Zarejestruj nowy proces(TCBNowegoProcesu)
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:rm-algorithm} demonstruje pseudokod algorytmu RM. Ten algorytm nie jest liniowy, ponieważ używa on warunków i pętli. Nie używa on jednak działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Okres gotowości procesu do wykonania (\textit{xTaskPeriod}) był wiadomy. 
+    \item Żeby przed rejestracją nowego procesu, priorytety wszystkich procesów w systemie zostały przeliczone zgodnie z algorytmem RM, uwzględniając nowy proces.
+    \item Żeby przełączenie kontekstu było robione tylko wtedy, gdy aktualnie wykonywany proces osiągnie swój cel.
+    \item Żeby planista przydzielał zasoby jednostki obliczeniowej procesu z największym priorytetem. 
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Zaś trzeci i czwarte punkty nie potrzebują wprowadzenia żadnych zmian, ponieważ FreeRTOS, jak było wspomniane poprzednio, już ma te funkcjonalności dodane. Natomiast do implementacji została jedna rzecz: modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przy rejestracji priorytety procesów zostały przeliczone zgodnie z algorytmem RM.
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+% TODO: describe not working status
+
+\subsubsection{DM}
+
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu DM}\label{alg:dm-algorithm}
+\begin{algorithmic}[1]
+\If {Lista jest pusta(\textit{pxReadyTasksLists})}
+    \State TCBNowegoProcesu.\textit{uxPriority} = najniższy priorytet
+\Else
+    \For {proces \textbf{in} \textit{pxReadyTasksLists}}
+        \If {proces.\textit{xTaskExecutionDeadline} > TCBNowegoProcesu.\textit{xTaskExecutionDeadline}}
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority} + 1
+        \ElsIf {proces.\textit{xTaskExecutionDeadline} < TCBNowegoProcesu.\textit{xTaskExecutionDeadline}}
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority}
+            \State proces.\textit{uxPriority} = proces.\textit{uxPriority} + 1
+        \Else
+            \State TCBNowegoProcesu.\textit{uxPriority} = proces.\textit{uxPriority}
+        \EndIf
+    \EndFor
+\EndIf
+\State Zarejestruj nowy proces(TCBNowegoProcesu)
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:dm-algorithm} demonstruje pseudokod algorytmu DM, jest on podobny do algorytmu RM i róźnie się tylko tym, że podczas przeliczenia priorytetów pod uwagę jest brany najgorszy czas osiągnięcia celu (\textit{xTaskExecutionDeadline}). Ten algorytm nie jest liniowy, ponieważ używa on warunków i pętli. Nie używa on jednak działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Okres gotowości procesu do wykonania (\textit{xTaskExecutionDeadline}) był wiadomy. 
+    \item Żeby przed rejestracją nowego procesu, priorytety wszystkich procesów w systemie zostały przeliczone zgodnie z algorytmem DM, uwzględniając nowy proces.
+    \item Żeby przełączenie kontekstu było robione tylko wtedy, gdy aktualnie wykonywany proces osiągnie swój cel.
+    \item Żeby planista przydzielał zasoby jednostki obliczeniowej procesu z największym priorytetem. 
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Zaś trzeci i czwarte punkty nie potrzebują wprowadzenia żadnych zmian, ponieważ FreeRTOS, jak było wspomniane poprzednio, już ma te funkcjonalności dodane. Natomiast do implementacji została jedna rzecz: modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przy rejestracji priorytety procesów zostały przeliczone zgodnie z algorytmem RM.
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+% TODO: describe not working status
+
+\subsubsection{EDF}
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu EDF}\label{alg:edf-algorithm}
+\begin{algorithmic}[1]
+\ForAll {procesTCB \textbf{in} \textit{pxReadyTasksLists}}
+    \State procesTCB.Deadline = procesTCB.\textit{xTaskStarted} + procesTCB.\textit{xTaskExecutionDeadline}
+    \State \textit{pxCurrentTCB}.Deadline = \textit{pxCurrentTCB}.\textit{xTaskStarted} + \textit{pxCurrentTCB}.\textit{xTaskExecutionDeadline}
+    \If {procesTCB.Deadline < \textit{pxCurrentTCB}.Deadline}
+        \State \textit{pxCurrentTCB}=procesTCB
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:edf-algorithm} demonstruje pseudokod algorytmu EDF. Ten algorytm nie jest liniowy, używa on pętli i warunków. Nie używa on jednak jakichkolwiek skomplikowanych działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Żeby czas, kiedy proces trafia do listy \textit{pxReadyTasksLists} (czyli \textit{xTaskStarted}), oraz najgorszy czas osiągnięcia celu przez proces względem czasu, kiedy proces trafia do listy \textit{pxReadyTasksLists} (czyli \textit{xTaskExecutionDeadline}) były wiadome.
+    \item Żeby przed uruchomieniem nadzorcy został wybrany na wykonanie proces zgodnie z algorytmem EDF.
+    \item Żeby zmiana kontekstu odbywała się tylko wtedy, gdy aktualnie wykonywany proces osiąga swój cel. Lub, jeżeli to jest potrzebne, przy przepisaniu innego procesu do listy \textit{pxReadyTasksLists}. Czyli ten algorytm może używać wywłaszczania, a może i nie używać.
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Natomiast do implementacji zostały dwie rzeczy:
+
+\begin{enumerate}
+    \item Modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przed uruchomieniem nadzorcy został wybrany do wykonania proces zgodnie z algorytmem EDF.
+    \item Modyfikacja funkcji \textit{vTaskSwitchContext} aby przy każdym wywołaniu planisty zasoby jednostki obliczeniowej zostały przedzielone procesowi zgodnie z algorytmem SJF. Lub, jeżeli jest to skonfigurowane, wywoływanie planisty musi być wymuszone przy pojawieniu nowego procesu w liście \textit{pxReadyTasksLists}. 
+\end{enumerate}
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{LLF}
+
+
+\begin{algorithm}
+\caption{Pseudokod algorytmu LLF}\label{alg:edf-algorithm}
+\begin{algorithmic}[1]
+\ForAll {procesTCB \textbf{in} \textit{pxReadyTasksLists}}
+    \State procesTCB.RemainingExecutionTime = procesTCB.\textit{xTaskExecutionTime} - proces-
+TCB.\textit{xTaskTimeExecuted}
+    \State \textit{pxCurrentTCB}.Deadline = \textit{pxCurrentTCB}.\textit{xTaskStarted} + \textit{pxCurrentTCB}.\textit{xTaskExecutionDeadline}
+    \If {procesTCB.Deadline < \textit{pxCurrentTCB}.Deadline}
+        \State \textit{pxCurrentTCB}=procesTCB
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\cref{alg:edf-algorithm} demonstruje pseudokod algorytmu EDF. Ten algorytm nie jest liniowy, używa on pętli i warunków. Nie używa on jednak jakichkolwiek skomplikowanych działań matematycznych.
+
+Natomiast ten algorytm potrzebuje:
+
+\begin{itemize}
+    \item Żeby czas, kiedy proces trafia do listy \textit{pxReadyTasksLists} (czyli \textit{xTaskStarted}), oraz najgorszy czas osiągnięcia celu przez proces względem czasu, kiedy proces trafia do listy \textit{pxReadyTasksLists} (czyli \textit{xTaskExecutionDeadline}) były wiadome.
+    \item Żeby przed uruchomieniem nadzorcy został wybrany na wykonanie proces zgodnie z algorytmem EDF.
+    \item Żeby zmiana kontekstu odbywała się tylko wtedy, gdy aktualnie wykonywany proces osiąga swój cel. Lub, jeżeli to jest potrzebne, przy przepisaniu innego procesu do listy \textit{pxReadyTasksLists}. Czyli ten algorytm może używać wywłaszczania, a może i nie używać.
+\end{itemize}
+
+Pierwszy punkt został już zrealizowany (przykład \ref{rst:new-tcb}). Natomiast do implementacji zostały dwie rzeczy:
+
+\begin{enumerate}
+    \item Modyfikacja funkcji \textit{prvAddNewTaskToReadyList}, aby przed uruchomieniem nadzorcy został wybrany do wykonania proces zgodnie z algorytmem EDF.
+    \item Modyfikacja funkcji \textit{vTaskSwitchContext} aby przy każdym wywołaniu planisty zasoby jednostki obliczeniowej zostały przedzielone procesowi zgodnie z algorytmem SJF. Lub, jeżeli jest to skonfigurowane, wywoływanie planisty musi być wymuszone przy pojawieniu nowego procesu w liście \textit{pxReadyTasksLists}. 
+\end{enumerate}
+
+% NOTE: referencing source code
+Kod zaimplementowanego algorytmu jest zamieszczony w \hyperref[sec:zalacznik-7]{załączniku nr 7}.
+
+\subsubsection{DARTS}
+
+\subsubsection{HFPF}
+
+\subsection{Porównywanie działania algorytmów}
+
+\end{document}
