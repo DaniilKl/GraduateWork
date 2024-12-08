@@ -50,7 +50,7 @@ DEBUGFLAGS := -ggdb -Og
 
 # For more warnings add -Wall and -Wextra
 CFLAGS := $(TARGETFLAGS) -Wno-error=implicit-function-declaration \
-	  $(DEBUGFLAGS) $(INC) $(DEFINES) -O0
+	  $(DEBUGFLAGS) $(INC) $(DEFINES) -O0 -mfloat-abi=soft
 
 
 OBJFILES := $(SRC:%.c=$(BUILDDIR)/%.o)

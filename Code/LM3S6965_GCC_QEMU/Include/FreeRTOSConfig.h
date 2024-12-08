@@ -85,7 +85,7 @@
 	#define configUSE_TASK_NOTIFICATIONS 									0
 	#define configUSE_TICKLESS_IDLE                       0
 	#define configUSE_TIMERS				                      0
-	#define configUSE_TIME_SLICING                        1
+	#define configUSE_TIME_SLICING                        0
 	//config_*_HOOK definitions:
 	#define configUSE_IDLE_HOOK														0
 	#define configUSE_TICK_HOOK														0
@@ -107,15 +107,15 @@ to exclude the API function. */
 #define INCLUDE_xTaskGetSchedulerState 0
 #define INCLUDE_xTaskGetIdleTaskHandle 0
 #define INCLUDE_xTaskGetHandle 0
-#define INCLUDE_xTaskGetCurrentTaskHandle 1
+#define INCLUDE_xTaskGetCurrentTaskHandle 0
 #define INCLUDE_xTaskAbortDelay 0
-#define INCLUDE_vTaskPrioritySet		1
-#define INCLUDE_uxTaskPriorityGet		1
+#define INCLUDE_vTaskPrioritySet		0
+#define INCLUDE_uxTaskPriorityGet		0
 #define INCLUDE_vTaskDelete				1
-#define INCLUDE_vTaskCleanUpResources	1
-#define INCLUDE_vTaskSuspend			1
+#define INCLUDE_vTaskCleanUpResources	0
+#define INCLUDE_vTaskSuspend			0
 #define INCLUDE_vTaskDelayUntil			1
-#define INCLUDE_vTaskDelay				1
+#define INCLUDE_vTaskDelay				0
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
@@ -150,6 +150,49 @@ header file. */
 #define vPortSVCHandler SVC_Handler
 #define xPortSysTickHandler SysTick_Handler
 
+
+/*******************************************************************************
+ * Custom definitions.
+ ******************************************************************************/
+//#define USE_FREERTOS_CLASSIC_SCHEDULER
+
+//#define USE_FCFS_SCHEDULER
+
+//#define USE_RR_SCHEDULER
+/* Time slice for Round Robin scheduler in ticks, must be a power of 2:*/
+//#define RR_TIME_SLICE 4
+
+//#define USE_SRTN_SCHEDULER
+
+//#define USE_SJF_SCHEDULER
+
+//#define USE_DM_SCHEDULER
+
+//#define USE_RM_SCHEDULER
+
+#if defined(USE_DM_SCHEDULER) || defined(USE_RM_SCHEDULER)
+	#define USE_FREERTOS_CLASSIC_SCHEDULER
+	#define configUSE_PREEMPTION 1
+	#define configUSE_TIME_SLICING 0
+#endif
+
+//#define USE_EDF_SCHEDULER
+
+//#define USE_PREEMPTIVE_EDF_SCHEDULER
+
+#ifdef USE_PREEMPTIVE_EDF_SCHEDULER
+	#define USE_EDF_SCHEDULER
+#endif
+
+//#define USE_LLF_SCHEDULER
+
+//#define USE_PREEMPTIVE_LLF_SCHEDULER
+
+#ifdef USE_PREEMPTIVE_LLF_SCHEDULER
+	#define USE_LLF_SCHEDULER
+#endif
+
+#define USE_DARTS_SCHEDULER
 
 #endif /* FREERTOS_CONFIG_H */
 
