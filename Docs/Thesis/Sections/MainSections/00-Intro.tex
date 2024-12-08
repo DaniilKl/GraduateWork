@@ -1,0 +1,49 @@
+\documentclass[../../main]{subfiles}
+\graphicspath{{\subfix{../../Images/}}}
+
+\begin{document}
+
+\subsection{Wprowadzenie}
+
+Od momentu pojawienia się pierwszych urządzeń elektronicznych i maszyn % TODO: pojawienia się?
+obliczeniowych minęło dość dużo czasu, w ciągu którego progres pchał cele % TODO: progres pchał?
+postawione przed systemami cyfrowymi, co powodowało ich szybką ewolucję. Od listy instrukcji napisanej
+na kartkach perforowanych, do skomplikowanych programów zajmujących duże obszary pamięci, dodaniu do
+mocy obliczeniowej mnóstwa urządzeń peryferyjnych i prób abstrahować się od ich implementacji,
+wprowadzenia skomplikowanych abstrakcji systemowych dla ułatwienia developmętu i % TODO: developmętu?
+bezpieczeństwa, i, w końcu, łączenia mnóstwa systemów w jeden, mnogofunkcjonalny system.
+% TODO: mnogofunkcjonalny; check punktuation
+
+Aktualnie, logika zarządzająca systemami cyfrowymi i sprawiająca, że system wykonuje postawione przed
+nim cele oraz spełnia określone oczekiwania, jest bardzo skomplikowana, posiada dużo poziomów
+abstrakcji i podsystemów, co znacząco utrudnia integrację i analizę. Dodatkowo nieznajomość działania
+tych systemów coraz częściej powoduje błędy i problemy podczas % TODO: Dodatkowo, nieznajomość?
+implementacji rozwiązań lub realizacji celów bazujących się na tych systemach.
+
+Z kolei, bardzo ważną dla automatyki częścią tego progresu jest też ewolucja systemów czasu
+rzeczywistego. Jeszcze można spotkać się z systemami cyfrowymi pełniącymi rolę systemu czasu
+rzeczywistego z oprogramowaniem wykonującym się wprost na sprzęcie (tzn. bez żadnych warstw abstrakcji
+pomiędzy sprzętem a aplikacją, np. bez systemu operacyjnego). Jednak coraz częściej są spotykane
+\acrshort{rtos}'y lub inne, bardziej skomplikowane oprogramowanie, które używa wzrost funkcjonalności i
+wydajności mikrokontrolerów, na przykład coraz bardziej złożoną wirtualizację. % TODO: używa wzrost?
+
+Z coraz większą skomplikowanością systemów wbudowanych i ich oprogramowania wzbudzają zainteresowanie też sposoby i metody na realizację wymagań systemu czasu rzeczywistego przez taki system, jak również i sprawdzenie tych wymagań.
+
+\subsection{Cel i zakres pracy}
+
+Celem pracy jest analiza oprogramowania zarządzającego zasobami jednostki (lub jednostek)
+obliczeniowych w cyfrowych systemach wbudowanych i planującego wykonywanie zadań, w tym w systemach
+cyfrowych pełniących rolę systemów czasu rzeczywistego na sprzęcie bazującym się na architekturze
+\acrshort{arm}'owej.\\
+Zakres pracy:
+\begin{itemize}
+    \item Przedstawienie i omówienie głównych cech architektur oprogramowania uruchomianego na systemach wbudowanych skonstruowanych na podstawie systemów cyfrowych bazujących się na architekturze \acrshort{arm}'owej;
+    \item Przedstawienie przykładów realizacji omówionych architektur oprogramowania systemowego;
+    \item Dekompozycja wybranych architektur oprogramowania;
+    \item Wyodrębnienie części oprogramowania odpowiadających za zarządzanie zasobami jednostki obliczeniowej i planujących wykonywanie zadań dla wybranych architektur;
+    \item Analiza wyodrębnionych części oprogramowania;
+    \item Przedstawienie przykładów realizacji wyodrębnionych części oprogramowania;
+    \item Sprawdzenie sposobów realizacji i weryfikacji wymagań czasu rzeczywistego dla wybranych przykładów;
+\end{itemize}
+
+\end{document}
