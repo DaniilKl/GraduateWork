@@ -43,9 +43,9 @@ def GetHigherPriorityTasks(TasksSortedByPriority, Percentage):
 def ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighestPriorityPercentage):
     MetDeadline = {}
     MissDeadline = {}
-    MissDeadlineHighestPriority = {}
+#    MissDeadlineHighestPriority = {}
     TasksSortedByPriority = SortOutTasksByPriority(TasksMetadata)
-    HighestPriorityTasksList = GetHigherPriorityTasks(TasksSortedByPriority, HighestPriorityPercentage)
+#    HighestPriorityTasksList = GetHigherPriorityTasks(TasksSortedByPriority, HighestPriorityPercentage)
 
     for task, inf in TasksParsedInf.items():
         MetDeadline[task] = 0
@@ -59,10 +59,11 @@ def ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighestPriorityPercent
             elif inf["TaskEnd"][i] > AbsoluteDeadline:
                 MissDeadline[task] += 1
 
-    for i in range(0, len(HighestPriorityTasksList)):
-        MissDeadlineHighestPriority[HighestPriorityTasksList[i]]=MissDeadline[HighestPriorityTasksList[i]]
+#    for i in range(0, len(HighestPriorityTasksList)):
+#        MissDeadlineHighestPriority[HighestPriorityTasksList[i]]=MissDeadline[HighestPriorityTasksList[i]]
 
-    return MetDeadline, MissDeadline, MissDeadlineHighestPriority
+#    return MetDeadline, MissDeadline, MissDeadlineHighestPriority
+    return MetDeadline, MissDeadline
 
 def ComputeLoadFactor(TasksMetadata):
     Tasks = list(TasksMetadata)
@@ -117,7 +118,8 @@ def main():
     TasksAnalysysData = {}
     TasksAnalysysData['MetDeadline'] = {}
     TasksAnalysysData['MissDeadline'] = {}
-    TasksAnalysysData['MetDeadline'], TasksAnalysysData['MissDeadline'], TasksAnalysysData['MissDeadlineHighPriorityTasks'] = ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighPriorityTasksPercentage)
+#    TasksAnalysysData['MetDeadline'], TasksAnalysysData['MissDeadline'], TasksAnalysysData['MissDeadlineHighPriorityTasks'] = ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighPriorityTasksPercentage)
+    TasksAnalysysData['MetDeadline'], TasksAnalysysData['MissDeadline'] = ComputeMetMissDeadline(TasksMetadata, TasksParsedInf, HighPriorityTasksPercentage)
     TasksAnalysysData['LoadFactor'] = ComputeLoadFactor(TasksMetadata)
     TasksAnalysysData['MeanTaskExecutionTime'] = ComputeTaskMeanExecutionTime(TasksMetadata)
 
