@@ -146,6 +146,12 @@ def process_trace_log(lines, systick_end_parse):
                 TasksInf[NextTask]["TaskStart"].append(SysTickCount)
                 print(f"Task {NextTask} start logged: {TasksInf[NextTask]['TaskStart']} ")
                 CurrentTask = NextTask
+            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil == 0 and xTaskIncrementTick != 0:
+                print(f"Task {CurrentTask} has been preempted by {NextTask}")
+                ContextSwitches += 1
+                TasksInf[CurrentTask]["TaskPreemptedTimes"] += 1
+                print(f"Task {CurrentTask} preemption logged: {TasksInf[CurrentTask]['TaskPreemptedTimes']}")
+                CurrentTask = NextTask
             # Task ends execution and the following task is a periodic task that
             # starts execution again:
             elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0  and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
