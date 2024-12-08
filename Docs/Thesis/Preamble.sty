@@ -13,7 +13,7 @@
     \usepackage{pdfpages}
     %Packages for multifile project management:
     \usepackage{subfiles}
-    \usepackage{geometry} %Not used yet
+    \usepackage[a4paper, inner=3.5cm, outer=2.5cm, top=2.5cm, bottom=2.5cm]{geometry} %Not used yet
     %Sections and chapters customization:
     \usepackage{titlesec} %Not used yet
     %Text aligment customization:
@@ -31,7 +31,7 @@
     \usepackage[acronym]{glossaries}
     \makeglossaries
     \usepackage{Sections/ListOfSymbolsAndAbbreviations}
-    \usepackage[skip=1.5pt plus1pt, indent=15pt]{parskip}
+    \usepackage[skip=1.5pt plus 1pt, indent=15pt]{parskip}
     \usepackage{indentfirst} % indent first paragraph in section.
     \usepackage{float} % For using \begin{figure}[H] to place images at the exact locations.
     \usepackage{subcaption} % For Subfigures
@@ -47,10 +47,10 @@
         showspaces=false,
         showstringspaces=false,
         basicstyle=\footnotesize,
-        numbers=left,
-        numberstyle=\small,
-        stepnumber=1,
-        numbersep=10pt,
+%        numbers=left,
+%        numberstyle=\small,
+%        stepnumber=1,
+%        numbersep=10pt,
         frame=lines,
         keywordstyle=\bfseries
     }
@@ -63,11 +63,16 @@
     \floatname{algorithm}{Algorytm}
     \usepackage{caption}
     \captionsetup[algorithm]{font=small, labelfont=bf}
-    \crefname{algorithm}{alg.}{Alg.}
-    \Crefname{algorithm}{alg.}{Alg.}
+    \crefname{algorithm}{Alg.}{Alg.}
+    \Crefname{algorithm}{Alg.}{Alg.}
     % Math packages:
     \usepackage{amsmath}
     \usepackage{unicode-math}
+    \usepackage{setspace}
+    \renewcommand{\thepage}{\fontsize{9pt}{9pt}\selectfont\arabic{page}}
+    \usepackage[polish]{babel}
+    % Centerign captions:
+    \usepackage[justification=centering]{caption}
 
 %Other definitions:
     %Change the title of the Table of content:
@@ -80,3 +85,6 @@
     \pagenumbering{arabic}
     % Distance between lines:
     \linespread{1.5}
+    \sloppy
+    \raggedbottom
+    \usepackage{placeins}

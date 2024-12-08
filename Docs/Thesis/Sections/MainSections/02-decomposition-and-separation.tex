@@ -15,20 +15,20 @@ Należy zauważyć, że celem tej pracy nie jest omówienie wszystkich elementó
     \label{fig:cpu-resources-mult}
 \end{figure}
 
-Jak wspomniano poprzednio, z punktu widzenia zarządzania zasobami jednostki obliczeniowej są ciekawe dwa rodzaje oprogramowania systemowego: system operacyjny i hiperwizor. Na \cref{fig:cpu-resources-mult} jest pokazane przydzielenie zasobów jednostki obliczeniowej przy użyciu tego oprogramowania systemowego, kolorami są odznaczone tryby, w których znajduje się jednostka obliczeniowa podczas wykonywania instrukcji pewnego oprogramowania, zacieniony obszar wskazuje, że serwisy systemu operacyjnego mogą być wykonywane zarówno w trybie jądra jak i w trybie aplikacji (zależy od architektury systemu operacyjnego: mikrojądro lub monolityczny jądro). Strzałkami jest odznaczone przydzielenie zasobów jednostki obliczeniowej do pewnego oprogramowania przez pewną logikę w oprogramowaniu systemowym.
+Jak wspomniano poprzednio, z punktu widzenia zarządzania zasobami jednostki obliczeniowej są ciekawe dwa rodzaje oprogramowania systemowego: system operacyjny i hiperwizor. Na \cref{fig:cpu-resources-mult} jest pokazane przydzielenie zasobów jednostki obliczeniowej przy użyciu tego oprogramowania systemowego. Kolorami są odznaczone tryby, w których znajduje się jednostka obliczeniowa podczas wykonywania instrukcji pewnego oprogramowania, zacieniony obszar wskazuje, że serwisy systemu operacyjnego mogą być wykonywane zarówno w trybie jądra jak i w trybie aplikacji (zależy od architektury systemu operacyjnego: mikrojądro lub monolityczne jądro). Strzałkami jest odznaczone przydzielenie zasobów jednostki obliczeniowej do pewnego oprogramowania przez pewną logikę w oprogramowaniu systemowym.
 
-Ten rysunek demonstruje architekturę z wirtualizacją, zaś architektura bez wirtualizacji wykorzystująca tylko system operacyjny może być pokazana usuwając z \cref{fig:cpu-resources-mult} cały hiperwizor i strzałkę o numerze 3. W takim przypadku strzałka o numerze 1 będzie wskazywała wprost na system operacyjny.
+Ten rysunek demonstruje architekturę z wirtualizacją, zaś architektura bez wirtualizacji wykorzystująca tylko system operacyjny może być pokazana usuwając z \cref{fig:cpu-resources-mult} cały hiperwizor i strzałkę o numerze 3. W takim przypadku strzałka o numerze 1 będzie wskazywała wprost na jądro systemu operacyjnego.
 
 Jest to struktura hierarchiczna, tzn. (numery punktów są odpowiednie do numerów strzałek na \cref{fig:cpu-resources-mult}):
 
 \begin{enumerate}
     \item Hiperwizor otrzymuję kontrolę nad wszystkimi zasobami jednostki obliczeniowej i przydziela je do oprogramowania, które on uruchamia: system operacyjny (strzałka nr 2 na \cref{fig:cpu-resources-mult}) lub aplikacja (strzałka nr 3 na \cref{fig:cpu-resources-mult});
-    \item System operacyjny otrzymuję od hiperwizora pewną część zasobów jednostki obliczeniowej (strzałka nr 2 na \cref{fig:cpu-resources-mult}) i rozprowadza je do serwisów lub aplikacji (strzałki o wspólnym numerze 4 na \cref{fig:cpu-resources-mult});
+    \item System operacyjny otrzymuję od hiperwizora pewną część zasobów jednostki obliczeniowej (strzałka nr 2 na \cref{fig:cpu-resources-mult}) i przydziela je do serwisów lub aplikacji (strzałki o wspólnym numerze 4 na \cref{fig:cpu-resources-mult});
     \item Aplikacja, która jest uruchomiona bez systemu operacyjnego otrzymuje przydzielone zasoby od hiperwizora (strzałka nr 3 na \cref{fig:cpu-resources-mult}) i zaczyna wykonywać swoją pracę;
     \item Aplikację i serwisy, uruchomione przez system operacyjny, otrzymują przydzielone im zasoby przez system operacyjny (strzałki o wspólnym numerze 4 na \cref{fig:cpu-resources-mult}) i zaczynają wykonywać swoją pracę.
 \end{enumerate}
 
-W systemie operacyjnym funkcjonalność przydzielenia zasobów jednostki obliczeniowej jest jedna z trzech kluczowych (pozostałe dwie: komunikacja międzyprocesowa i zarządzanie pamięcią). Natomiast w hiperwizorze jest to jedna ze sposobów separacji (pozostałe dwie: separacja sygnałowa i separacja pamięciowa; więcej informacji w \hyperref[sec:zalacznik-3]{załączniku nr 3}).
+W systemie operacyjnym funkcjonalność przydzielenia zasobów jednostki obliczeniowej jest jedna z trzech kluczowych (pozostałe dwie: komunikacja międzyprocesowa i zarządzanie pamięcią). Natomiast w hiperwizorze jest to jedna ze sposobów separacji (pozostałe dwie: separacja sygnałowa i separacja pamięciowa; więcej informacji w \hyperref[sec:zalacznik-2]{załączniku nr 2}).
 
 Logikę lub kod, który odpowiada za zarządzanie zasobami jednostki obliczeniowej zarówno w systemie operacyjnym jak i hiperwizorze (pomiędzy strzałkami 1 i 2, oraz pomiędzy strzałkami 2 i 4, \cref{fig:armv8-m-context-switch}) można nazwać nadzorcą (ang. supervisor). Takie nazewnictwo będzie stosowane w dalszej części pracy. Nadzorcę można także podzielić na dwie części: dyspozytora (ang. dispatcher) i planistę (ang. scheduler).
 
@@ -48,6 +48,6 @@ Po wywołaniu nadzorcy następuje przełączenie kontekstu. Na \cref{fig:armv8-m
 
 Zadaniem dyspozytora jest otrzymywanie informacji i przekierowanie jej w odpowiednim formacie do planisty (kroki \textit{K1} i \textit{K2} na \cref{fig:armv8-m-context-switch}), który podejmuje decyzję na podstawie zdefiniowanych reguł (krok \textit{K3} na \cref{fig:armv8-m-context-switch}), i informuje o tym dyspozytora. Dyspozytor podejmuje odpowiednie dla podjętej decyzji działania (krok K4 na \cref{fig:armv8-m-context-switch}).
 
-Więc wejściem do planisty jest lista deskryptorów procesów oczekujących na przydzielenie zasobów obliczeniowych oraz ilość dostępnych zasobów obliczeniowych. Wyjściem jest deskryptor procesu z przydzielonymi zasobami jednostki obliczeniowej. Planista podejmuję decyzję na podstawie wstępnie zdefiniowanych reguł.
+Więc wejściem do planisty jest lista deskryptorów procesów oczekujących na przydzielenie zasobów obliczeniowych oraz ilość dostępnych zasobów obliczeniowych. Wyjściem jest deskryptor procesu z przydzielonymi zasobami jednostki obliczeniowej. Planista podejmuję decyzję na podstawie wstępnie zdefiniowanych reguł. Te reguły będą omówione w następnej części pracy.
 
 \end{document}

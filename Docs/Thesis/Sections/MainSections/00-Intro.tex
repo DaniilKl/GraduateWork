@@ -5,37 +5,35 @@
 
 \subsection{Wprowadzenie}
 
-Od momentu pojawienia się pierwszych urządzeń elektronicznych i maszyn % TODO: pojawienia się?
-obliczeniowych minęło dość dużo czasu, w ciągu którego progres pchał cele % TODO: progres pchał?
+Od czasu pojawienia się pierwszych urządzeń elektronicznych i maszyn
+obliczeniowych minęło dość dużo czasu, w ciągu którego postęp technologiczny pchał cele
 postawione przed systemami cyfrowymi, co powodowało ich szybką ewolucję. Od listy instrukcji napisanej
 na kartkach perforowanych, do skomplikowanych programów zajmujących duże obszary pamięci, dodaniu do
 mocy obliczeniowej mnóstwa urządzeń peryferyjnych i prób abstrahować się od ich implementacji,
-wprowadzenia skomplikowanych abstrakcji systemowych dla ułatwienia developmętu i % TODO: developmętu?
+wprowadzenia skomplikowanych abstrakcji systemowych dla ułatwienia dalszego rozwoju i
 bezpieczeństwa, i, w końcu, łączenia mnóstwa systemów w jeden, mnogofunkcjonalny system.
-% TODO: mnogofunkcjonalny; check punktuation
 
 Aktualnie, logika zarządzająca systemami cyfrowymi i sprawiająca, że system wykonuje postawione przed
 nim cele oraz spełnia określone oczekiwania, jest bardzo skomplikowana, posiada dużo poziomów
-abstrakcji i podsystemów, co znacząco utrudnia integrację i analizę. Dodatkowo nieznajomość działania
-tych systemów coraz częściej powoduje błędy i problemy podczas % TODO: Dodatkowo, nieznajomość?
-implementacji rozwiązań lub realizacji celów bazujących się na tych systemach.
+abstrakcji i podsystemów, co znacząco utrudnia integrację i analizę.
 
 Z kolei, bardzo ważną dla automatyki częścią tego progresu jest też ewolucja systemów czasu
 rzeczywistego. Jeszcze można spotkać się z systemami cyfrowymi pełniącymi rolę systemu czasu
 rzeczywistego z oprogramowaniem wykonującym się wprost na sprzęcie (tzn. bez żadnych warstw abstrakcji
 pomiędzy sprzętem a aplikacją, np. bez systemu operacyjnego). Jednak coraz częściej są spotykane
-\acrshort{rtos}'y lub inne, bardziej skomplikowane oprogramowanie, które używa wzrost funkcjonalności i
-wydajności mikrokontrolerów, na przykład coraz bardziej złożoną wirtualizację. % TODO: używa wzrost?
+\acrshort{rtos}'y lub inne, bardziej skomplikowane oprogramowanie, które wykorzystuje wzrost funkcjonalności i wydajności mikrokontrolerów, na przykład coraz bardziej złożona wirtualizacja.
 
-Z coraz większą skomplikowanością systemów wbudowanych i ich oprogramowania wzbudzają zainteresowanie też sposoby i metody na realizację wymagań systemu czasu rzeczywistego przez taki system, jak również i sprawdzenie tych wymagań.
+Z coraz większą skomplikowanością systemów wbudowanych i ich oprogramowania wzbudzają zainteresowanie też sposoby i metody na realizację wymagań systemu czasu rzeczywistego przez taki system, jak również i sprawdzenie tych wymagań. Akurat w zakresie spełnienia jakichkolwiek wymagań najlepszym obiektem badania będą tzw. \acrshort{rtos}'y, które nie tylko są zbudowane z myślą o uruchomieniu na platformach wbudowanych z mocno ograniczonymi zasobami, ale i, przede wszystkim, muszą dbać o wymogi czasowe postawione im przez aplikacje.
 
 \subsection{Cel i zakres pracy}
 
 Celem pracy jest analiza oprogramowania zarządzającego zasobami jednostki (lub jednostek)
 obliczeniowych w cyfrowych systemach wbudowanych i planującego wykonywanie zadań, w tym w systemach
 cyfrowych pełniących rolę systemów czasu rzeczywistego na sprzęcie bazującym się na architekturze
-\acrshort{arm}'owej.\\
+\acrshort{arm}'owej i sprawdzenie spełnienia determinizmu czasowego przez te systemy.
+
 Zakres pracy:
+
 \begin{itemize}
     \item Przedstawienie i omówienie głównych cech architektur oprogramowania uruchomianego na systemach wbudowanych skonstruowanych na podstawie systemów cyfrowych bazujących się na architekturze \acrshort{arm}'owej;
     \item Przedstawienie przykładów realizacji omówionych architektur oprogramowania systemowego;
@@ -43,7 +41,8 @@ Zakres pracy:
     \item Wyodrębnienie części oprogramowania odpowiadających za zarządzanie zasobami jednostki obliczeniowej i planujących wykonywanie zadań dla wybranych architektur;
     \item Analiza wyodrębnionych części oprogramowania;
     \item Przedstawienie przykładów realizacji wyodrębnionych części oprogramowania;
-    \item Sprawdzenie sposobów realizacji i weryfikacji wymagań czasu rzeczywistego dla wybranych przykładów;
+    \item Sprawdzenie sposobów realizacji i weryfikacji wymagań czasu rzeczywistego;
+    \item Wybranie realizacji oprogramowania systemowego dla każdej z przedstawionych architektur i przeprowadzenie padań praktycznych w zakresie determinizmu czasowego, w tym, modyfikacja wybranych realizacji z celem sprawdzenia realizacji warunku determinizmu czasowego.
 \end{itemize}
 
 \end{document}
