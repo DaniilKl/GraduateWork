@@ -5,30 +5,39 @@ import random
 import sys
 import json
 
-def GenerateTasksMetadata(NumTasks, AlphaBetaPeriod, AlphaBetaDeadline, StdMeanExec, StdMeanPriority):
+def GenerateTasksMetadata(GenerationMetadata):
     TasksMetadata = {}
     UsedPriorities = set()  # Set to track used priorities
 
-    for i in range(1, NumTasks + 1):
+    for i in range(1, GenerationMetadata['TaskAmount'] + 1):
         TaskName = f"v{i}_Task"
 
-        # Generate TaskExecutionTime using Normal distribution and clip to [10, 1000]
-        TaskExecutionTime = int(np.clip(np.random.normal(StdMeanExec[1], StdMeanExec[0]), 1, 20))
-
-        # Generate TaskPeriod using Beta distribution scaled to [2 * TaskExecutionTime + 1, 300]
-        BetaSamplePeriod = np.random.beta(AlphaBetaPeriod[0], AlphaBetaPeriod[1])
-        TaskPeriod = int((TaskExecutionTime + 1) + BetaSamplePeriod * (300 - (TaskExecutionTime + 1)))
-
-        # Generate TaskDeadline using Beta distribution scaled to [TaskExecutionTime, TaskPeriod]
-        BetaSampleDeadline = np.random.beta(AlphaBetaDeadline[0], AlphaBetaDeadline[1])
-        TaskDeadline = int(TaskExecutionTime + BetaSampleDeadline * (TaskPeriod - TaskExecutionTime))
-
-        # Generate TaskPriority using Normal distribution and clip to [1, 25], ensuring it's unique
         while True:
-            TaskPriority = int(np.clip(np.random.normal(StdMeanPriority[1], StdMeanPriority[0]), 1, 25))
-            if TaskPriority not in UsedPriorities:
-                UsedPriorities.add(TaskPriority)
+            TaskExecutionTime = int(np.random.normal(GenerationMetadata['StdMeanExec'][1], GenerationMetadata['StdMeanExec'][0]))
+            if TaskExecutionTime >= GenerationMetadata['LowUpExec'][0] and TaskExecutionTime <= GenerationMetadata['LowUpExec'][1]:
                 break
+
+        while True:
+            TaskPeriod = int(np.random.normal(GenerationMetadata['StdMeanPeriod'][1], GenerationMetadata['StdMeanPeriod'][0]))
+            if TaskPeriod > (GenerationMetadata['LowUpPeriod'][0] * TaskExecutionTime) and TaskPeriod <= (GenerationMetadata['LowUpPeriod'][1] * TaskExecutionTime):
+                break
+
+        while True:
+            TaskDeadline = int(np.random.normal(GenerationMetadata['StdMeanDeadline'][1], GenerationMetadata['StdMeanDeadline'][0]))
+            if TaskDeadline >= (GenerationMetadata['LowUpDeadline'][0] * TaskExecutionTime) and TaskDeadline <= (GenerationMetadata['LowUpDeadline'][1] * TaskPeriod):
+                break
+
+        if GenerationMetadata['PriorityOverlapping'] == 0:
+            while True:
+                TaskPriority = int(np.random.normal(GenerationMetadata['StdMeanPriority'][1], GenerationMetadata['StdMeanPriority'][0]))
+                if TaskPriority not in UsedPriorities and (TaskPriority >= GenerationMetadata['LowUpPriority'][0] and TaskPriority <= GenerationMetadata['LowUpPriority'][1]):
+                    UsedPriorities.add(TaskPriority)
+                    break
+        else:
+            while True:
+                TaskPriority = int(np.random.normal(GenerationMetadata['StdMeanPriority'][1], GenerationMetadata['StdMeanPriority'][0]))
+                if TaskPriority >= GenerationMetadata['LowUpPriority'][0] and TaskPriority <= GenerationMetadata['LowUpPriority'][1]:
+                    break
 
         # Add task to the dictionary
         TasksMetadata[TaskName] = {
@@ -48,25 +57,39 @@ def ComputeLoadFactor(TasksMetadata):
     LoadFactor = 0
 
     for i in range(0, TasksCount):
-        LoadFactor += TasksMetadata[Tasks[i]]["TaskExecutionTime"]/TasksMetadata[Tasks[i]]["TaskPeriod"]
+        LoadFactor += TasksMetadata[Tasks[i]]["TaskExecutionTime"]/TasksMetadata[Tasks[i]]["TaskDeadline"]
 
     return LoadFactor
 
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: ./generate.py <number_of_tasks> <path_to_output_file>")
+        print("Usage: ./generate.py <path_to_generation_metadata> <path_to_output_file>")
+        print("<generate_for>: either LoadFactor or ExecutionTime")
+        print("Example of generation metadata format:")
+        print("{")
+        print('    "TaskAmount": 24,')
+        print('    "PriorityOverlapping": 1,')
+        print('    "StdMeanPeriod": [1,2],')
+        print('    "LowUpPeriod": [1,2],')
+        print('    "StdMeanDeadline": [1,2],')
+        print('    "LowUpDeadline": [1,2],')
+        print('    "StdMeanExec": [1,2],')
+        print('    "LowUpExec": [1,2],')
+        print('    "StdMeanPriority": [1,2],')
+        print('    "LowUpPriority": [1,2]')
+        print("}")
         sys.exit(1)
 
-    NumberOfTasks = int(sys.argv[1])
+    GenerationMetadataFile = sys.argv[1]
     OutputFilePath = sys.argv[2]
-    AlphaBetaPeriod = [3.5, 3]
-    AlphaBetaDeadline = [3.5, 3]
-    StdMeanExec = [10, 6]
-    StdMeanPriority = [128,50]
 
-    TasksMetadata = GenerateTasksMetadata(NumberOfTasks, AlphaBetaPeriod, AlphaBetaDeadline, StdMeanExec, StdMeanPriority)
-    LoadFactor = ComputeLoadFactor(TasksMetadata)
+
+    with open(GenerationMetadataFile, 'r') as json_file:
+        GenerationMetadata = json.load(json_file)
+
+    TasksMetadata = GenerateTasksMetadata(GenerationMetadata)
+    LoadFactor=ComputeLoadFactor(TasksMetadata)
 
     print(TasksMetadata)
     print(LoadFactor)

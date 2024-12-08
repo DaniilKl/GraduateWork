@@ -24,7 +24,7 @@ def key_exists_first_level(dictionary, key):
     return key if key in dictionary else None
 
 
-def process_trace_log(lines):
+def process_trace_log(lines, systick_end_parse):
     SysTickCount = 0
     ContextSwitches = 0
 
@@ -107,6 +107,9 @@ def process_trace_log(lines):
         if SysTick_Handler != 0 and xTaskIncrementTick != 0:
             SysTickCount += 1
 
+            if systick_end_parse != 0 and SysTickCount >= systick_end_parse:
+                break
+
         if CurrentTask == None: # First task to execute since system started
             print(f"First task to execute: {NextTask}")
             TasksInf[NextTask]["TaskStart"].append(SysTickCount)
@@ -143,6 +146,12 @@ def process_trace_log(lines):
                 TasksInf[NextTask]["TaskStart"].append(SysTickCount)
                 print(f"Task {NextTask} start logged: {TasksInf[NextTask]['TaskStart']} ")
                 CurrentTask = NextTask
+            elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil == 0 and xTaskIncrementTick != 0:
+                print(f"Task {CurrentTask} has been preempted by {NextTask}")
+                ContextSwitches += 1
+                TasksInf[CurrentTask]["TaskPreemptedTimes"] += 1
+                print(f"Task {CurrentTask} preemption logged: {TasksInf[CurrentTask]['TaskPreemptedTimes']}")
+                CurrentTask = NextTask
             # Task ends execution and the following task is a periodic task that
             # starts execution again:
             elif PendSV_Handler != 0 and vTaskSwitchContext != 0 and xTaskDelayUntil != 0  and xTaskResumeAll != 0 and len(TasksInf[NextTask]['TaskStart']) == len(TasksInf[NextTask]['TaskEnd']):
@@ -178,18 +187,19 @@ def process_trace_log(lines):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print("Usage: ./parse.py <path_to_trace_file> <path_to_output_file>")
+    if len(sys.argv) != 4:
+        print("Usage: ./parse.py <systick_end_parse> <path_to_trace_file> <path_to_output_file>")
         sys.exit(1)
 
-    trace_log_path = sys.argv[1]
-    output_file_path = sys.argv[2]
+    systick_end_parse = int(sys.argv[1])
+    trace_log_path = sys.argv[2]
+    output_file_path = sys.argv[3]
     
     with open(trace_log_path, 'r') as file:
         lines = file.readlines()
 
     # Process the trace log
-    TasksInf, SysTickCount, ContextSwitches = process_trace_log(lines)
+    TasksInf, SysTickCount, ContextSwitches = process_trace_log(lines, systick_end_parse)
 
     TasksInf["SysTickCount"] = SysTickCount
     TasksInf["ContextSwitches"] = ContextSwitches
