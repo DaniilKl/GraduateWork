@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.7.17">
+  <diagram name="Page-1" id="Tr-I-GVapoS6bloY794x">
+    <mxGraphModel dx="652" dy="338" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="220" y="280" width="157" height="77" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-1" value="Sprzęt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="221" y="392" width="459" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-3" value="System Operacyjny" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="230" y="313.5" width="138" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-10" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="380" y="210" width="300" height="147" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-13" value="Hiperwizor nadrzędny" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="221" y="360" width="459" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-14" value="Maszyna wirtualna" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="550" y="272" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-16" value="Maszyna wirtualna" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="238.5" y="332" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-17" value="Aplikacja" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="230" y="285.5" width="67" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-18" value="Aplikacja" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="301" y="285.5" width="67" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="388.5" y="220" width="157" height="77" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-20" value="System Operacyjny" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="398.5" y="253.5" width="138" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-21" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="548.5" y="220" width="123" height="77" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-22" value="Aplikacja" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="558.5" y="230" width="103" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-23" value="Aplikacja" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="398.5" y="225.5" width="67" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-24" value="Aplikacja" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="469.5" y="225.5" width="67" height="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-25" value="Maszyna wirtualna" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="407" y="272" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-26" value="Maszyna wirtualna" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="470" y="327" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="XRpB_4KlpS3l9nGKVizs-27" value="Hiperwizor podrzędny" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="388.5" y="302" width="284" height="29" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
