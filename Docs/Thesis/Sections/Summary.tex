@@ -2,6 +2,36 @@
 \graphicspath{{\subfix{../Images/}}}
 
 \begin{document}
-\blindtext
+
+W tej części pracy przedstawione zostaną wnioski i przemyślenia autora, które pojawiły się podczas realizacji poszczególnych etapów pracy.
+
+\subsection*{Planowanie i zakres}
+
+Początkowo planowano przeanalizować dwie architektury oprogramowania systemowego: architekturę z wirtualizacją i bez wirtualizacji, uwzględniając różne realizacje tych architektur. Plan ten opierał się na wiedzy koncepcyjnej autora na temat tych architektur, dlatego nie było możliwe dokładne przewidzenie problemów oraz ich skutków. W wyniku tego zakres prac został zmniejszony do dwóch architektur w części teoretycznej oraz jednej architektury i jednej realizacji w części praktycznej.
+
+W takim przypadku należało skonsultować się z osobami posiadającymi większą wiedzę na ten temat, aby lepiej przeanalizować i rozplanować tok pracy.
+
+\subsection*{Algorytmy}
+
+W ramach tej pracy analizowane były głównie algorytmy jednordzeniowe, chociaż początkowo planowano także przeanalizować algorytmy wielordzeniowe. Większość z algorytmów jednordzeniowych jest już znana od końca dwudziestego wieku, i w tym zakresie już mało zostało do badań i usprawnień. Przykładem może być algorytm DARTS, który jest najnowszym z badanych algorytmów, jednak pokazuje rezultaty gorsze od algorytmów starszych.
+
+Natomiast większym wyzwaniem jest dobór odpowiedniego algorytmu do konkretnego przypadku praktycznego oraz implementacja tego algorytmu w rzeczywistym systemie. Najwięcej trudności pojawia się w systemach z kilkoma jednostkami obliczeniowymi, co nie zostało zbadane w ramach tej pracy.
+
+Po analizie i porównaniu algorytmów autor nie widzi przyczyny dalszego rozwoju i optymalizacji algorytmów jednordzeniowych, chociaż autor nie jest także w stanie tego stwierdzić na pewno. Aby to potwierdzić, konieczne byłoby  przeprowadzenie analizy matematycznej.
+
+\subsection*{Potencjał dalszego rozwoju}
+
+W ramach tej pracy zaimplementowane i przeanalizowane zostały najpopularniejsze algorytmy jednordzeniowe. Głównym celem tego było zdobycie wiedzy praktycznej i teoretycznej na temat tych algorytmów. Jednak przeprowadzona analiza była niekompletna i może być kontynuowana. Lista przykładowych przypadków testowych dla dalszej analizy:
+
+\begin{itemize}
+    \item Analiza zależności pomiędzy rozkładem średniego czasu potrzebnego na osiągnięcie celu a liczbą sukcesów i porażek w osiągnięciu celów przez procesy.
+    \item Analiza zależności pomiędzy ilością procesów a ilością sukcesów i porażek w osiągnięciu celów przez te procesy.
+    \item Analiza zależności pomiędzy rozkładem priorytetów procesów i ilością sukcesów i porażek w osiągnięciu celów przez procesy.
+    \item Analiza możliwości konfiguracji algorytmów (np. algorytm RR posiada możliwość ustawienia kwantu czasu) i wpływu tej konfiguracji na wyniki wyjściowe.
+\end{itemize}
+
+Warto również zwrócić uwagę na optymalizacje doboru metadanych procesów, aby uniknąć wahań i niepewności w rezultatach wyjściowych, zaprezentowanych na \cref{fig:results-notsmoothed-loadfactor}.
+
+Natomiast analiza algorytmów w przypadku obecności kilku jednostek obliczeniowych lub hiperwizora jest tematem bardziej skomplikowanym, ponieważ oprócz algorytmów zarządzania zasobami jednostki obliczeniowej pojawiają się również problemy determinizmu związane z pamięcią podręczną jednostki obliczeniowej (ang. cache). Jednak największym wezwaniem w takich przypadkach są implementacja, pomiar i analiza, co wynika z obecności dodatkowej jednostki obliczeniowej lub warstwy abstrakcji w postaci hiperwizora.
 
 \end{document}
