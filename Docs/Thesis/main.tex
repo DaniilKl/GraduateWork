@@ -5,35 +5,45 @@
 
 %Main part of the document:
 \begin{document}
+
 %Title page from PDF:
 \includepdf[pages=-]{PDFs/StronaTytulowa_PracaDyplomowa}%The tittle is downloaded from university page
 
 %Page counter start:
-\setcounter{page}{1}
+%\setcounter{page}{1}
 
 %Abstract:
     %Abstract using the Polish language:
-    \section*{Streszczenie}\addcontentsline{toc}{section}{Streszczenie}
+%    \section*{Streszczenie}\addcontentsline{toc}{section}{Streszczenie}
     \subfile{Sections/AbstractPL}
+    \newpage
 
     %Abstract using the English language:
-    \section*{Abstract}\addcontentsline{toc}{section}{Abstract}
+%    \section*{Abstract}\addcontentsline{toc}{section}{Abstract}
     \subfile{Sections/AbstractEN}
+    \newpage
 
 %End of the abstract.
 
 %Table of content:
 \addcontentsline{toc}{section}{Spis treści}
+%\newgeometry{top=0pt, bottom=6pt}
+\begin{spacing}{1.5} % 1.5x line spacing
 \tableofcontents
+\end{spacing}
+%\restoregeometry
 %End of the Table of content.
+\newpage
 
 % List of figures:
 \listoffigures
+\newpage
 
 %List of symbols and abbreviations:
 % TODO: ekcja "Skróty i oznaczenia" nie jest dodawana automatycznie do spisu treści, trzeba ją dodawać ręczenie. Ale przy ręcznym dodawaniu, spis treści nie wskazuje prawidłowo na początek sekcji, tylko na początek strony gzdie ta sekcja się znajduje.
-\addcontentsline{toc}{section}{Skróty i oznaczenia}
-\printglossary[type=\acronymtype,nonumberlist]
+%\addcontentsline{toc}{section}{Skróty i oznaczenia}
+%\printglossary[type=\acronymtype,nonumberlist]
+%\newpage
 
 %Main sections (numerated):
 
@@ -41,14 +51,17 @@
 \section{Wstęp}
 \subfile{Sections/MainSections/00-Intro}
 
-\section{Architektury i przykłady realizazcji}
+\section{Architektury i przykłady realizacji}
 \subfile{Sections/MainSections/01-basics}
 
 \section{Dekompozycja i wyodrębnienie}
 \subfile{Sections/MainSections/02-decomposition-and-separation}
 
-\section{Analiza}
-\subfile{Sections/MainSections/03-analysis}
+\section{Algorytmy}
+\subfile{Sections/MainSections/03-alghorithms}
+
+\section{System operacyjny}
+\subfile{Sections/MainSections/04-operating-system}
 
 %End of main sections.
 
@@ -57,7 +70,6 @@
 \section*{Podsumowanie}
 
 \subfile{Sections/Summary}
-\acrshort{rtos}
 %End of the Summary.
 
 %The bibliography section:
