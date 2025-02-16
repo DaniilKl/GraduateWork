@@ -1,27 +1,155 @@
-\newacronym{rtos}{RTOS}{ang. Real Time Operating System; System Operacyjny Czasu Rzeczywistego}
-\newacronym{risc}{RISC}{ang. Reduced Instruction Set Computing; typ architektóry mikroprocesorowego układu oblczeniowego o skróconej funkcjanolności do potrzebnego minimum oraz z większością instrukcji wykonujących się w jednym okresie zegara \cite{saletan}}
-\newacronym{arm}{ARM}{ang. Advanced RISC Machine, lub, poprzednio, Acorn \acrshort{risc} Machine; brytyjskie przedsiębiorstwo zajmujące się projektowaniem mikroprocesorów z siedzibą w Cambridge w Anglii \cite{armholdings}}
-\newacronym{el}{EL}{ang. Exception Level, poziom uprawnień przypisywanych wykonującemu oprogramowaniu w architekturze \acrshort{arm}'owej, możliwe poziomy (od poziomu z najmniejszymi uprawnieniamu do poziomu z największymi): EL0, EL1, EL2 i EL3 \cite{exceptionlevels}}
-\newacronym{cpu}{CPU}{ang. Central Processing Unit, centralna jednostka obliczeniowa}
-\newacronym{mmu}{MMU}{ang. Memory Management Unit, układ, odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest bardziej złożony niż \acrshort{mpu} (m. in. ma funkcjanolności wspierające wirtualizację) \cite{mmu}}
-\newacronym{mpu}{MPU}{ang. Memory Protection Unit,  układ, odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest mniej złożony w porównaniu do \acrshort{mmu} (typowo posida tylko mechanizmy zarządzania uprawnieniami prz dostępie do pamięci) \cite{mpu}}
-\newacronym{bsa}{BSA}{ang. Base System Arhitecture, termin wprowadzony przez \acrshort{arm} opisujący łączenie architektury sprzętowej i architektury oprogramowania, np. obecność \acrshort{mpu} lub \acrshort{mmu} \cite{introarmarch}}
-\newacronym{isa}{ISA}{ang. Instruction Set Architecture, architektura jednostki obliczeniowej z punktu widzenia programisty (rejestry, assembler i t.d.) \cite{isa}}
-\newacronym{smc}{SMC}{ang. Secure Monitor Call, instrukcja \acrshort{isa} generująca synchroniczne przerwanie, jest częścią \acrshort{smccc} \cite{smccc}}
-\newacronym{smccc}{SMCCC}{ang. \acrshort{smc} Calling Convention, mechanizm \acrshort{arm}'owy dla komunikacji pomiędzy środowiskiem zaufanym a niezaufanym \cite{smccc}}
-\newacronym{sau}{SAU}{ang. Secure Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m}}
-\newacronym{idau}{IDAU}{ang. Implementation Defined Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m}}
-\newacronym{vm}{VM}{ang. Virtual Machine, dosłownie - maszyna wirtualna, lub środowisko wirtualne tworzone poprzez \acrshort{vmm} \cite{formreqvirt}}
-\newacronym{vmm}{VMM}{ang. Virtual Machine Monitor, dosłownie monitor maszyn wirtualnych, często też zwany hiperwizorem; oprogramowanie pozwalające na tworzenie środowisk wirtualnych (\acrshort{vm}) \cite{formreqvirt}}
-\newacronym{gic}{GIC}{ang. General Interrupt Controller, kontroller przerwań skonstruowany dla wirtualizacji oraz obsługi kilku jednostek obliczeniowych na raz \cite{gic}}
-\newacronym{m}{M}{ang. ARM M Profile, rodzina architektur \acrshort{arm}'owych stworzonych z myślą o małe energooszczędne układy, lub tzw. mikrokontrolery \cite{introarmarch}}
-\newacronym{a}{A}{ang. ARM A Profile, rodzina architektur \acrshort{arm}'owych stworzonych z myślą o układach o dużej mocy obliczeniowej i skomplikowanej architekturze oprogramowania \cite{introarmarch}}
-\newacronym{r}{R}{ang. ARM R Profile, rodzina architektur \acrshort{arm}'owych stworzonych z myślą o skomplikowanych systemach będących też systemami czasu rzeczywistego \cite{introarmarch}}
-\newacronym{va}{VA}{ang. Virtual Address, dosłownie adres wirtualny, pojęcie określające adresy pamięci przekazane aplikacji poprzez system operacyjny, nie są tą realne adresy w pamięci, tylko adresy w pewny sposób zmodyfikowane i przetwarzane na realne adresy podczas procesu translacji pamięci \cite{armv8amemtranslation}}
-\newacronym{ipa}{IPA}{ang. Intermidiate Peripheral Address, pośredni realny adres, pojęcie \acrshort{arm}'owe określające adresy pamięci widziane przez system operacyjny znajdujący się wewnątrz \acrshort{vm}, te adresy są nazewane "pośrednio realnymi", dlatego, że realne adresy są ukrywane przez hiperwizor, z kolei system operacyjny uważa te adresy za realne, skoro nie wie że jest wewnątrz \acrshort{vm} \cite{armv8amemtranslation}}
-\newacronym{pa}{PA}{ang. Peripheral Address, dosłownie sprzętowy adres, tzn. realne adresy pamięci widziane przez hiperwizor \cite{armv8amemtranslation}}
-\newacronym{svc}{SVC}{ang. Supervisor Call, przerwanie systemowe, z którego może skorzystać aplikacja, aby skomunikować się z jądrem systemu operacyjnego \cite{exceptionlevels}}
-\newacronym{hvc}{HVC}{ang. Hypervisor Call, przerwanie systemowe, z którego może skorzystać system operacyjny, aby skomunikować się z hiperwizorem \cite{exceptionlevels}}
-\newacronym{amp}{AMP}{ang. Asynchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, gdy każdej jednoscę jest przydzielane oddzielny proces do wykonania \cite{amp}}
-\newacronym{smp}{SMP}{ang. Synchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, gdy proces jest dzielony na wątki które są przydzielane każdej jednostkie obliczeniowej, tzn. wszystkie jednostki obliczeniowe zostają na pewny okres czesu przepisane do jednego procesu \cite{smp}}
-\newacronym{vcpu}{VCPU}{ang. Virtual CPU, wirtualna jednostka obliczeniowa}
+\newglossaryentry{rtos}{
+    name=RTOS,
+    description={ang. Real Time Operating System; System Operacyjny Czasu Rzeczywistego \cite{rtos}},
+    first={RTOS (ang. Real Time Operating System; System Operacyjny Czasu Rzeczywistego \cite{rtos})}
+}
+\newglossaryentry{risc}{
+    name=RISC,
+    description={ang. Reduced Instruction Set Computing; typ architektury mikroprocesorowego układu oblczeniowego o ograniczonej funkcjanolności do potrzebnego minimum \cite{saletan}},
+    first={RISC (ang. Reduced Instruction Set Computing; typ architektury mikroprocesorowego układu oblczeniowego o ograniczonej funkcjanolności do potrzebnego minimum \cite{saletan})}
+}
+\newglossaryentry{arm}{
+    name=ARM,
+    description={ang. Advanced RISC Machine, lub, poprzednio, Acorn RISC Machine; brytyjskie przedsiębiorstwo zajmujące się projektowaniem architektur mikroprocesorów, z siedzibą w Cambridge, Anglia \cite{armholdings}},
+    first={ARM (ang. Advanced RISC Machine, lub, poprzednio, Acorn RISC Machine; brytyjskie przedsiębiorstwo zajmujące się projektowaniem architektur mikroprocesorów, z siedzibą w Cambridge, Anglia \cite{armholdings})}
+}
+\newglossaryentry{el}{
+    name=EL,
+    description={ang. Exception Level, poziom uprawnień przypisywanych wykonującemu oprogramowaniu w architekturze ARM'owej, możliwe poziomy (od poziomu z najmniejszymi uprawnieniamu do poziomu z największymi): EL0, EL1, EL2 i EL3 \cite{exceptionlevels}},
+    first={EL2 (ang. Exception Level, poziom uprawnień przypisywanych wykonującemu oprogramowaniu w architekturze ARM'owej, możliwe poziomy: EL0, EL1, EL2 i EL3 \cite{exceptionlevels})}
+}
+\newglossaryentry{cpu}{
+    name=CPU,
+    description={ang. Central Processing Unit, centralna jednostka obliczeniowa \cite{cpu}},
+    first={CPU (ang. Central Processing Unit, centralna jednostka obliczeniowa \cite{cpu})}
+}
+\newglossaryentry{mmu}{
+    name=MMU,
+    description={ang. Memory Management Unit, układ odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest bardziej złożony niż MPU \cite{mmu}},
+    first={MMU (ang. Memory Management Unit, układ odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest bardziej złożony niż MPU \cite{mmu})}
+}
+\newglossaryentry{mpu}{
+    name=MPU,
+    description={ang. Memory Protection Unit, układ odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest mniej złożony w porównaniu do MMU (typowo posiada tylko mechanizmy zarządzania uprawnieniami) \cite{mpu}},
+    first={MPU (ang. Memory Protection Unit, układ odpowiedzialny za dostęp do pamięci przez oprogramowanie wykonywane na CPU, jest mniej złożony w porównaniu do MMU (typowo posiada tylko mechanizmy zarządzania uprawnieniami) \cite{mpu})}
+}
+\newglossaryentry{bsa}{
+    name=BSA,
+    description={ang. Base System Arhitecture, termin wprowadzony przez ARM, opisujący łączenie architektury sprzętowej i architektury oprogramowania, np. obecność MPU lub MMU \cite{introarmarch}},
+    first={BSA (ang. Base System Arhitecture, termin wprowadzony przez ARM, opisujący łączenie architektury sprzętowej i architektury oprogramowania, np. obecność MPU lub MMU \cite{introarmarch})}
+}
+\newglossaryentry{isa}{
+    name=ISA,
+    description={ang. Instruction Set Architecture, architektura jednostki obliczeniowej z punktu widzenia programisty (rejestry, assembler itp.) \cite{isa}},
+    first={ISA (ang. Instruction Set Architecture, architektura jednostki obliczeniowej z punktu widzenia programisty \cite{isa})}
+}
+\newglossaryentry{smc}{
+    name=SMC,
+    description={ang. Secure Monitor Call, instrukcja ISA generująca synchroniczne przerwanie, jest częścią SMCCC \cite{smccc}},
+    first={SMC (ang. Secure Monitor Call, instrukcja ISA generująca synchroniczne przerwanie, jest częścią SMCCC \cite{smccc})}
+}
+\newglossaryentry{smccc}{
+    name=SMCCC,
+    description={ang. SMC Calling Convention, mechanizm ARM'owy dla komunikacji pomiędzy środowiskiem zaufanym a niezaufanym \cite{smccc}},
+    first={SMCCC (ang. SMC Calling Convention, mechanizm ARM'owy dla komunikacji pomiędzy środowiskiem zaufanym a niezaufanym \cite{smccc})}
+}
+\newglossaryentry{sau}{
+    name=SAU,
+    description={ang. Secure Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m}},
+    first={SAU (ang. Secure Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m})}
+}
+\newglossaryentry{idau}{
+    name=IDAU,
+    description={ang. Implementation Defined Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m}},
+    first={IDAU (ang. Implementation Defined Attribution Unit, moduł zarządzający dostępem do pamięci przy obecności rozszerzenia bezpieczeństwa dla architektury ARMv8-M \cite{trustzonearmv8m})}
+}
+\newglossaryentry{vm}{
+    name=VM,
+    description={ang. Virtual Machine, dosłownie - maszyna wirtualna, lub środowisko wirtualne tworzone poprzez VMM \cite{formreqvirt}},
+    first={VM (ang. Virtual Machine, dosłownie - maszyna wirtualna, lub środowisko wirtualne tworzone poprzez VMM \cite{formreqvirt})}
+}
+\newglossaryentry{vmm}{
+    name=VMM,
+    description={ang. Virtual Machine Monitor, dosłownie monitor maszyn wirtualnych, często też zwany hiperwizorem; oprogramowanie pozwalające na tworzenie środowisk wirtualnych (VM) \cite{formreqvirt}}
+    first={VMM (ang. Virtual Machine Monitor, dosłownie monitor maszyn wirtualnych, często też zwany hiperwizorem; oprogramowanie pozwalające na tworzenie środowisk wirtualnych (VM) \cite{formreqvirt}}
+}
+\newglossaryentry{gic}{
+    name=GIC,
+    description={ang. General Interrupt Controller, kontroler przerwań skonstruowany dla wirtualizacji oraz obsługi kilku jednostek obliczeniowych na raz \cite{gic}},
+    first={GIC (ang. General Interrupt Controller, kontroler przerwań skonstruowany dla wirtualizacji oraz obsługi kilku jednostek obliczeniowych na raz \cite{gic})}
+}
+\newglossaryentry{m}{
+    name=Cortex M,
+    description={rodzina architektur ARM'owych stworzonych z myślą o małych energooszczędne układach, lub tzw. mikrokontrolery \cite{introarmarch}},
+    first={Cortex M (rodzina architektur ARM'owych stworzonych z myślą o małych energooszczędne układach, lub tzw. mikrokontrolery \cite{introarmarch})}
+}
+\newglossaryentry{a}{
+    name=Cortex A,
+    description={rodzina architektur ARM'owych stworzonych z myślą o układach o dużej mocy obliczeniowej i skomplikowanej architekturze oprogramowania \cite{introarmarch}},
+    first={Cortex A (rodzina architektur ARM'owych stworzonych z myślą o układach o dużej mocy obliczeniowej i skomplikowanej architekturze oprogramowania \cite{introarmarch})}
+}
+\newglossaryentry{r}{
+    name=Cortex R,
+    description={rodzina architektur ARM'owych stworzonych z myślą o skomplikowanych systemach które są również systemami czasu rzeczywistego \cite{introarmarch}},
+    first={Cortex R (rodzina architektur ARM'owych stworzonych z myślą o skomplikowanych systemach które są również systemami czasu rzeczywistego \cite{introarmarch})}
+}
+\newglossaryentry{va}{
+    name=VA,
+    description={ang. Virtual Address, dosłownie adres wirtualny, pojęcie określające adresy pamięci przekazane aplikacji przez system operacyjny, nie są tą realne adresy w pamięci, tylko adresy w pewien sposób zmodyfikowane i przetwarzane na realne adresy podczas procesu translacji pamięci \cite{armv8amemtranslation}},
+    first={VA (ang. Virtual Address, dosłownie adres wirtualny, pojęcie określające adresy pamięci przekazane aplikacji przez system operacyjny, nie są tą realne adresy w pamięci, tylko adresy w pewien sposób zmodyfikowane i przetwarzane na realne adresy podczas procesu translacji pamięci \cite{armv8amemtranslation})}
+}
+\newglossaryentry{ipa}{
+    name=IPA,
+    description={ang. Intermediate Peripheral Address, pośredni realny adres, pojęcie ARM'owe określające adresy pamięci widziane przez system operacyjny znajdujący się wewnątrz VM, te adresy nazewane są "pośrednio realnymi", dlatego, że rzeczywiste adresy są ukrywane przez hiperwizor, z kolei system operacyjny uważa te adresy za rzeczywiste, skoro nie wie, że jest wewnątrz VM \cite{armv8amemtranslation}},
+    first={IPA (ang. Intermediate Peripheral Address, pośredni realny adres, pojęcie ARM'owe określające adresy pamięci widziane przez system operacyjny znajdujący się wewnątrz VM, te adresy nazewane są "pośrednio realnymi", dlatego, że rzeczywiste adresy są ukrywane przez hiperwizor, z kolei system operacyjny uważa te adresy za rzeczywiste, skoro nie wie, że jest wewnątrz VM \cite{armv8amemtranslation})}
+}
+\newglossaryentry{pa}{
+    name=PA,
+    description={ang. Peripheral Address, dosłownie sprzętowy adres, tzn. realne adresy pamięci widziane przez hiperwizor \cite{armv8amemtranslation}},
+    first={PA (ang. Peripheral Address, dosłownie sprzętowy adres, tzn. realne adresy pamięci widziane przez hiperwizor \cite{armv8amemtranslation})}
+}
+\newglossaryentry{svc}{
+    name=SVC,
+    description={ang. Supervisor Call, przerwanie systemowe, z którego może skorzystać aplikacja, aby skomunikować się z jądrem systemu operacyjnego \cite{exceptionlevels}},
+    first={SVC (ang. Supervisor Call, przerwanie systemowe, z którego może skorzystać aplikacja, aby skomunikować się z jądrem systemu operacyjnego \cite{exceptionlevels})}
+}
+\newglossaryentry{hvc}{
+    name=HVC,
+    description={ang. Hypervisor Call, przerwanie systemowe, z którego może skorzystać system operacyjny, aby skomunikować się z hiperwizorem \cite{exceptionlevels}},
+    first={HVC (ang. Hypervisor Call, przerwanie systemowe, z którego może skorzystać system operacyjny, aby skomunikować się z hiperwizorem \cite{exceptionlevels})}
+}
+\newglossaryentry{amp}{
+    name=AMP,
+    description={ang. Asynchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, w którym każdej jednoscę jest przydzielane oddzielny proces do wykonania \cite{amp}},
+    first={AMP (ang. Asynchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, w którym każdej jednoscę jest przydzielane oddzielny proces do wykonania \cite{amp})}
+}
+\newglossaryentry{smp}{
+    name=SMP,
+    description={ang. Synchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, w którym proces jest dzielony na wątki które są przydzielane każdej jednostkie obliczeniowej, to znaczy wszystkie jednostki obliczeniowe zostają na pewny okres czasu przepisane do jednego procesu \cite{smp}},
+    first={SMP (ang. Synchronous Multiprocessing, techniki zarządzania kilkoma jednostkami obliczeniowymi w sposób, w którym proces jest dzielony na wątki które są przydzielane każdej jednostkie obliczeniowej, to znaczy wszystkie jednostki obliczeniowe zostają na pewny okres czasu przepisane do jednego procesu \cite{smp})}
+}
+\newglossaryentry{vcpu}{
+    name=VCPU,
+    description={ang. Virtual CPU, wirtualna jednostka obliczeniowa},
+    first={VCPU (ang. Virtual CPU, wirtualna jednostka obliczeniowa)}
+}
+\newglossaryentry{etm}{
+    name=ETM,
+    description={ang. Embedded Trace Macrocell, narzędzie w architektórach ARM'owych pozwalające na bezingerencyjne śledzenie pracy jednostek obliczeniowych i elementow do nich podłączonych (np. pamięć RAM) \cite{armetm}},
+    first={ETM (ang. Embedded Trace Macrocell, narzędzie w architekturach ARM'owych pozwalające na bezingerencyjne śledzenie pracy jednostek obliczeniowych i elementow do nich podłączonych \cite{armetm})}
+}
+\newglossaryentry{gcc}{
+    name=GCC,
+    description={ang. GNU Compiler Collection, zestaw narzędzi do kompilacji o otwartym kodzie źródłowym rozwijany w ramach projektu GNU \cite{gcc}},
+    first={GCC (ang. GNU Compiler Collection, zestaw narzędzi do kompilacji o otwartym kodzie źródłowym rozwijany w ramach projektu GNU \cite{gcc})}
+}
+\newglossaryentry{gnu}{
+    name=GNU,
+    description={ang. GNU's not Unix, przedsięwzięcie mające na celu stworzenie kompletnego, wolnego, uniksopodobnego systemu operacyjnego GNU, zapoczątkowane w styczniu 1984 roku przez Richarda Stallmana \cite{gnu}},
+    first={GNU (ang. GNU's not Unix, przedsięwzięcie mające na celu stworzenie kompletnego, wolnego, uniksopodobnego systemu operacyjnego GNU, zapoczątkowane w styczniu 1984 roku przez Richarda Stallmana \cite{gnu})}
+}
+\newglossaryentry{tcb}{
+    name=TCB,
+    description={ang. Task Control Block, struktura w FreeRTOS przechowująca metadane procesu \cite{freertostaskshandling}},
+    first={TCB (ang. Task Control Block, struktura w FreeRTOS przechowująca metadane procesu \cite{freertostaskshandling})}
+}
