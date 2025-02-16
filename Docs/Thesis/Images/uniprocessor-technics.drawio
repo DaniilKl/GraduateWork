@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:132.0) Gecko/20100101 Firefox/132.0" version="24.8.4">
+  <diagram name="Page-1" id="naxJSvM8NTy55_panOLZ">
+    <mxGraphModel dx="552" dy="298" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4XI6mp5D9phggYbXlTDS-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-6" target="4XI6mp5D9phggYbXlTDS-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-6" target="4XI6mp5D9phggYbXlTDS-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-6" value="Techniki jednordzeniowe" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-8" target="4XI6mp5D9phggYbXlTDS-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-8" target="4XI6mp5D9phggYbXlTDS-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-8" value="Wywłaszczenie" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="320" y="80" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-9" target="4XI6mp5D9phggYbXlTDS-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-9" target="4XI6mp5D9phggYbXlTDS-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=default;" edge="1" parent="1" source="4XI6mp5D9phggYbXlTDS-9" target="4XI6mp5D9phggYbXlTDS-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-9" value="Priorytet" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-13" value="Bez wywłąszczenia" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;direction=south;textDirection=vertical-rl;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="335" y="130" width="20" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-14" value="Z wywłaszczeniem" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;direction=south;textDirection=vertical-rl;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="375" y="130" width="20" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-18" value="Bez priorytetowe" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;direction=south;textDirection=vertical-rl;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="450" y="130" width="20" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-19" value="Priorytety dynamiczne" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;direction=south;textDirection=vertical-rl;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="500" y="130" width="20" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="4XI6mp5D9phggYbXlTDS-33" value="Priorytety statyczne" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;direction=south;textDirection=vertical-rl;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="475" y="130" width="20" height="110" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

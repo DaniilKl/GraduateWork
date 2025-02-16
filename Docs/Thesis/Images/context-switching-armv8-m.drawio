@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.8.3">
+  <diagram name="Page-1" id="i-1dUXjVv0L9_AhEkDwS">
+    <mxGraphModel dx="683" dy="370" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-1" target="0HA2B92WHa-r6N4GoKdJ-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-1" value="Start" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="335" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-2" value="Stop" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_1;whiteSpace=wrap;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="335" y="590" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-3" value="&lt;div&gt;Zapisz stan&lt;/div&gt;&lt;div&gt;aktualnie wykonywanego&lt;/div&gt;&lt;div&gt;programu&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="335" y="112.5" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-5" value="&lt;div&gt;Stanem jest stos&lt;/div&gt;&lt;div&gt;zapisywany podczas&lt;/div&gt;&lt;div&gt;przełączenia stanów,&lt;/div&gt;&lt;div&gt;wskaźnik na ten stos&lt;/div&gt;&lt;div&gt;znajduje się w&lt;/div&gt;&lt;div&gt;rejestrze PSP&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="100" width="50" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-7" target="0HA2B92WHa-r6N4GoKdJ-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-7" value="&lt;div&gt;Deskryptor&lt;/div&gt;&lt;div&gt;aktualnie wykonywanego programu z aktualnym&lt;/div&gt;&lt;div&gt;stanem&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.stored_data;whiteSpace=wrap;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="150" y="112.5" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-9" value="Zapisz meta-dane aktualnie wykonywanego programu" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="335" y="240" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-13" value="&lt;div&gt;Systemy operacyjne&lt;/div&gt;&lt;div&gt;przechowują dodatkowe&lt;/div&gt;&lt;div&gt;dane w deskryptorach&lt;/div&gt;&lt;div&gt;programów, które są&lt;/div&gt;&lt;div&gt;interpretowane przez&lt;/div&gt;&lt;div&gt;system operacyjny&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="225" width="50" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-9" target="0HA2B92WHa-r6N4GoKdJ-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-15" target="0HA2B92WHa-r6N4GoKdJ-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-15" value="&lt;div&gt;Deskryptor aktualnie wykonywanego&lt;/div&gt;&lt;div&gt;&amp;nbsp;programu z aktualnymi stanem&lt;br&gt;&lt;/div&gt;&amp;nbsp;i meta-danymi" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.stored_data;whiteSpace=wrap;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="150" y="235" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-17" value="Wybierz z listy programów następny program do wykonania" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="340" y="370" width="100" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-19" target="0HA2B92WHa-r6N4GoKdJ-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-19" value="&lt;div&gt;Deskryptor następnego programu ze stanem i meta-danymi&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.stored_data;whiteSpace=wrap;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="180" y="360" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-21" value="&lt;div&gt;Są interpretowane&lt;/div&gt;&lt;div&gt;meta-dane pozostałych&lt;/div&gt;&lt;div&gt;programów, na podstawie&lt;/div&gt;&lt;div&gt;których jest wybierany&lt;/div&gt;&lt;div&gt;następny program do&lt;/div&gt;&lt;div&gt;&amp;nbsp;wykonania&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="355" width="50" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-17" target="0HA2B92WHa-r6N4GoKdJ-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-25" value="Podmień stan aktualnie wykonywanego programu na stan następnego programu" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="310" y="490" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-27" target="0HA2B92WHa-r6N4GoKdJ-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-27" value="&lt;div&gt;System operacyjny&lt;/div&gt;&lt;div&gt;modyfikuje rejestr PSP&lt;/div&gt;&lt;div&gt;podmieniając wskaźnik&lt;/div&gt;&lt;div&gt;na stos&lt;br&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_1;align=left;pointerEvents=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="490" width="50" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-25" target="0HA2B92WHa-r6N4GoKdJ-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.93;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-3" target="0HA2B92WHa-r6N4GoKdJ-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.93;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-9" target="0HA2B92WHa-r6N4GoKdJ-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-3" target="0HA2B92WHa-r6N4GoKdJ-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.93;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="0HA2B92WHa-r6N4GoKdJ-17" target="0HA2B92WHa-r6N4GoKdJ-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-36" value="K1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="330" y="90" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-37" value="K2" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="330" y="217" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-38" value="K3" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="335" y="347" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0HA2B92WHa-r6N4GoKdJ-39" value="K4" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="305" y="468" width="40" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
