@@ -56,6 +56,15 @@
     }
     \lstset{style=mystyle}
     \renewcommand{\lstlistingname}{Przykład}
+    % For pseudocode blocks:
+    \usepackage{algorithm}
+    \usepackage{algpseudocode}
+    \usepackage{float}
+    \floatname{algorithm}{Algorytm}
+    \usepackage{caption}
+    \captionsetup[algorithm]{font=small, labelfont=bf}
+    \crefname{algorithm}{Alg.}{Alg.}
+    \Crefname{algorithm}{Alg.}{Alg.}
 
 %Other definitions:
     %Change the title of the Table of content:
