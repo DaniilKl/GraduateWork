@@ -13,7 +13,7 @@
     \usepackage{pdfpages}
     %Packages for multifile project management:
     \usepackage{subfiles}
-    \usepackage{geometry} %Not used yet
+    \usepackage[a4paper, inner=3.5cm, outer=2.5cm, top=2.5cm, bottom=2.5cm]{geometry} %Not used yet
     %Sections and chapters customization:
     \usepackage{titlesec} %Not used yet
     %Text aligment customization:
@@ -31,7 +31,7 @@
     \usepackage[acronym]{glossaries}
     \makeglossaries
     \usepackage{Sections/ListOfSymbolsAndAbbreviations}
-    \usepackage[skip=1.5pt plus1pt, indent=15pt]{parskip}
+    \usepackage[skip=1.5pt plus 1pt, indent=15pt]{parskip}
     \usepackage{indentfirst} % indent first paragraph in section.
     \usepackage{float} % For using \begin{figure}[H] to place images at the exact locations.
     \usepackage{subcaption} % For Subfigures
@@ -51,3 +51,6 @@
     \pagenumbering{arabic}
     % Distance between lines:
     \linespread{1.5}
+    \sloppy
+    \raggedbottom
+    \usepackage{placeins}
