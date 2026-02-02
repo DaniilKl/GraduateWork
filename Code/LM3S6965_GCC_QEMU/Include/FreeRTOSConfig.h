@@ -57,8 +57,8 @@
 //#define	configTIMER_QUEUE_LENGTH
 //#define	configTIMER_TASK_PRIORITY
 //#define configTIMER_TASK_STACK_DEPTH
-#define configCPU_CLOCK_HZ															( 50000000 )
-#define configTICK_RATE_HZ															( ( TickType_t ) 1000 )
+#define configCPU_CLOCK_HZ															( 5000000 )
+#define configTICK_RATE_HZ															( ( TickType_t ) 10000 )
 #define configMAX_PRIORITIES														( 257UL )
 #define configMINIMAL_STACK_SIZE												( ( unsigned short ) 20 )
 #define configTOTAL_HEAP_SIZE														( ( size_t ) ( 60000 ) )
@@ -115,14 +115,14 @@ to exclude the API function. */
 #define INCLUDE_vTaskCleanUpResources	0
 #define INCLUDE_vTaskSuspend			0
 #define INCLUDE_vTaskDelayUntil			1
-#define INCLUDE_vTaskDelay				0
+#define INCLUDE_vTaskDelay				1
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
 	/* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
 	#define configPRIO_BITS       		__NVIC_PRIO_BITS
 #else
-	#define configPRIO_BITS       		8        /* 63 priority levels */
+	#define configPRIO_BITS       		( (uint8_t) 3 )        /* 8 priority levels */
 #endif
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"
@@ -154,7 +154,7 @@ header file. */
 /*******************************************************************************
  * Custom definitions.
  ******************************************************************************/
-//#define USE_FREERTOS_CLASSIC_SCHEDULER
+#define USE_FREERTOS_CLASSIC_SCHEDULER
 
 //#define USE_FCFS_SCHEDULER
 
@@ -192,7 +192,7 @@ header file. */
 	#define USE_LLF_SCHEDULER
 #endif
 
-#define USE_DARTS_SCHEDULER
+//#define USE_DARTS_SCHEDULER
 
 #endif /* FREERTOS_CONFIG_H */
 
